@@ -1,0 +1,30 @@
+text 
+{
+	font-family: Nunito Sans;
+	font-weight: 900;
+	color: rgba( white, 0.4 );
+	text-shadow: 0 0 50px rgba( black, 0.1 );	
+}
+
+text.alert 
+{
+	font-size: 25px;
+	padding: 50px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+}
+
+.crosshair {
+	position: absolute; 
+	left: 50%;
+	top: 50%;
+	background-color: white;
+	border-radius: 10px;
+	border: 2px solid black;
+	width: 6px;
+	height: 6px;
+	transform: translate( -50% -50% );
+}
