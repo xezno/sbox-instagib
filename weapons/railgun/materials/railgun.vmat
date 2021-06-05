@@ -29,13 +29,13 @@ Layer0
 	g_flDirectionalLightmapStrength "1.000"
 
 	//---- Metalness ----
-	TextureMetalness "weapons/railgun/textures/railgun_metal.jpg"
+	TextureMetalness "[0.305000 0.305000 0.305000 0.000000]"
 
 	//---- Normal ----
 	TextureNormal "weapons/railgun/textures/railgun_norm.jpg"
 
 	//---- Roughness ----
-	TextureRoughness "weapons/railgun/textures/railgun_rough.jpg"
+	TextureRoughness "[0.282353 0.282353 0.282353 1.000000]"
 
 	//---- Texture Coordinates ----
 	g_nScaleTexCoordUByModelScaleAxis "0"
