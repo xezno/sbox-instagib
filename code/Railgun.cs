@@ -84,6 +84,9 @@ partial class Railgun : BaseWeapon
 	public override void Simulate( Client owner )
 	{
 		base.Simulate( owner );
+		
+		if ( IsClient )
+			beamParticles.SetPos( 1, Owner.EyeRot.Forward * 1000000f );
 	}
 
 	[ClientRpc]
@@ -93,14 +96,13 @@ partial class Railgun : BaseWeapon
 
 		Sound.FromEntity( "railgun_fire", this );
 		beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity, "muzzle" );
-		beamParticles.SetPos( 1, direction );
 
 		ViewModelEntity?.SetAnimBool( "fire", true );
 		CrosshairPanel?.OnEvent( "onattack" );
 
 		if ( IsLocalPawn )
 		{
-			new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.2f );
+			_ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 1.0f );
 		}
 	}
 	
