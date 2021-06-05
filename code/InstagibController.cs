@@ -37,9 +37,10 @@ namespace Instagib
 		public float BodyGirth { get; set; } = 32.0f;
 		public float BodyHeight { get; set; } = 72.0f;
 		public float EyeHeight { get; set; } = 64.0f;
-		public float Gravity { get; set; } = 700.0f;
+		public float Gravity { get; set; } = 800.0f;
 		public float AirControl { get; set; } = 60.0f;
 		public bool AutoJump { get; set; } = true;
+		public float JumpMultiplier { get; set; } = 1.1f;
 
 		/// <summary>
 		///     This is temporary, get the hull size for the player's collision
@@ -394,7 +395,7 @@ namespace Instagib
 
 			ClearGroundEntity();
 
-			var flMul = 268.3281572999747f * 1.2f;
+			var flMul = 268.3281572999747f * ( Gravity / 600f ) * JumpMultiplier;
 			var startz = Velocity.z;
 
 			if ( Duck.IsActive )

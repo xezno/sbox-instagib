@@ -7,6 +7,10 @@ namespace Instagib
 	partial class InstagibPlayer : Player
 	{
 		public Team Team { get; set; }
+		
+		private Vector3 lastCameraPos = Vector3.Zero;
+		private Rotation lastCameraRot = Rotation.Identity;
+		private float lastHudOffset;
 
 		public InstagibPlayer()
 		{
@@ -43,8 +47,6 @@ namespace Instagib
 
 			EnableDrawing = false;
 		}
-		
-		Rotation lastCameraRot = Rotation.Identity;
 
 		public override void PostCameraSetup( ref CameraSetup setup )
 		{
@@ -100,9 +102,16 @@ namespace Instagib
 			var tx = new Sandbox.UI.PanelTransform();
 			tx.AddRotation( 0, 0, lean * -0.5f );
 
-			InstagibHud.Current.Style.Transform = tx;
-			InstagibHud.Current.Style.Dirty(); 
+			var zOffset = (lastCameraPos - setup.Position).z * 2f;
+			zOffset = lastHudOffset.LerpTo( zOffset, 25.0f * Time.Delta );
+			tx.AddTranslateY( zOffset );
 
+			lastHudOffset = zOffset;
+
+			InstagibHud.Current.Style.Transform = tx;
+			InstagibHud.Current.Style.Dirty();
+
+			lastCameraPos = setup.Position;
 		}
 	}
 }

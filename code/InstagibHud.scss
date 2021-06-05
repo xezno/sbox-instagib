@@ -2,8 +2,8 @@ text
 {
 	font-family: Nunito Sans;
 	font-weight: 900;
-	color: rgba( white, 0.4 );
-	text-shadow: 0 0 50px rgba( black, 0.1 );	
+	color: white;
+	text-shadow: 0 0 50px rgba( black, 0.1 );
 }
 
 text.alert 
@@ -15,6 +15,27 @@ text.alert
 	left: 0;
 	right: 0;
 	text-align: center;
+	color: rgba( white, 0.4 );
+	text-shadow: 0 0 50px rgba( black, 0.1 );
+}
+
+.bottom {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	
+	padding: 50px;
+	
+	font-size: 64px;
+	
+	align-items: center;
+	justify-content: space-between;
+	text {
+		background-color: rgba( black, 0.4 );
+		border-radius: 25px;
+		padding: 20px 40px;
+	}
 }
 
 .crosshair {

@@ -11,8 +11,6 @@ partial class Railgun : BaseWeapon
 		base.Spawn();
 
 		SetModel( "weapons/railgun/models/railgun.vmdl" );
-		if ( ViewModelEntity != null )
-			ViewModelEntity.FieldOfView = 50;
 	}
 
 	public override bool CanPrimaryAttack()
@@ -68,6 +66,8 @@ partial class Railgun : BaseWeapon
 	public override void Simulate( Client owner )
 	{
 		base.Simulate( owner );
+		if ( ViewModelEntity != null )
+			ViewModelEntity.FieldOfView = 55;
 	}
 
 	[ClientRpc]
@@ -85,5 +85,33 @@ partial class Railgun : BaseWeapon
 		{
 			new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.2f );
 		}
+	}
+	
+
+	/// <summary>
+	/// Create the viewmodel. You can override this in your base classes if you want
+	/// to create a certain viewmodel entity.
+	/// </summary>
+	public override void CreateViewModel()
+	{
+		Host.AssertClient();
+
+		if ( string.IsNullOrEmpty( ViewModelPath ) )
+			return;
+
+		ViewModelEntity = new ViewModel(); 
+		ViewModelEntity.Position = Position; 
+		ViewModelEntity.Owner = Owner;
+		ViewModelEntity.EnableViewmodelRendering = true;
+		ViewModelEntity.SetModel( ViewModelPath );
+	}
+
+	/// <summary>
+	/// We're done with the viewmodel - delete it
+	/// </summary>
+	public override void DestroyViewModel()
+	{
+		ViewModelEntity?.Delete();
+		ViewModelEntity = null;
 	}
 }
