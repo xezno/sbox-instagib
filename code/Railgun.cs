@@ -7,6 +7,8 @@ partial class Railgun : BaseWeapon
 	public override string ViewModelPath => "weapons/railgun/models/v_railgun.vmdl";
 	public override float PrimaryRate => 1/1.5f;
 
+	private Particles beamParticles;
+
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -46,9 +48,9 @@ partial class Railgun : BaseWeapon
 
 	private void Shoot( Vector3 pos, Vector3 dir )
 	{
-		ShootEffects();
-
 		var forward = dir * 10000;
+		
+		ShootEffects( pos + forward );
 
 		// ShootBullet is coded in a way where we can have bullets pass through shit
 		// or bounce off shit, in which case it'll return multiple results
@@ -74,17 +76,16 @@ partial class Railgun : BaseWeapon
 	public override void Simulate( Client owner )
 	{
 		base.Simulate( owner );
-		if ( ViewModelEntity != null )
-			ViewModelEntity.FieldOfView = 55;
 	}
 
 	[ClientRpc]
-	public virtual void ShootEffects()
+	public virtual void ShootEffects( Vector3 direction )
 	{
 		Host.AssertClient();
 
-		Sound.FromEntity( "rust_pistol.shoot", this );
-		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
+		Sound.FromEntity( "railgun_fire", this );
+		beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity, "muzzle" );
+		beamParticles.SetPos( 1, direction );
 
 		ViewModelEntity?.SetAnimBool( "fire", true );
 		CrosshairPanel?.OnEvent( "onattack" );

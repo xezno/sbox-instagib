@@ -1,11 +1,12 @@
-﻿using Instagib.UI.Menus;
+﻿using Instagib.UI;
+using Instagib.UI.Menus;
 using Sandbox.UI;
 
 namespace Instagib
 {
 	public partial class InstagibHud : Sandbox.HudEntity<RootPanel>
 	{
-		public static RootPanel Current;
+		public static RootPanel CurrentHudPanel;
 		
 		public InstagibHud()
 		{
@@ -17,7 +18,10 @@ namespace Instagib
 				RootPanel.AddChild<KillFeed>();
 				RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
 
-				Current = RootPanel;
+				var fragMessage = new FragMessage( "big boy" );
+				fragMessage.Parent = RootPanel;
+
+				CurrentHudPanel = RootPanel;
 			}
 		}
 	}

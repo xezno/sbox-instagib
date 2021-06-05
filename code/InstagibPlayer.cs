@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Instagib
 {
-	partial class InstagibPlayer : Player
+	public partial class InstagibPlayer : Player
 	{
 		public Team Team { get; set; }
 		
@@ -46,6 +46,8 @@ namespace Instagib
 			base.OnKilled();
 
 			EnableDrawing = false;
+			BecomeRagdollOnClient( Vector3.Zero, 0 );
+			Camera = new SpectateRagdollCamera();
 		}
 
 		public override void PostCameraSetup( ref CameraSetup setup )
@@ -100,7 +102,7 @@ namespace Instagib
 			setup.FieldOfView += fov;
 
 			var tx = new Sandbox.UI.PanelTransform();
-			tx.AddRotation( 0, 0, lean * -0.5f );
+			tx.AddRotation( 0, 0, lean * -0.2f );
 
 			var zOffset = (lastCameraPos - setup.Position).z * 2f;
 			zOffset = lastHudOffset.LerpTo( zOffset, 25.0f * Time.Delta );
@@ -108,8 +110,8 @@ namespace Instagib
 
 			lastHudOffset = zOffset;
 
-			InstagibHud.Current.Style.Transform = tx;
-			InstagibHud.Current.Style.Dirty();
+			InstagibHud.CurrentHudPanel.Style.Transform = tx;
+			InstagibHud.CurrentHudPanel.Style.Dirty();
 
 			lastCameraPos = setup.Position;
 		}

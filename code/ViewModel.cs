@@ -2,6 +2,9 @@
 
 public class ViewModel : BaseViewModel
 {
+	[ClientVar( "viewmodel_centered" )]
+	public static bool Centered { get; set; }
+	
 	protected float SwingInfluence => 0.005f;
 	protected float ReturnSpeed => 5.0f;
 	protected float MaxOffsetLength => 10.0f;
@@ -33,7 +36,7 @@ public class ViewModel : BaseViewModel
 		Position = camSetup.Position;
 		Rotation = camSetup.Rotation;
 
-		camSetup.ViewModel.FieldOfView = FieldOfView;
+		camSetup.ViewModel.FieldOfView = 55;
 
 		var newPitch = Rotation.Pitch();
 		var newYaw = Rotation.Yaw();
@@ -50,6 +53,10 @@ public class ViewModel : BaseViewModel
 		var offset = CalcSwingOffset( pitchDelta, yawDelta );
 		offset += CalcBobbingOffset( playerVelocity );
 
+		if ( Centered )
+		{
+			offset -= new Vector3( 0f, -2.5f, 0.75f );
+		}
 		Position += Rotation * offset;
 
 		lastPitch = newPitch;
@@ -74,7 +81,16 @@ public class ViewModel : BaseViewModel
 	protected Vector3 CalcBobbingOffset( Vector3 velocity )
 	{
 		if ( Owner.GroundEntity != null )
+		{
 			bobAnim += Time.Delta * BobCycleTime;
+		}
+		else
+		{
+			if ( bobAnim > System.MathF.PI / 2f + 0.01f )
+				bobAnim -= Time.Delta * BobCycleTime * 0.1f;
+			else if ( bobAnim < System.MathF.PI / 2f + 0.01f )
+				bobAnim += Time.Delta * BobCycleTime * 0.1f;
+		}
 		
 		var twoPI = System.MathF.PI * 2.0f;
 
