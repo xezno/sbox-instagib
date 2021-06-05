@@ -25,7 +25,7 @@ namespace Instagib
 
 			Controller = new InstagibController();
 			Animator = new StandardPlayerAnimator();
-			Camera = new FirstPersonCamera();
+			Camera = new FirstPersonCamera() { FieldOfView = 90 };
 
 			EnableAllCollisions = true;
 			EnableDrawing = true;
@@ -106,7 +106,6 @@ namespace Instagib
 
 			speed = (speed - 0.7f).Clamp( 0, 1 ) * 3.0f;
 
-			setup.FieldOfView = 90f;
 			fov = fov.LerpTo( speed * 20 * MathF.Abs( forwardspeed ), Time.Delta * 2.0f );
 
 			setup.FieldOfView += fov;
