@@ -389,9 +389,7 @@ namespace Instagib
 		public virtual void CheckJumpButton()
 		{
 			if ( GroundEntity == null )
-			{
 				return;
-			}
 
 			ClearGroundEntity();
 
@@ -405,6 +403,8 @@ namespace Instagib
 
 			Velocity = Velocity.WithZ( startz + flMul );
 			Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
+
+			Sound.FromWorld( "jump", Position );
 
 			AddEvent( "jump" );
 		}

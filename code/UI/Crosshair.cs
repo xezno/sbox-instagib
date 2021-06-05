@@ -8,6 +8,7 @@ namespace Instagib.UI
 		public Crosshair()
 		{
 			SetClass( "crosshair", true );
+			AddChild<Panel>().SetClass( "crosshair-inner", true );
 			StyleSheet.Load( "/InstagibHud.scss" );
 		}
 	}

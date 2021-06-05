@@ -12,14 +12,12 @@ partial class Railgun : BaseWeapon
 	public override void Spawn()
 	{
 		base.Spawn();
-
 		SetModel( "weapons/railgun/models/railgun.vmdl" );
 	}
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
 		base.SimulateAnimator( anim );
-		
 		anim.SetParam( "holdtype", 3 );
 	}
 
@@ -34,12 +32,7 @@ partial class Railgun : BaseWeapon
 		return base.CanPrimaryAttack();
 	}
 
-	public override void Reload()
-	{
-		base.Reload();
-
-		ViewModelEntity?.SetAnimBool( "reload", true );
-	}
+	public override void Reload() { }
 
 	public override void AttackPrimary()
 	{
@@ -69,7 +62,6 @@ partial class Railgun : BaseWeapon
 
 			if ( !IsServer ) continue;
 			if ( !tr.Entity.IsValid() ) continue;
-			
 			
 			using ( Prediction.Off() )
 			{

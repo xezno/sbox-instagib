@@ -41,12 +41,25 @@ text.alert
 	position: absolute; 
 	left: 50%;
 	top: 50%;
-	background-color: white;
 	border-radius: 10px;
-	border: 2px solid black;
+	border: 2px solid white;
 	width: 6px;
 	height: 6px;
-	transform: translate( -50% -50% );
+	padding: 5px;
+	
+	margin-left: -7px;
+	margin-top: -7px;
+	
+	.crosshair-inner {
+		position: absolute;
+		left: 4px;
+		top: 4px;
+		transform: translate( -50% -50% );		
+		border-radius: 10px;
+		background-color: white;
+		width: 2px;
+		height: 2px;
+	}
 }
 
 .frag {
