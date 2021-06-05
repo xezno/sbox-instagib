@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 
 [Library( "gun" )]
 partial class Railgun : BaseWeapon
@@ -11,6 +12,13 @@ partial class Railgun : BaseWeapon
 		base.Spawn();
 
 		SetModel( "weapons/railgun/models/railgun.vmdl" );
+	}
+
+	public override void SimulateAnimator( PawnAnimator anim )
+	{
+		base.SimulateAnimator( anim );
+		
+		anim.SetParam( "holdtype", 3 );
 	}
 
 	public override bool CanPrimaryAttack()
