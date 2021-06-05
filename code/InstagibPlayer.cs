@@ -6,6 +6,8 @@ namespace Instagib
 {
 	public partial class InstagibPlayer : Player
 	{
+		private DamageInfo lastDamageInfo;
+		
 		public Team Team { get; set; }
 		
 		private Vector3 lastCameraPos = Vector3.Zero;
@@ -46,8 +48,15 @@ namespace Instagib
 			base.OnKilled();
 
 			EnableDrawing = false;
-			BecomeRagdollOnClient( Vector3.Zero, 0 );
+
+			BecomeRagdollOnClient( Velocity, 0 );
 			Camera = new SpectateRagdollCamera();
+		}
+
+		public override void TakeDamage( DamageInfo info )
+		{
+			base.TakeDamage( info );
+			lastDamageInfo = info;
 		}
 
 		public override void PostCameraSetup( ref CameraSetup setup )

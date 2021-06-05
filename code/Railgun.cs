@@ -62,9 +62,14 @@ partial class Railgun : BaseWeapon
 			
 			ShootEffects( tr.EndPos );
 			hit = true;
+			
+			// Do beam particles on client and server
+			beamParticles?.Destroy( true );
+			beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity, "muzzle" );
 
 			if ( !IsServer ) continue;
 			if ( !tr.Entity.IsValid() ) continue;
+			
 			
 			using ( Prediction.Off() )
 			{
@@ -84,9 +89,12 @@ partial class Railgun : BaseWeapon
 	public override void Simulate( Client owner )
 	{
 		base.Simulate( owner );
-		
-		if ( IsClient )
-			beamParticles.SetPos( 1, Owner.EyeRot.Forward * 1000000f );
+
+		if ( beamParticles != null )
+		{
+			var tr = Trace.Ray( Owner.EyePos, Owner.EyeRot.Forward * 1000000f ).Ignore( Owner ).WorldOnly().Run();
+			beamParticles.SetPos( 1, tr.EndPos );
+		}
 	}
 
 	[ClientRpc]
@@ -95,7 +103,6 @@ partial class Railgun : BaseWeapon
 		Host.AssertClient();
 
 		Sound.FromEntity( "railgun_fire", this );
-		beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity, "muzzle" );
 
 		ViewModelEntity?.SetAnimBool( "fire", true );
 		CrosshairPanel?.OnEvent( "onattack" );
