@@ -49,7 +49,7 @@ namespace Instagib
 		{
 			var forward = dir * 10000;
 
-			foreach ( var tr in TraceBullet( pos, pos + dir * 4000 ) )
+			foreach ( var tr in TraceBullet( pos, pos + dir * 100000 ) )
 			{
 				tr.Surface.DoBulletImpact( tr );
 
