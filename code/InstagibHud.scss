@@ -31,6 +31,7 @@ text.alert
 	
 	align-items: center;
 	justify-content: space-between;
+	
 	text {
 		background-color: rgba( black, 0.4 );
 		border-radius: 25px;
@@ -69,4 +70,12 @@ text.alert
 .highlight {
 	color: #40c0ff;
 	text-shadow: 0 0 10px rgba( black, 0.2 );
+}
+
+.mainpanel { 
+	position: absolute; 
+	top: 0; 
+	right: 0; 
+	left: 0; 
+	bottom: 0; 
 }

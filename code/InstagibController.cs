@@ -26,7 +26,7 @@ namespace Instagib
 		}
 
 		public float Speed { get; set; } = 384.0f;
-		public float Acceleration { get; set; } = 128.0f;
+		public float Acceleration { get; set; } = 8.0f;
 		public float AirAcceleration { get; set; } = 256.0f;
 		public float GroundFriction { get; set; } = 4.0f;
 		public float StopSpeed { get; set; } = 100.0f;

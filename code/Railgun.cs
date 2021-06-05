@@ -1,7 +1,7 @@
 ﻿using System;
 using Sandbox;
 
-[Library( "gun" )]
+[Library( "railgun" )]
 partial class Railgun : BaseWeapon
 {
 	public override string ViewModelPath => "weapons/railgun/models/v_railgun.vmdl";
@@ -28,6 +28,9 @@ partial class Railgun : BaseWeapon
 		if ( !Owner.Input.Pressed( InputButton.Attack1 ) )
 			return false;
 
+		if ( Owner.Health <= 0 )
+			return false;
+
 		return base.CanPrimaryAttack();
 	}
 
@@ -50,13 +53,15 @@ partial class Railgun : BaseWeapon
 	{
 		var forward = dir * 10000;
 		
-		ShootEffects( pos + forward );
-
 		// ShootBullet is coded in a way where we can have bullets pass through shit
 		// or bounce off shit, in which case it'll return multiple results
+		bool hit = false;
 		foreach ( var tr in TraceBullet( pos, pos + dir * 4000 ) )
 		{
 			tr.Surface.DoBulletImpact( tr );
+			
+			ShootEffects( tr.EndPos );
+			hit = true;
 
 			if ( !IsServer ) continue;
 			if ( !tr.Entity.IsValid() ) continue;
@@ -71,6 +76,9 @@ partial class Railgun : BaseWeapon
 				tr.Entity.TakeDamage( damage );
 			}
 		}
+		
+		if ( !hit )
+			ShootEffects( pos + forward );
 	}
 
 	public override void Simulate( Client owner )
