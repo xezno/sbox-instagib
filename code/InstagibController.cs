@@ -205,7 +205,7 @@ namespace Instagib
 		{
 			if ( Velocity.WithZ( 0 ).Length > SpeedLimit )
 			{
-				Velocity = (Velocity.Normal * SpeedLimit).WithZ( Velocity.z );
+				Velocity = Velocity.LerpTo( (Velocity.Normal * SpeedLimit).WithZ( Velocity.z ), 10f * Time.Delta );
 			}
 		}
 
@@ -229,7 +229,7 @@ namespace Instagib
 			WishVelocity = WishVelocity.Normal * wishspeed;
 
 			Velocity = Velocity.WithZ( 0 );
-			Accelerate( wishdir, wishspeed, 0, Acceleration );
+			Accelerate( wishdir, wishspeed, SpeedLimit, Acceleration );
 			Velocity = Velocity.WithZ( 0 );
 
 			// Add in any base velocity to the current velocity.
