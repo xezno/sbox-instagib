@@ -9,6 +9,8 @@ namespace Instagib
 		public override string ViewModelPath => "weapons/railgun/models/v_railgun.vmdl";
 		public override float PrimaryRate => 1 / 1.5f;
 
+		private float zoomFov = 40f;
+
 		private Particles beamParticles;
 		private bool zoom;
 
@@ -94,7 +96,7 @@ namespace Instagib
 
 			if ( zoom )
 			{
-				camSetup.FieldOfView = 40;
+				camSetup.FieldOfView = zoomFov;
 			}
 		}
 		
@@ -103,7 +105,7 @@ namespace Instagib
 			if ( zoom )
 			{
 				// Half input sensitivity
-				owner.ViewAngles = Angles.Lerp( owner.OriginalViewAngles, owner.ViewAngles, 40f / 90f );
+				owner.ViewAngles = Angles.Lerp( owner.OriginalViewAngles, owner.ViewAngles, zoomFov / 90f );
 			}
 		}
 
@@ -119,7 +121,7 @@ namespace Instagib
 
 			if ( IsLocalPawn )
 			{
-				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 1.0f );
+				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 2.0f );
 			}
 		}
 
