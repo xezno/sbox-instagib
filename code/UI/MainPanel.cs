@@ -5,7 +5,7 @@ namespace Instagib.UI
 {
 	public class MainPanel : Panel
 	{
-		public string PlayerHealth => $"♥ {Local.Client.Pawn.Health}";
+		public string PlayerHealth => $"{Local.Client.Pawn.Health}";
 
 		public MainPanel()
 		{

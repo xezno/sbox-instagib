@@ -1,7 +1,7 @@
 text 
 {
-	font-family: Nunito Sans;
-	font-weight: 900;
+	font-family: Kairos Sans;
+	font-weight: 700;
 	color: white;
 	text-shadow: 2px 2px 10px rgba( black, 0.8 );
 }
@@ -25,12 +25,31 @@ text.alert
 	left: 0;
 	right: 0;
 	
-	padding: 50px;
+	padding: 50px 100px;
 	
 	font-size: 48px;
 	
 	align-items: center;
 	justify-content: space-between;
+
+	.health, .ammo {
+		align-items: center;
+	}
+
+	.icon {
+		width: 64px;
+		height: 64px;
+		background-size: cover;
+
+		&.slugs {
+			background-image: url( /textures/ui/slugs.png );
+			margin-left: -16px;
+		}
+		&.health {
+			background-image: url( /textures/ui/health.png );
+			margin-right: -16px;
+		}
+	}
 	
 	text {
 		padding: 20px 40px;

@@ -9,7 +9,7 @@ namespace Instagib
 		protected float SwingInfluence => 0.005f;
 		protected float ReturnSpeed => 5.0f;
 		protected float MaxOffsetLength => 10.0f;
-		protected float BobCycleTime => 7;
+		protected float BobCycleTime => 14;
 		protected Vector3 BobDirection => new Vector3( 0.0f, 0.1f, 0.2f );
 
 		private Vector3 swingOffset;
@@ -88,10 +88,13 @@ namespace Instagib
 			}
 			else
 			{
-				if ( bobAnim > System.MathF.PI / 2f + 0.01f )
-					bobAnim -= Time.Delta * BobCycleTime * 0.1f;
-				else if ( bobAnim < System.MathF.PI / 2f + 0.01f )
-					bobAnim += Time.Delta * BobCycleTime * 0.1f;
+				// In air - return to center
+				if ( bobAnim > System.MathF.PI / 2f + 0.1f )
+					bobAnim -= Time.Delta * BobCycleTime * 0.05f;
+				else if ( bobAnim < System.MathF.PI / 2f + 0.1f )
+					bobAnim += Time.Delta * BobCycleTime * 0.05f;
+				else
+					bobAnim = System.MathF.PI / 2f;
 			}
 
 			var twoPI = System.MathF.PI * 2.0f;

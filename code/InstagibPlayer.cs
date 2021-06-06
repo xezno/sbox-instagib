@@ -41,6 +41,18 @@ namespace Instagib
 		{
 			base.Simulate( cl );
 			SimulateActiveChild( cl, ActiveChild );
+
+			if ( cl == Local.Client )
+			{
+				GlowActive = false;
+				return;
+			}
+			
+			GlowActive = true;
+			GlowState = GlowStates.GlowStateOn;
+			GlowDistanceStart = -32;
+			GlowDistanceEnd = 4096;
+			GlowColor = Color.Red.WithAlpha( 0.5f );
 		}
 
 		public override void OnKilled()
