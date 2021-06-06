@@ -33,7 +33,7 @@ namespace Instagib
 		public float DistEpsilon { get; set; } = 0.03125f;
 		public float GroundAngle { get; set; } = 46.0f;
 		public float StepSize { get; set; } = 18.0f;
-		public float MaxNonJumpVelocity { get; set; } = 512.0f;
+		public float MaxNonJumpVelocity { get; set; } = 128.0f;
 		public float BodyGirth { get; set; } = 32.0f;
 		public float BodyHeight { get; set; } = 72.0f;
 		public float EyeHeight { get; set; } = 64.0f;
@@ -41,6 +41,7 @@ namespace Instagib
 		public float AirControl { get; set; } = 60.0f;
 		public bool AutoJump { get; set; } = true;
 		public float JumpMultiplier { get; set; } = 1.1f;
+		public float SpeedLimit { get; set; } = 1024f; // Hard limit (excludes Z)
 
 		/// <summary>
 		///     This is temporary, get the hull size for the player's collision
@@ -178,6 +179,8 @@ namespace Instagib
 
 			// CheckFalling(); // fall damage etc
 
+			LimitSpeed();
+
 			if ( Debug )
 			{
 				DebugOverlay.Box( Position + TraceOffset, mins, maxs, Color.Red );
@@ -195,6 +198,14 @@ namespace Instagib
 				DebugOverlay.ScreenText( lineOffset + 3, $"    GroundEntity: {GroundEntity} [{GroundEntity?.Velocity}]" );
 				DebugOverlay.ScreenText( lineOffset + 4, $" SurfaceFriction: {SurfaceFriction}" );
 				DebugOverlay.ScreenText( lineOffset + 5, $"    WishVelocity: {WishVelocity}" );
+			}
+		}
+
+		public virtual void LimitSpeed()
+		{
+			if ( Velocity.WithZ( 0 ).Length > SpeedLimit )
+			{
+				Velocity = (Velocity.Normal * SpeedLimit).WithZ( Velocity.z );
 			}
 		}
 
