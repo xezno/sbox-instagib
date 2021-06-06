@@ -92,7 +92,8 @@ text.alert
 			background-size: cover;
 			background-image: url( textures/ui/chevron-up.png );
 			opacity: 0;
-			transition: opacity 100ms ease;
+			
+			transition: all 100ms ease;
 			
 			&.active {
 				opacity: 1;
@@ -102,6 +103,10 @@ text.alert
 		.up {
 			top: 0;
 			left: 50%;
+			
+			&.active {
+				top: -5px;
+			}
 
 			margin-left: -8px;
 		}
@@ -110,6 +115,10 @@ text.alert
 			left: 0;
 			top: 50%;
 
+			&.active {
+				left: -5px;
+			}
+
 			margin-top: -8px;
 			transform: rotate( 270deg );
 		}
@@ -117,6 +126,10 @@ text.alert
 		.right {
 			right: 0;
 			top: 50%;
+			
+			&.active {
+				right: -5px;
+			}
 
 			margin-top: -8px;
 			transform: rotate( 90deg );
@@ -125,6 +138,10 @@ text.alert
 		.down {
 			bottom: 0;
 			left: 50%;
+			
+			&.active {
+				bottom: -5px;
+			}	
 
 			margin-left: -8px;
 			transform: rotate( 180deg );
