@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 using System;
 using System.Linq;
+using Instagib.UI;
 
 namespace Instagib
 {
@@ -131,8 +132,11 @@ namespace Instagib
 
 			lastHudOffset = zOffset;
 
-			InstagibHud.CurrentHudPanel.Style.Transform = tx;
-			InstagibHud.CurrentHudPanel.Style.Dirty();
+			if ( InstagibHud.CurrentHudPanel != null )
+			{
+				InstagibHud.CurrentHudPanel.Style.Transform = tx;
+				InstagibHud.CurrentHudPanel.Style.Dirty();
+			}
 
 			lastCameraPos = setup.Position;
 		}

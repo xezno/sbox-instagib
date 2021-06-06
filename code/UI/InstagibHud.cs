@@ -3,7 +3,7 @@ using Instagib.UI.Menus;
 using Sandbox;
 using Sandbox.UI;
 
-namespace Instagib
+namespace Instagib.UI
 {
 	public partial class InstagibHud : Sandbox.HudEntity<RootPanel>
 	{
@@ -20,12 +20,11 @@ namespace Instagib
 				var mainPanel = RootPanel.AddChild<MainPanel>();
 				mainPanel.AddChild<KillFeed>();
 
-				var fragMessage = new FragMessage( "big boy" );
-				fragMessage.Parent = mainPanel;
-
+				// var fragMessage = new FragMessage( "big boy" );
+				// fragMessage.Parent = mainPanel;
+				
 				CurrentHudPanel = mainPanel;
 			}
 		}
 	}
-
 }

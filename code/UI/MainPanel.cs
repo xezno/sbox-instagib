@@ -14,8 +14,8 @@ namespace Instagib.UI
 
 		public MainPanel()
 		{
+			SetTemplate( "/UI/InstagibHud.html" );
 			SetClass( "mainpanel", true );
-			SetTemplate( "/InstagibHud.html" );
 		}
 	}
 }

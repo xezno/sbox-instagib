@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Instagib.UI;
+using Sandbox;
 
 namespace Instagib
 {

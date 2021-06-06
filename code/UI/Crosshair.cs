@@ -24,7 +24,7 @@ namespace Instagib.UI
 			right = crosshairMove.AddChild<Panel>( "right" );
 			down = crosshairMove.AddChild<Panel>( "down" );
 			
-			StyleSheet.Load( "/InstagibHud.scss" );
+			StyleSheet.Load( "/UI/InstagibHud.scss" );
 		}
 
 		[Event.BuildInput]
