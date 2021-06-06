@@ -14,7 +14,8 @@ namespace Instagib.UI
 
 		public MainPanel()
 		{
-			SetTemplate( "/UI/InstagibHud.html" );
+			SetTemplate( "/Code/UI/InstagibHud.html" );
+			StyleSheet.Load( "/Code/UI/InstagibHud.scss" ); // Loading in HTML doesn't work for whatever reason
 			SetClass( "mainpanel", true );
 		}
 	}
