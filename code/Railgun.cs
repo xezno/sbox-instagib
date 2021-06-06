@@ -9,7 +9,7 @@ namespace Instagib
 		public override string ViewModelPath => "weapons/railgun/models/v_railgun.vmdl";
 		public override float PrimaryRate => 1 / 1.5f;
 
-		private float zoomFov = 40f;
+		private float zoomFov = 60f;
 
 		private Particles beamParticles;
 		private bool zoom;
@@ -121,7 +121,7 @@ namespace Instagib
 
 			if ( IsLocalPawn )
 			{
-				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 2.0f );
+				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 1.0f );
 			}
 		}
 
