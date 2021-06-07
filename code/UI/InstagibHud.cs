@@ -8,6 +8,7 @@ namespace Instagib.UI
 	public partial class InstagibHud : Sandbox.HudEntity<RootPanel>
 	{
 		public static Panel CurrentHudPanel;
+		public static InstagibHud CurrentHud;
 		
 		public InstagibHud()
 		{
@@ -19,12 +20,19 @@ namespace Instagib.UI
 				
 				var mainPanel = RootPanel.AddChild<MainPanel>();
 				mainPanel.AddChild<KillFeed>();
-
-				// var fragMessage = new FragMessage( "big boy" );
-				// fragMessage.Parent = mainPanel;
 				
 				CurrentHudPanel = mainPanel;
+				CurrentHud = this;
 			}
+		}
+
+		public void OnKilledMessage( InstagibPlayer attacker, InstagibPlayer victim, string[] medals )
+		{
+			if ( attacker.GetClientOwner().SteamId != (Local.Client?.SteamId) )
+				return;
+
+			var fragMessage = new FragMessage( victim.GetClientOwner().Name, medals );
+			fragMessage.Parent = RootPanel;
 		}
 	}
 }

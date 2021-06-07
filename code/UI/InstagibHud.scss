@@ -1,4 +1,4 @@
-text 
+text,label
 {
 	font-family: Kairos Sans;
 	font-weight: 700;
@@ -169,11 +169,24 @@ text.alert
 	
 	align-items: center;
 	justify-content: center;
-	
+
 	text-align: center;
-	padding-bottom: 150px;
+	padding-bottom: 400px;
 	
 	font-size: 24px;
+
+	flex-direction: column;
+	
+	opacity: 1;
+	transition: opacity 200ms ease;
+	
+	&.inactive {
+		opacity: 0;
+	}
+
+	.medals {		
+		flex-direction: column;
+	}
 }
 
 .highlight {

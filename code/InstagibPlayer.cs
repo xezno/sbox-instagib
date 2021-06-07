@@ -9,8 +9,19 @@ namespace Instagib
 	{
 		private DamageInfo lastDamageInfo;
 		
+		//
+		// Stats used for medals
+		//
+		public int CurrentStreak { get; set; }
+		public float TotalDamageDealt { get; set; }
+		public float CurrentDamageDealt { get; set; }
+		
+		
 		public Team Team { get; set; }
 		
+		//
+		// Dynamic hud / camera
+		//
 		private Vector3 lastCameraPos = Vector3.Zero;
 		private Rotation lastCameraRot = Rotation.Identity;
 		private float lastHudOffset;
@@ -34,6 +45,9 @@ namespace Instagib
 			EnableShadowInFirstPerson = true;
 
 			Inventory.Add( new Railgun(), true );
+
+			CurrentStreak = 0;
+			CurrentDamageDealt = 0;
 			
 			base.Respawn();
 		}
@@ -70,6 +84,22 @@ namespace Instagib
 		{
 			base.TakeDamage( info );
 			lastDamageInfo = info;
+
+			// if ( IsClient ) return;
+			//
+			// ( info.Attacker as InstagibPlayer ).TotalDamageDealt += info.Damage;
+			// ( info.Attacker as InstagibPlayer ).CurrentDamageDealt += info.Damage;
+			//
+			// var attacker = info.Attacker as InstagibPlayer;
+			// var victim = this;
+			//
+			// foreach ( var medal in Medals.DamageMedals )
+			// {
+			// 	if ( medal.Condition.Invoke( attacker, victim ) )
+			// 	{
+			// 		Log.Info( $"Medal: {medal.Name}\t{medal.Description}" );
+			// 	}
+			// }
 		}
 
 		public override void PostCameraSetup( ref CameraSetup setup )
@@ -140,5 +170,6 @@ namespace Instagib
 
 			lastCameraPos = setup.Position;
 		}
+
 	}
 }
