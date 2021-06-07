@@ -41,7 +41,7 @@ namespace Instagib
 		public float AirControl { get; set; } = 60.0f;
 		public bool AutoJump { get; set; } = true;
 		public float JumpMultiplier { get; set; } = 1.1f;
-		public float SpeedLimit { get; set; } = 1024f; // Hard limit (excludes Z)
+		public float SpeedLimit { get; set; } = 1536f; // Hard limit (excludes Z)
 
 		/// <summary>
 		///     This is temporary, get the hull size for the player's collision
