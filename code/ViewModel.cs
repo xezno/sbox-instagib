@@ -19,6 +19,9 @@ namespace Instagib
 
 		private bool activated = false;
 
+		private Vector3 CenteredOffset => new Vector3( -25f, 0f, 10f );
+		private Vector3 RightHandOffset => new Vector3( -25f, 10f, 10f );
+
 		public override void PostCameraSetup( ref CameraSetup camSetup )
 		{
 			base.PostCameraSetup( ref camSetup );
@@ -56,7 +59,11 @@ namespace Instagib
 
 			if ( Centered )
 			{
-				offset -= new Vector3( 0f, -2.5f, 0.75f );
+				offset -= CenteredOffset;
+			}
+			else
+			{
+				offset -= RightHandOffset;
 			}
 
 			Position += Rotation * offset;

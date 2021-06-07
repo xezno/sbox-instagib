@@ -6,7 +6,7 @@ namespace Instagib
 	[Library( "railgun" )]
 	partial class Railgun : BaseWeapon
 	{
-		public override string ViewModelPath => "weapons/railgun/models/v_railgun.vmdl";
+		public override string ViewModelPath => "weapons/railgun/models/wpn_qc_railgun.vmdl";
 		public override float PrimaryRate => 1 / 1.5f;
 
 		private float zoomFov = 60f;
@@ -19,7 +19,7 @@ namespace Instagib
 		public override void Spawn()
 		{
 			base.Spawn();
-			SetModel( "weapons/railgun/models/railgun.vmdl" );
+			SetModel( "weapons/railgun/models/wpn_qc_railgun.vmdl" ); // TODO: LOD
 		}
 
 		public override void SimulateAnimator( PawnAnimator anim )

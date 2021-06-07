@@ -183,6 +183,11 @@ text.alert
 	&.inactive {
 		opacity: 0;
 	}
+	
+	.player {
+		color: #ff151c;
+		font-weight: 600;
+	}
 
 	.medals {		
 		flex-direction: column;

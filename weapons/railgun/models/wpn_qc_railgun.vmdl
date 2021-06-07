@@ -1,0 +1,850 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "BoneMarkupList"
+				bone_cull_type = "None"
+			},
+			{
+				_class = "WeightListList"
+				children = 
+				[
+					{
+						_class = "WeightList"
+						name = "bonemask_default"
+						default_weight = 0.0
+						weights = 
+						[
+							{
+								bone = "root"
+								weight = 1.0
+							},
+						]
+						master_morph_weight = -1.0
+						morph_weights = [  ]
+					},
+				]
+			},
+			{
+				_class = "Skeleton"
+				children = 
+				[
+					{
+						_class = "Bone"
+						name = "root"
+						children = 
+						[
+							{
+								_class = "Bone"
+								name = "barrel_recoil"
+								children = 
+								[
+									{
+										_class = "Bone"
+										name = "plate_top_right_2"
+										origin = [ 5.891491, 2.446457, 0.781871 ]
+										angles = [ -89.999985, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "plate_top_left_2"
+										origin = [ 5.891491, 2.446457, -0.466671 ]
+										angles = [ 89.999985, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "fins"
+										origin = [ 4.714231, -0.480345, 0.157874 ]
+										angles = [ -0.0, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "plate_top_left_1"
+										origin = [ 5.891489, 1.654251, 0.157874 ]
+										angles = [ 89.999985, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "plate_top_right_1"
+										origin = [ 5.891491, 1.654253, 0.157874 ]
+										angles = [ -89.999985, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "plate_bottom_left_1"
+										origin = [ 5.891493, -2.644192, 0.157873 ]
+										angles = [ 89.999985, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "plate_bottom_right_1"
+										origin = [ 5.891489, -2.644191, 0.157873 ]
+										angles = [ -89.999985, -0.000057, 0.0 ]
+										do_not_discard = true
+									},
+								]
+								origin = [ 25.092676, 0.383852, -0.157875 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "upper_plates_recoil"
+								children = 
+								[
+									{
+										_class = "Bone"
+										name = "upper_plates_right"
+										origin = [ 0.0, -0.091843, 0.595 ]
+										angles = [ -0.0, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "upper_plates_left"
+										origin = [ 0.0, -0.091843, -0.595279 ]
+										angles = [ -0.0, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+								]
+								origin = [ 20.684874, 2.423992, 0.0 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "trigger"
+								origin = [ 4.044654, -3.176161, -0.000001 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "canister_bottom_base"
+								children = 
+								[
+									{
+										_class = "Bone"
+										name = "canister_bottom_rotate"
+										origin = [ -4.035252, -0.118653, -3.242612 ]
+										angles = [ -0.000036, -180.0, 179.999939 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "canister_bottom_move"
+										origin = [ -5.880871, -0.119839, -3.243906 ]
+										angles = [ -0.000036, -180.0, 179.999939 ]
+										do_not_discard = true
+									},
+								]
+								origin = [ 20.344774, -3.629457, -5.804808 ]
+								angles = [ -0.000036, -180.0, 179.999939 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "canister_top_base"
+								children = 
+								[
+									{
+										_class = "Bone"
+										name = "canister_top_move"
+										origin = [ 5.7039, 0.117779, -3.724006 ]
+										angles = [ -0.0, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "canister_top_rotate"
+										origin = [ 3.938673, 0.117779, -3.722704 ]
+										angles = [ -0.0, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+								]
+								origin = [ 4.415812, 3.928428, 6.233201 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "plate_bottom_right_2"
+								origin = [ 30.984171, -3.029413, 0.623908 ]
+								angles = [ -89.999985, -0.000057, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "plate_bottom_left_2"
+								origin = [ 30.984169, -3.029413, -0.623885 ]
+								angles = [ 89.999985, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+						]
+						origin = [ 0.0, 0.0, 0.0 ]
+						angles = [ -0.0, -89.999985, 89.999985 ]
+						do_not_discard = true
+					},
+					{
+						_class = "Bone"
+						name = "hold_R"
+						origin = [ 6.362709, -1.143668, 0.357469 ]
+						angles = [ 4.263336, 0.0, 0.0 ]
+						do_not_discard = true
+					},
+				]
+			},
+			{
+				_class = "BodyGroupList"
+				children = 
+				[
+					{
+						_class = "BodyGroup"
+						name = "wpn_qc_railgun_bg_canisters_sm0_lod0"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								meshes = 
+								[
+									"wpn_qc_railgun_bg_canisters_sm0_lod0",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								meshes = 
+								[
+									"wpn_qc_railgun_bg_canisters2_lod0",
+								]
+							},
+						]
+						hidden_in_tools = false
+					},
+					{
+						_class = "BodyGroup"
+						name = "wpn_qc_railgun_bg_barrel_sm0_lod0"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								meshes = 
+								[
+									"wpn_qc_railgun_bg_barrel2_lod0",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								meshes = 
+								[
+									"wpn_qc_railgun_bg_barrel_sm0_lod0",
+								]
+							},
+						]
+						hidden_in_tools = false
+					},
+					{
+						_class = "BodyGroup"
+						name = "wpn_qc_railgun_bg_trigger_sm0_lod0"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								meshes = 
+								[
+									"wpn_qc_railgun_bg_trigger_sm0_lod0",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								meshes = 
+								[
+									"wpn_qc_railgun_bg_trigger2_lod0",
+								]
+							},
+						]
+						hidden_in_tools = false
+					},
+				]
+			},
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "MaterialGroup"
+						name = "1"
+						remaps = 
+						[
+							{
+								from = "weapons/railgun/materials/qc_wpn_railgun_01.vmat"
+								to = "weapons/railgun/materials/qc_wpn_railgun_01_a.vmat"
+							},
+						]
+					},
+					{
+						_class = "MaterialGroup"
+						name = "2"
+						remaps = 
+						[
+							{
+								from = "weapons/railgun/materials/qc_wpn_railgun_01.vmat"
+								to = "weapons/railgun/materials/qc_wpn_railgun_gold.vmat"
+							},
+						]
+					},
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = 
+						[
+							{
+								from = "qc_wpn_railgun_01_glass_is_unused.vmat"
+								to = "weapons/railgun/materials/qc_wpn_railgun_01_alpha.vmat"
+							},
+							{
+								from = "qc_wpn_railgun_01_is_unused.vmat"
+								to = "weapons/railgun/materials/qc_wpn_railgun_01.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = ""
+					},
+				]
+			},
+			{
+				_class = "PhysicsBodyMarkupList"
+				children = 
+				[
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = ""
+						mass_override = 10.0
+						inertia_scale = 1.0
+						linear_damping = 0.0
+						angular_damping = 0.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+				]
+			},
+			{
+				_class = "PhysicsShapeList"
+				children = 
+				[
+					{
+						_class = "PhysicsHullFile"
+						name = "wpn_railgun_01_00_tp_phys_0_mesh"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "weapons/railgun/models/wpn_qc_railgun_refs/phys/wpn_qc_railgun_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"wpn_railgun_01_00_tp_phys_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "wpn_railgun_01_00_tp_phys_1_mesh"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "weapons/railgun/models/wpn_qc_railgun_refs/phys/wpn_qc_railgun_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"wpn_railgun_01_00_tp_phys_1_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "wpn_railgun_01_00_tp_phys_2_mesh"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "weapons/railgun/models/wpn_qc_railgun_refs/phys/wpn_qc_railgun_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"wpn_railgun_01_00_tp_phys_2_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "wpn_railgun_01_00_tp_phys_3_mesh"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "weapons/railgun/models/wpn_qc_railgun_refs/phys/wpn_qc_railgun_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"wpn_railgun_01_00_tp_phys_3_mesh",
+							]
+						}
+					},
+				]
+			},
+			{
+				_class = "HitboxSetList"
+				children = 
+				[
+					{
+						_class = "HitboxSet"
+						name = "default"
+						children = 
+						[
+							{
+								_class = "Hitbox"
+								parent_bone = "root"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -8.4205, -14.7842, -5.804808 ]
+								hitbox_maxs = [ 30.984169, 7.394099, 6.233201 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "barrel_recoil"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -14.125876, -3.147552, -1.905919 ]
+								hitbox_maxs = [ 17.298624, 2.456248, 2.221682 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "upper_plates_recoil"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -2.616374, -2.465392, -1.939093 ]
+								hitbox_maxs = [ 2.616927, 0.595508, 1.941208 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "canister_bottom_base"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -10.287626, -1.632439, -4.458516 ]
+								hitbox_maxs = [ 1.520576, 1.466562, 0.0 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "canister_bottom_rotate"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.679431, -0.844285, -0.841696 ]
+								hitbox_maxs = [ 0.443071, 0.843115, 0.844204 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "canister_bottom_move"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -1.402551, -0.8074, -0.808485 ]
+								hitbox_maxs = [ 1.743351, 0.8086, 0.808516 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "canister_top_base"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -1.520513, -1.467429, -4.939796 ]
+								hitbox_maxs = [ 10.287686, 1.631571, 0.0 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "canister_top_move"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -1.215713, -0.807408, -0.808491 ]
+								hitbox_maxs = [ 1.930187, 0.808592, 0.808609 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "canister_top_rotate"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.572887, -0.843108, -0.844194 ]
+								hitbox_maxs = [ 0.549514, 0.843092, 0.841706 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "plate_top_right_2"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.20678, -2.264609, -8.820032 ]
+								hitbox_maxs = [ 1.34751, 0.598091, 7.874367 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "plate_top_left_2"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.207357, -2.264608, -7.874367 ]
+								hitbox_maxs = [ 1.346944, 0.598091, 8.820032 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "fins"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -5.618908, -1.480607, -2.815692 ]
+								hitbox_maxs = [ 5.684594, 1.480593, 2.815712 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "plate_top_left_1"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.209211, -0.199903, -7.330366 ]
+								hitbox_maxs = [ 0.838088, 1.028397, 8.418835 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "plate_top_right_1"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.209193, -0.199905, -8.418833 ]
+								hitbox_maxs = [ 0.838117, 1.028395, 7.330369 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "plate_bottom_left_1"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.209211, -0.97826, 0.0 ]
+								hitbox_maxs = [ 0.838089, 0.19954, 8.418831 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "plate_bottom_right_1"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.209184, -0.978253, -8.418835 ]
+								hitbox_maxs = [ 0.838116, 0.199547, 0.0 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "upper_plates_right"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -2.616374, -1.439149, -0.299693 ]
+								hitbox_maxs = [ 2.616926, 1.621751, 1.932708 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "upper_plates_left"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -2.616373, -1.439148, -1.932414 ]
+								hitbox_maxs = [ 2.616927, 1.621751, 0.299987 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "plate_bottom_right_2"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.206694, -0.355593, -8.82003 ]
+								hitbox_maxs = [ 1.347597, 2.243718, 7.783272 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "plate_bottom_left_2"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.206694, -0.355587, -7.78327 ]
+								hitbox_maxs = [ 1.347606, 2.243713, 8.82003 ]
+							},
+						]
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "Folder"
+						name = "LOD0"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								name = "wpn_qc_railgun_bg_base_lod0"
+								filename = "weapons/railgun/models/wpn_qc_railgun_refs/mesh/wpn_qc_railgun_bg_base_lod0.dmx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = false
+									exception_list = [  ]
+								}
+							},
+							{
+								_class = "RenderMeshFile"
+								name = "wpn_qc_railgun_bg_details_lod0"
+								filename = "weapons/railgun/models/wpn_qc_railgun_refs/mesh/wpn_qc_railgun_bg_details_lod0.dmx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = false
+									exception_list = [  ]
+								}
+							},
+							{
+								_class = "RenderMeshFile"
+								name = "wpn_qc_railgun_bg_canisters2_lod0"
+								filename = "weapons/railgun/models/wpn_qc_railgun_refs/mesh/wpn_qc_railgun_bg_canisters2_lod0.dmx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = false
+									exception_list = [  ]
+								}
+							},
+							{
+								_class = "RenderMeshFile"
+								name = "wpn_qc_railgun_bg_barrel2_lod0"
+								filename = "weapons/railgun/models/wpn_qc_railgun_refs/mesh/wpn_qc_railgun_bg_barrel2_lod0.dmx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = false
+									exception_list = [  ]
+								}
+							},
+							{
+								_class = "RenderMeshFile"
+								name = "wpn_qc_railgun_bg_trigger2_lod0"
+								filename = "weapons/railgun/models/wpn_qc_railgun_refs/mesh/wpn_qc_railgun_bg_trigger2_lod0.dmx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = false
+									exception_list = [  ]
+								}
+							},
+							{
+								_class = "RenderMeshFile"
+								name = "wpn_qc_railgun_bg_canisters_sm0_lod0"
+								filename = "weapons/railgun/models/wpn_qc_railgun_refs/mesh/wpn_qc_railgun_bg_canisters_sm0_lod0.dmx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = false
+									exception_list = [  ]
+								}
+							},
+							{
+								_class = "RenderMeshFile"
+								name = "wpn_qc_railgun_bg_barrel_sm0_lod0"
+								filename = "weapons/railgun/models/wpn_qc_railgun_refs/mesh/wpn_qc_railgun_bg_barrel_sm0_lod0.dmx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = false
+									exception_list = [  ]
+								}
+							},
+							{
+								_class = "RenderMeshFile"
+								name = "wpn_qc_railgun_bg_trigger_sm0_lod0"
+								filename = "weapons/railgun/models/wpn_qc_railgun_refs/mesh/wpn_qc_railgun_bg_trigger_sm0_lod0.dmx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = false
+									exception_list = [  ]
+								}
+							},
+						]
+					},
+				]
+			},
+			{
+				_class = "AnimationList"
+				children = 
+				[
+					{
+						_class = "AnimFile"
+						name = "idle"
+						activity_name = "ACT_IDLE"
+						activity_weight = 1
+						weight_list_name = "bonemask_default"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "weapons/railgun/models/wpn_qc_railgun_refs/anim/_idle_0.dmx"
+						start_frame = -1
+						end_frame = -1
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "@idle_0"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "weapons/railgun/models/wpn_qc_railgun_refs/anim/_idle_0.dmx"
+						start_frame = 0
+						end_frame = 100
+						framerate = 30.0
+						reverse = false
+					},
+				]
+				default_root_bone_name = ""
+			},
+			{
+				_class = "AttachmentList"
+				children = 
+				[
+					{
+						_class = "Attachment"
+						name = "muzzle"
+						parent_bone = "root"
+						relative_origin = [ 42.81596, 0.0, 0.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = "weapons/railgun/animgraphs/railgun.vanmgrph"
+	}
+}

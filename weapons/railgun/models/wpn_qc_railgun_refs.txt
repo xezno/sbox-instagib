@@ -1,0 +1,6 @@
+importfilelist
+{
+	"file"	"qc_wpn_railgun_01_is_unused.vmt"
+	"file"	"qc_wpn_railgun_gold_is_unused.vmt"
+	"file"	"qc_wpn_railgun_01_glass_is_unused.vmt"
+}

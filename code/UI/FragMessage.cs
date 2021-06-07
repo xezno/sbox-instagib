@@ -23,7 +23,9 @@ namespace Instagib.UI
 			
 			fragMessage.SetClass( "frag-message", true );
 			fragMessage.AddChild<Label>().SetText( Rand.Int(0, 10) == 1 ? "YOU SHAGGED " : "YOU FRAGGED " );
-			fragMessage.AddChild<Label>().SetText( target );
+			var playerText = fragMessage.AddChild<Label>();
+			playerText.SetText( target );
+			playerText.SetClass( "player", true );
 
 			var medalPanel = AddChild<Panel>();
 			medalPanel.SetClass( "medals", true );
