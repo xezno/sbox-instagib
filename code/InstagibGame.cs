@@ -35,21 +35,10 @@ namespace Instagib
 			
 			var attacker = pawn.LastAttacker as InstagibPlayer;
 			var victim = pawn as InstagibPlayer;
+			
 			attacker.CurrentStreak++;
 			
-			Log.Info( $"Current streak: {attacker.CurrentStreak}" );
-			Log.Info( "Checking medals" );
-			Log.Info( $"{pawn.LastAttacker.GetClientOwner().Name} receives:");
-
-			List<Medal> medals = new();
-			foreach ( var medal in Medals.KillMedals )
-			{
-				if ( medal.Condition.Invoke( attacker, victim ) )
-				{
-					Log.Info( $"Medal: {medal.Name}\t{medal.Description}" );
-					medals.Add( medal );
-				}
-			}
+			List<Medal> medals = Medals.KillMedals.Where( medal => medal.Condition.Invoke( attacker, victim ) ).ToList();
 
 			string[] medalArr = new string[ medals.Count ];
 			for ( int i = 0; i < medals.Count; ++i )
