@@ -37,7 +37,7 @@ namespace Instagib
 
 			Controller = new InstagibController();
 			Animator = new StandardPlayerAnimator();
-			Camera = new FirstPersonCamera() { FieldOfView = 90 };
+			Camera = new FirstPersonCamera();
 
 			EnableAllCollisions = true;
 			EnableDrawing = true;
@@ -154,8 +154,7 @@ namespace Instagib
 			setup.FieldOfView += fov;
 
 			var tx = new Sandbox.UI.PanelTransform();
-			tx.AddRotation( 0, 0, lean * -0.2f );
-
+			tx.AddRotation( 0, 0, lean * -0.2f ); 
 			var zOffset = (lastCameraPos - setup.Position).z * 2f;
 			zOffset = lastHudOffset.LerpTo( zOffset, 25.0f * Time.Delta );
 			tx.AddTranslateY( zOffset );

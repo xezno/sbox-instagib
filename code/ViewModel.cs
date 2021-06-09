@@ -40,7 +40,7 @@ namespace Instagib
 			Position = camSetup.Position;
 			Rotation = camSetup.Rotation;
 
-			camSetup.ViewModel.FieldOfView = 55;
+			camSetup.ViewModel.FieldOfView = 45;
 
 			var newPitch = Rotation.Pitch();
 			var newYaw = Rotation.Yaw();

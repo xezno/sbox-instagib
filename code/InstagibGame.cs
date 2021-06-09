@@ -32,9 +32,12 @@ namespace Instagib
 			base.OnKilled( client, pawn );
 			if ( pawn.LastAttacker == null )
 				return;
+
+			if ( pawn.LastAttacker is not InstagibPlayer attacker )
+				return;
 			
-			var attacker = pawn.LastAttacker as InstagibPlayer;
-			var victim = pawn as InstagibPlayer;
+			if ( pawn is not InstagibPlayer victim )
+				return;
 			
 			attacker.CurrentStreak++;
 			

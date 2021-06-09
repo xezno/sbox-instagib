@@ -91,6 +91,7 @@ text.alert
 
 			background-size: cover;
 			background-image: url( textures/ui/chevron-up.png );
+			background-image-tint: rgba( white, 0.2 );
 			opacity: 0;
 			
 			transition: all 100ms ease;

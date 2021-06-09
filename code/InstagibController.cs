@@ -25,9 +25,9 @@ namespace Instagib
 			Unstuck = new Unstuck( this );
 		}
 
-		public float Speed { get; set; } = 384.0f;
+		public float Speed { get; set; } = 310.0f;
 		public float Acceleration { get; set; } = 8.0f;
-		public float AirAcceleration { get; set; } = 256.0f;
+		public float AirAcceleration { get; set; } = 64.0f;
 		public float GroundFriction { get; set; } = 4.0f;
 		public float StopSpeed { get; set; } = 100.0f;
 		public float DistEpsilon { get; set; } = 0.03125f;
@@ -38,10 +38,10 @@ namespace Instagib
 		public float BodyHeight { get; set; } = 72.0f;
 		public float EyeHeight { get; set; } = 64.0f;
 		public float Gravity { get; set; } = 800.0f;
-		public float AirControl { get; set; } = 60.0f;
+		public float AirControl { get; set; } = 40.0f;
 		public bool AutoJump { get; set; } = true;
-		public float JumpMultiplier { get; set; } = 1.1f;
-		public float SpeedLimit { get; set; } = 1536f; // Hard limit (excludes Z)
+		public float JumpMultiplier { get; set; } = 0.9f;
+		public float SpeedLimit { get; set; } = 1024f; // Hard limit (excludes Z)
 
 		/// <summary>
 		///     This is temporary, get the hull size for the player's collision
