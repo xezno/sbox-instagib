@@ -30,7 +30,7 @@ namespace Instagib
 
 		public override bool CanPrimaryAttack()
 		{
-			if ( !Owner.Input.Pressed( InputButton.Attack1 ) )
+			if ( !Input.Pressed( InputButton.Attack1 ) )
 				return false;
 
 			if ( Owner.Health <= 0 )

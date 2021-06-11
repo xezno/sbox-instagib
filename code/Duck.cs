@@ -16,7 +16,7 @@ namespace Instagib
 
 		public virtual void PreTick() 
 		{
-			bool wants = Controller.Input.Down( InputButton.Duck );
+			bool wants = Input.Down( InputButton.Duck );
 
 			if ( wants != IsActive ) 
 			{
