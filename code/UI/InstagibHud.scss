@@ -208,3 +208,38 @@ text.alert
 	left: 0; 
 	bottom: 0; 
 }
+
+hitmarker
+{
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	position: absolute;
+	align-items: center;
+	justify-content: center;
+
+	hitmarkerinstance
+	{
+		width: 60px;
+		height: 60px;
+		opacity: 1;
+		position: absolute;
+		transition: all 0.1s ease-out;
+		background-image: url( /textures/ui/hit.png );
+		background-image-tint: #f00;
+		background-size: 100%;
+
+		&:intro
+		{
+			opacity: 0;
+		}
+
+		&:outro
+		{
+			transition: all 50ms ease;
+			opacity: 0;
+		}
+	}
+}

@@ -17,6 +17,7 @@ namespace Instagib.UI
 				// RootPanel.AddChild<MainMenu>();
 				RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
 				RootPanel.AddChild<Crosshair>();
+				RootPanel.AddChild<Hitmarker>();
 				
 				var mainPanel = RootPanel.AddChild<MainPanel>();
 				mainPanel.AddChild<KillFeed>();

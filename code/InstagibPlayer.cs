@@ -80,10 +80,23 @@ namespace Instagib
 			Camera = new SpectateRagdollCamera();
 		}
 
+		[ClientRpc]
+		public void OnDamageOther( Vector3 pos, float amount )
+		{
+			Log.Trace( $"{Local.DisplayName} damaged another player" );
+			
+			Hitmarker.CurrentHitmarker.OnHit();
+		}
+
 		public override void TakeDamage( DamageInfo info )
 		{
 			base.TakeDamage( info );
 			lastDamageInfo = info;
+
+			if ( info.Attacker is InstagibPlayer attacker )
+			{
+				attacker.OnDamageOther( To.Single( attacker ), info.Position, info.Damage );
+			}
 
 			// if ( IsClient ) return;
 			//
