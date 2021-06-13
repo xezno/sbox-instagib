@@ -4,7 +4,7 @@ namespace Instagib
 {
 	public class ViewModel : BaseViewModel
 	{
-		[ClientVar( "viewmodel_centered" )] public static bool Centered { get; set; } = true;
+		[ClientVar( "viewmodel_centered" )] public static bool Centered { get; set; } = false;
 
 		protected float SwingInfluence => 0.005f;
 		protected float ReturnSpeed => 5.0f;

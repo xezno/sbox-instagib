@@ -51,7 +51,7 @@ namespace Instagib
 		{
 			var forward = dir * 10000;
 
-			foreach ( var tr in TraceBullet( pos, pos + dir * 100000, 10f ) )
+			foreach ( var tr in TraceBullet( pos, pos + dir * 100000, 12.5f ) )
 			{
 				tr.Surface.DoBulletImpact( tr );
 
@@ -87,7 +87,7 @@ namespace Instagib
 				beamParticles.SetPos( 1, tr.EndPos );
 			}
 
-			zoom = Input.Down( InputButton.Attack2 );
+			zoom = Input.Down( InputButton.View );
 		}
 
 		public override void PostCameraSetup( ref CameraSetup camSetup )
