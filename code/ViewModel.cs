@@ -6,7 +6,7 @@ namespace Instagib
 	{
 		[ClientVar( "viewmodel_centered" )] public static bool Centered { get; set; } = false;
 
-		protected float SwingInfluence => 0.005f;
+		protected float SwingInfluence => 0.025f;
 		protected float ReturnSpeed => 5.0f;
 		protected float MaxOffsetLength => 10.0f;
 		protected float BobCycleTime => 14;
