@@ -121,7 +121,7 @@ namespace Instagib
 
 			if ( IsLocalPawn )
 			{
-				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 1.0f );
+				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 4.0f );
 			}
 		}
 
