@@ -2,17 +2,13 @@
 using Sandbox.Hooks;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
-using System;
-using System.Collections.Generic;
 
 public partial class ClassicChatBox : Panel
 {
-	static ClassicChatBox Current;
+	public static ClassicChatBox Current;
 
 	public Panel Canvas { get; protected set; }
 	public TextEntry Input { get; protected set; }
-
-	//public List<object> ChatMessages { get; private set; }
 
 	public ClassicChatBox()
 	{
@@ -28,9 +24,8 @@ public partial class ClassicChatBox : Panel
 		Input.AcceptsFocus = true;
 		Input.AllowEmojiReplace = true;
 
-		Sandbox.Hooks.Chat.OnOpenChat += Open;
+		Chat.OnOpenChat += Open;
 	}
-
 
 	void Open()
 	{
@@ -39,7 +34,7 @@ public partial class ClassicChatBox : Panel
 
 		foreach ( ClassicChatEntry message in Canvas.Children )
 		{
-			if(message.HasClass( "hide" ) )
+			if ( message.HasClass( "hide" ) )
 			{
 				message.AddClass( "show" );
 			}
@@ -57,8 +52,7 @@ public partial class ClassicChatBox : Panel
 			{
 				message.RemoveClass( "show" );
 				message.AddClass( "expired" );
-			}
-			
+			}	
 		}
 	}
 
@@ -75,24 +69,18 @@ public partial class ClassicChatBox : Panel
 		Say( msg );
 	}
 
-	
 	public void AddEntry( string name, string message, string avatar )
 	{
 		var e = Canvas.AddChild<ClassicChatEntry>();
-		//e.SetFirstSibling();
 		e.Message.Text = message;
 		e.NameLabel.Text = name;
 		e.Avatar.SetTexture( avatar );
 
 		e.SetClass( "noname", string.IsNullOrEmpty( name ) );
 		e.SetClass( "noavatar", string.IsNullOrEmpty( avatar ) );
-
-		// Add to array of messages to showcase later
-		//ChatMessages.Add( e );
 	}
 
-	//
-	[ClientCmd( "chatt_add", CanBeCalledFromServer = true )]
+	[ClientCmd( "chat_add", CanBeCalledFromServer = true )]
 	public static void AddChatEntry( string name, string message, string avatar = null )
 	{
 		Current?.AddEntry( name, message, avatar );
@@ -104,13 +92,13 @@ public partial class ClassicChatBox : Panel
 		}
 	}
 
-	[ClientCmd( "chatt_addinfo", CanBeCalledFromServer = true )]
+	[ClientCmd( "chat_addinfo", CanBeCalledFromServer = true )]
 	public static void AddInformation( string message, string avatar = null )
 	{
 		Current?.AddEntry( null, message, avatar );
 	}
 
-	[ServerCmd( "sayy" )]
+	[ServerCmd( "say" )]
 	public static void Say( string message )
 	{
 		Assert.NotNull( ConsoleSystem.Caller );
@@ -122,21 +110,4 @@ public partial class ClassicChatBox : Panel
 		Log.Info( $"{ConsoleSystem.Caller}: {message}" );
 		AddChatEntry( To.Everyone, ConsoleSystem.Caller.Name, message, $"avatar:{ConsoleSystem.Caller.SteamId}" );
 	}
-
 }
-
-
-/*
-public static partial class ClassicChat
-{
-	public static event Action OnOpenChat;
-
-	[ClientCmd( "openchatt" )]
-	internal static void MessageMode()
-	{
-		OnOpenChat?.Invoke();
-	}
-
-}
-
-*/
