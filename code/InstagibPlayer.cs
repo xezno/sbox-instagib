@@ -77,8 +77,11 @@ namespace Instagib
 			base.OnKilled();
 
 			EnableDrawing = false;
+			EnableAllCollisions = false;
 
-			BecomeRagdollOnClient( Velocity, 0 );
+			//BecomeRagdollOnClient( Velocity, 0 );
+			
+			_ = Particles.Create( "particles/gib_blood.vpcf", Position + (Vector3.Up * (8)) );
 			Camera = new SpectateRagdollCamera();
 		}
 
