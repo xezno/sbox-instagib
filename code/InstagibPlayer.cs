@@ -44,6 +44,8 @@ namespace Instagib
 			EnableHideInFirstPerson = true;
 			EnableShadowInFirstPerson = true;
 
+			Dress();
+
 			Inventory.Add( new Railgun(), true );
 
 			CurrentStreak = 0;
