@@ -115,7 +115,7 @@ namespace Instagib
 				BaseVelocity = BaseVelocity.WithZ( 0 );
 			}
 
-			if ( AutoJump ? Input.Down( InputButton.Attack2 ) || Input.Down( InputButton.Jump ) : Input.Pressed( InputButton.Attack2 ) || Input.Pressed( InputButton.Jump ) )
+			if ( AutoJump ? Input.Down( InputButton.Jump ) : Input.Pressed( InputButton.Jump ) )
 			{
 				CheckJumpButton();
 			}
