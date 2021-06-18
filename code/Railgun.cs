@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Sandbox;
 
 namespace Instagib
@@ -47,6 +48,44 @@ namespace Instagib
 			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
 		}
 
+		[ServerCmd( "send_shoot" )]
+		private static void CmdShoot( int targetIdent, int ownerIdent, Vector3 endPos, Vector3 forward, int tick )
+		{
+			// This should totally not be a command
+			// In order to prevent people from just typing stuff like "shoot Alex", we'll do some light checking to
+			// verify stuff
+
+			try
+			{
+				var target = Entity.All.First( e => e.NetworkIdent == targetIdent );
+				var owner = Entity.All.First( e => e.NetworkIdent == ownerIdent );
+				var damage = DamageInfo.FromBullet( endPos, forward.Normal * 20, 1000 )
+					.WithAttacker( owner ).WithWeapon( new Railgun() ).WithForce( (endPos - forward).Normal * 1000f );
+
+				//if ( target is not Player )
+				//	throw new Exception();
+
+				//if ( owner is not Player )
+				//	throw new Exception();
+
+				if ( Time.Tick - tick > 64 )
+					return;
+
+				// TODO - Checking:
+				// Check to make sure that the end pos and forward actually line up with the start pos
+				// Do some basic checking to ensure that this isn't called more times/sec than it should be
+				// Do a (large) raycast in the direction specified to make sure they're not fucking us with aim
+				target.TakeDamage( damage );
+			}
+			catch
+			{
+				Log.Error( $"Invalid target" );
+
+				ConsoleSystem.Run( "kick", ConsoleSystem.Caller.Name ); // :)
+			}
+		}
+
+		[ClientRpc()]
 		private void Shoot( Vector3 pos, Vector3 dir )
 		{
 			var forward = dir * 10000;
@@ -60,18 +99,10 @@ namespace Instagib
 				beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity,
 					"muzzle" );
 
-				if ( !IsServer ) continue;
 				if ( !tr.Entity.IsValid() ) continue;
 
-				using ( Prediction.Off() )
-				{
-					var damage = DamageInfo.FromBullet( tr.EndPos, forward.Normal * 20, 1000 )
-						.UsingTraceResult( tr )
-						.WithAttacker( Owner )
-						.WithWeapon( this );
-
-					tr.Entity.TakeDamage( damage );
-				}
+				// TODO: We shouldn't be running this as a command!!!!
+				ConsoleSystem.Run( "send_shoot", tr.Entity.NetworkIdent, Owner.NetworkIdent, tr.EndPos, Owner.EyeRot.Forward, Time.Tick );
 			}
 
 			ShootEffects();
