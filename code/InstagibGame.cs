@@ -11,7 +11,7 @@ namespace Instagib
 		private static InstagibHud hud;
 		public InstagibGame()
 		{
-			// Precache.Add( "particles/gib_blood.vpcf" );
+			Precache.Add( "particles/gib_blood.vpcf" );
 			Precache.Add( "sounds/jump.vsnd" );
 			
 			Precache.Add( "weapons/railgun/particles/railgun_beam.vpcf" );
