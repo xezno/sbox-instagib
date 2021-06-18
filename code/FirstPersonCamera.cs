@@ -23,7 +23,7 @@ namespace Instagib
 			if ( pawn == null ) return;
 
 			var eyePos = pawn.EyePos;
-			if ( eyePos.Distance( lastPos ) < 250 ) // TODO: Tweak this, or add a way to invalidate lastpos when teleporting
+			if ( eyePos.Distance( lastPos ) < 250 )
 			{
 				Pos = Vector3.Lerp( eyePos.WithZ( lastPos.z ), eyePos, 20.0f * Time.Delta );
 			}

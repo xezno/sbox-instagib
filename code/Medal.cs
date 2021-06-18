@@ -56,6 +56,7 @@ namespace Instagib
 				( attacker, _ ) => attacker.CurrentStreak == 30,
 				10 ),
 			
+			// TODO: All of below
 			new Medal( "Excellent", "Frag 2 enemies in 3 seconds or less", (_, _) => false, 10 ),
 			new Medal( "Triple Kill", "Frag 3 enemies with 3 seconds or less between each frag", (_, _) => false, 10 ),
 			new Medal( "Buzzkill", "Frag a player on a streak", (_, victim) => victim.CurrentStreak > 3, 10 ),

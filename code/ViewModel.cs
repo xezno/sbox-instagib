@@ -10,17 +10,17 @@ namespace Instagib
 		protected float ReturnSpeed => 5.0f;
 		protected float MaxOffsetLength => 10.0f;
 		protected float BobCycleTime => 14;
-		protected Vector3 BobDirection => new Vector3( 0.0f, 0.1f, 0.2f );
+		protected Vector3 BobDirection => new( 0.0f, 0.1f, 0.2f );
 
 		private Vector3 swingOffset;
 		private float lastPitch;
 		private float lastYaw;
 		private float bobAnim;
 
-		private bool activated = false;
+		private bool activated;
 
-		private Vector3 CenteredOffset => new Vector3( -25f, 0f, 10f );
-		private Vector3 RightHandOffset => new Vector3( -25f, 10f, 10f );
+		private Vector3 CenteredOffset => new( -25f, 0f, 10f );
+		private Vector3 RightHandOffset => new( -25f, 10f, 10f );
 
 		public override void PostCameraSetup( ref CameraSetup camSetup )
 		{
@@ -89,6 +89,9 @@ namespace Instagib
 
 		protected Vector3 CalcBobbingOffset( Vector3 velocity )
 		{
+			var halfPI = System.MathF.PI * 0.5f;
+			var twoPI = System.MathF.PI * 2.0f;
+			
 			if ( Owner.GroundEntity != null )
 			{
 				bobAnim += Time.Delta * BobCycleTime;
@@ -96,15 +99,13 @@ namespace Instagib
 			else
 			{
 				// In air - return to center
-				if ( bobAnim > System.MathF.PI / 2f + 0.1f )
+				if ( bobAnim > halfPI + 0.1f )
 					bobAnim -= Time.Delta * BobCycleTime * 0.05f;
-				else if ( bobAnim < System.MathF.PI / 2f + 0.1f )
+				else if ( bobAnim < halfPI + 0.1f )
 					bobAnim += Time.Delta * BobCycleTime * 0.05f;
 				else
-					bobAnim = System.MathF.PI / 2f;
+					bobAnim = halfPI;
 			}
-
-			var twoPI = System.MathF.PI * 2.0f;
 
 			if ( bobAnim > twoPI )
 			{

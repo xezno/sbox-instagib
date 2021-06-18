@@ -16,9 +16,6 @@ namespace Instagib
 		public float TotalDamageDealt { get; set; }
 		public float CurrentDamageDealt { get; set; }
 		
-		
-		public Team Team { get; set; }
-		
 		//
 		// Dynamic hud / camera
 		//
@@ -78,8 +75,6 @@ namespace Instagib
 
 			EnableDrawing = false;
 			EnableAllCollisions = false;
-
-			//BecomeRagdollOnClient( Velocity, 0 );
 			
 			_ = Particles.Create( "particles/gib_blood.vpcf", Position + (Vector3.Up * (8)) );
 			Camera = new SpectateRagdollCamera();
@@ -102,22 +97,6 @@ namespace Instagib
 			{
 				attacker.OnDamageOther( To.Single( attacker ), info.Position, info.Damage );
 			}
-
-			// if ( IsClient ) return;
-			//
-			// ( info.Attacker as InstagibPlayer ).TotalDamageDealt += info.Damage;
-			// ( info.Attacker as InstagibPlayer ).CurrentDamageDealt += info.Damage;
-			//
-			// var attacker = info.Attacker as InstagibPlayer;
-			// var victim = this;
-			//
-			// foreach ( var medal in Medals.DamageMedals )
-			// {
-			// 	if ( medal.Condition.Invoke( attacker, victim ) )
-			// 	{
-			// 		Log.Info( $"Medal: {medal.Name}\t{medal.Description}" );
-			// 	}
-			// }
 		}
 
 		public override void PostCameraSetup( ref CameraSetup setup )

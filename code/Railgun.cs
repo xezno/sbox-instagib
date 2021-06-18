@@ -123,8 +123,6 @@ namespace Instagib
 		[ClientRpc]
 		private void Shoot( Vector3 pos, Vector3 dir )
 		{
-			var forward = dir * 10000;
-
 			foreach ( var tr in TraceBullet( pos, pos + dir * 100000, 12.5f ) )
 			{
 				tr.Surface.DoBulletImpact( tr );

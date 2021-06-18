@@ -6,9 +6,8 @@ namespace Instagib
 {
 	partial class InstagibPlayer
 	{
-		ModelEntity trousers, jacket, shoes, hat;
-
-		bool dressed = false;
+		private ModelEntity trousers, jacket, shoes, hat;
+		private bool dressed = false;
 		
 		public void Dress()
 		{
