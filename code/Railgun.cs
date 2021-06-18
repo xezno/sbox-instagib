@@ -49,7 +49,7 @@ namespace Instagib
 			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
 		}
 
-		// This should totally not be a user-invoked command
+		// This should ideally not be a user-invoked command
 		[ServerCmd( "send_shoot" )]
 		private static void CmdShoot( int targetIdent, int ownerIdent, Vector3 startPos, Vector3 endPos, Vector3 forward, int tick )
 		{
@@ -77,20 +77,10 @@ namespace Instagib
 				return;
 			}
 
-			if ( tick - Time.Tick > maxHitTolerance ) // This is equivalent to
+			if ( tick - Time.Tick > maxHitTolerance )
 			{
 				Log.Trace( $"Too much time passed: {tick - Time.Tick}" );
 				return; // Too much time passed - player's lagging too much for us to do any proper checks
-			}
-
-			// TODO: Check to make sure that the end pos and forward actually line up with the start pos
-			{
-
-			}
-
-			// TODO: Do some basic checking to ensure that this isn't called more times/sec than it should be
-			{
-
 			}
 
 			// Do a (large) raycast in the direction specified to make sure they're not bullshitting
