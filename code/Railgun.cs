@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Sandbox;
+using Trace = Sandbox.Trace;
 
 namespace Instagib
 {
@@ -69,41 +71,42 @@ namespace Instagib
 				Log.Trace( "Target wasn't a player" );
 				return;
 			}
-
+			
 			if ( owner is not Player )
 			{
 				// This should never happen 
 				Log.Trace( "Owner wasn't a player" );
 				return;
 			}
-
+			
 			if ( tick - Time.Tick > maxHitTolerance )
 			{
 				Log.Trace( $"Too much time passed: {tick - Time.Tick}" );
 				return; // Too much time passed - player's lagging too much for us to do any proper checks
 			}
-
+			
 			// Do a (large) raycast in the direction specified to make sure they're not bullshitting
+			if ( false )
 			{
 				var tr = Trace.Ray( startPos, startPos + forward * 100000 )
 						.UseHitboxes()
 						.Ignore( owner )
-						.Size( 25f ) // This determines the tolerance of the cast; 25 is a good value for most playable pings
+						.Size( 20f ) // This determines the tolerance of the cast
 						.EntitiesOnly()
 						.Run();
-
+			
 				if ( !tr.Hit )
 				{
 					Log.Trace( "Didn't hit" );
 					return;
 				}
-
+			
 				if ( !tr.Entity.IsValid() )
 				{
 					Log.Trace( "Entity invalid" );
 					return;
 				}
-
+			
 				if ( tr.Entity.NetworkIdent != targetIdent )
 				{
 					Log.Trace( "Idents didnt match" );
@@ -115,7 +118,7 @@ namespace Instagib
 			// Damage
 			//
 			var damage = DamageInfo.FromBullet( endPos, forward.Normal * 20, 1000 )
-				.WithAttacker( owner ).WithWeapon( new Railgun() );
+				.WithAttacker( owner );
 
 			target.TakeDamage( damage );
 		}
@@ -123,10 +126,12 @@ namespace Instagib
 		[ClientRpc]
 		private void Shoot( Vector3 pos, Vector3 dir )
 		{
-			foreach ( var tr in TraceBullet( pos, pos + dir * 100000, 12.5f ) )
+			DebugOverlay.Line( pos, pos + dir * 100000, 5f );
+			foreach ( var tr in TraceBullet( pos, pos + dir * 100000, 4f ) )
 			{
-				tr.Surface.DoBulletImpact( tr );
-
+				if ( tr.Entity is not InstagibPlayer )
+					tr.Surface.DoBulletImpact( tr );
+				
 				// Do beam particles on client and server
 				beamParticles?.Destroy( true );
 				beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity,
