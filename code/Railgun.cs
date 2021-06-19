@@ -56,12 +56,18 @@ namespace Instagib
 		}
 
 		private void RocketJump( Vector3 pos, Vector3 normal )
-		{	
+		{
+			bool debug = false;
+			
+			if ( !IsServer )
+				return;
+			
 	        var sourcePos = pos;
 	        var radius = 128;
 	        var overlaps = Physics.GetEntitiesInSphere( sourcePos, radius );
 	        
-		    DebugOverlay.Sphere( pos, radius, Color.Yellow, true, 5f );
+	        if ( debug )
+				DebugOverlay.Sphere( pos, radius, Color.Yellow, true, 5f );
 		    
 		    foreach ( var overlap in overlaps )
 		    {
@@ -73,8 +79,10 @@ namespace Instagib
 			    var dist = Vector3.DistanceBetween( sourcePos, targetPos );
 
 			    if ( dist > radius ) continue;
-
-			    DebugOverlay.Line( sourcePos, targetPos, 5 );
+			    
+			    if ( debug )
+					DebugOverlay.Line( sourcePos, targetPos, 5 );
+			    
 			    var distanceFactor = 1.0f - Math.Clamp( dist / radius, 0.25f, 0.75f );
 			    var force = 0.75f * distanceFactor * player.PhysicsBody.Mass;
 			    var forceDir = ( targetPos - sourcePos ).Normal;
@@ -88,24 +96,21 @@ namespace Instagib
 
 			    ent.Velocity += force * Vector3.Lerp( normal, forceDir, 0.5f );
 		    }
+
+		    Particles.Create( "particles/explosion.vpcf", pos );
 		}
 
 		public override void AttackSecondary()
 		{
 			base.AttackSecondary();
-			Log.Trace( "Secondary attack" );
 
 			var pos = Owner.EyePos;
 			var dir = Owner.EyeRot.Forward;
 			
-			DebugOverlay.Line( pos, pos + dir * 256, 5f );
 			foreach ( var tr in TraceBullet( pos, pos + dir * 256, 4f ) )
 			{
 				if ( !tr.Hit )
 					return;
-				
-				if ( tr.Entity is not InstagibPlayer )
-					tr.Surface.DoBulletImpact( tr );
 
 				using ( Prediction.Off() )
 				{

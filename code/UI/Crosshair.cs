@@ -5,7 +5,7 @@ using Sandbox.UI;
 
 namespace Instagib.UI
 {
-	public class Crosshair : Panel
+	public class Crosshair : Label
 	{
 		private Panel up;
 		private Panel left;
@@ -15,7 +15,7 @@ namespace Instagib.UI
 		public Crosshair()
 		{
 			SetClass( "crosshair", true );
-			AddChild<Panel>().SetClass( "crosshair-inner", true );
+			SetText( "a" );
 
 			var crosshairMove = AddChild<Panel>( "crosshair-move" );
 			
