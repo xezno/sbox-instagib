@@ -1,4 +1,4 @@
-text,label
+text,label,input,textentry
 {
 	font-family: Kairos Sans;
 	font-weight: 700;
@@ -8,7 +8,7 @@ text,label
 
 text.alert 
 {
-	font-size: 25px;
+	font-size: 32px;
 	padding: 50px;
 	position: absolute;
 	top: 0;
@@ -65,100 +65,16 @@ text.alert
 	left: 50%;
 	top: 50%;
 	border-radius: 10px;
-	border: 2px solid white;
+	font-family: Crosshairs;
+	color: white;
+	text-align: center;
+	font-size: 24px;
 	width: 6px;
 	height: 6px;
 	padding: 5px;
 	
-	margin-left: -7px;
-	margin-top: -7px;
-	
-	.crosshair-move {
-		position: absolute;
-		transform: translate( -50% -50% );
-		top: -27px;
-		left: -27px;
-		
-		width: 64px;
-		height: 64px;
-		
-		.up,.left,.right,.down {
-			position: absolute;
-			width: 16px;
-			height: 16px;
-			margin-left: 0px;
-			margin-top: 0px;
-
-			background-size: cover;
-			background-image: url( textures/ui/chevron-up.png );
-			background-image-tint: rgba( white, 0.2 );
-			opacity: 0;
-			
-			transition: all 100ms ease;
-			
-			&.active {
-				opacity: 1;
-			}
-		}
-		
-		.up {
-			top: 0;
-			left: 50%;
-			
-			&.active {
-				top: -5px;
-			}
-
-			margin-left: -8px;
-		}
-		
-		.left {
-			left: 0;
-			top: 50%;
-
-			&.active {
-				left: -5px;
-			}
-
-			margin-top: -8px;
-			transform: rotate( 270deg );
-		}
-		
-		.right {
-			right: 0;
-			top: 50%;
-			
-			&.active {
-				right: -5px;
-			}
-
-			margin-top: -8px;
-			transform: rotate( 90deg );
-		}
-		
-		.down {
-			bottom: 0;
-			left: 50%;
-			
-			&.active {
-				bottom: -5px;
-			}	
-
-			margin-left: -8px;
-			transform: rotate( 180deg );
-		}
-	}
-	
-	.crosshair-inner {
-		position: absolute;
-		left: 4px;
-		top: 4px;
-		transform: translate( -50% -50% );
-		border-radius: 10px;
-		background-color: white;
-		width: 2px;
-		height: 2px;
-	}
+	margin-left: -6px;
+	margin-top: -16px;
 }
 
 .frag {

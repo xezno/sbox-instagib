@@ -138,7 +138,12 @@ namespace Instagib
 			setup.Position += left * MathF.Sin( walkBob * 0.6f ) * speed * 1;
 
 			// Camera lean
-			lean = lean.LerpTo( Velocity.Dot( setup.Rotation.Right ) * 0.015f, Time.Delta * 15.0f );
+			var leanMax = 0.015f;
+			var leanMul = 0.005f;
+			var leanSmooth = 15.0f;
+			
+			lean = lean.LerpTo( Velocity.Dot( setup.Rotation.Right ) * leanMul, Time.Delta * leanSmooth );
+			lean.Clamp( -leanMax, leanMax );
 
 			var appliedLean = lean;
 			appliedLean += MathF.Sin( walkBob ) * speed * 0.2f;

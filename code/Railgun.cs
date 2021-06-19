@@ -43,6 +43,81 @@ namespace Instagib
 			return base.CanPrimaryAttack();
 		}
 
+		public override bool CanSecondaryAttack()
+		{
+			if ( !Input.Pressed( InputButton.Attack2) )
+				return false;
+
+			if ( Owner.Health <= 0 )
+				return false;
+
+			return base.CanSecondaryAttack();
+		}
+
+		private void RocketJump( Vector3 pos, Vector3 normal )
+		{
+			bool debug = false;
+			
+			if ( !IsServer )
+				return;
+			
+	        var sourcePos = pos;
+	        var radius = 128;
+	        var overlaps = Physics.GetEntitiesInSphere( sourcePos, radius );
+	        
+	        if ( debug )
+				DebugOverlay.Sphere( pos, radius, Color.Yellow, true, 5f );
+		    
+		    foreach ( var overlap in overlaps )
+		    {
+			    if ( overlap is not ModelEntity ent || !ent.IsValid() ) continue;
+			    if ( ent.LifeState != LifeState.Alive && !ent.PhysicsBody.IsValid() && ent.IsWorld ) continue;
+			    if ( ent is not InstagibPlayer player ) continue;
+
+			    var targetPos = player.PhysicsBody.MassCenter;
+			    var dist = Vector3.DistanceBetween( sourcePos, targetPos );
+
+			    if ( dist > radius ) continue;
+			    
+			    if ( debug )
+					DebugOverlay.Line( sourcePos, targetPos, 5 );
+			    
+			    var distanceFactor = 1.0f - Math.Clamp( dist / radius, 0.25f, 0.75f );
+			    var force = 0.75f * distanceFactor * player.PhysicsBody.Mass;
+			    var forceDir = ( targetPos - sourcePos ).Normal;
+
+			    if ( player.GroundEntity != null )
+			    {
+				    ( player.Controller as InstagibController )?.ClearGroundEntity();
+				    player.GroundEntity = null;
+				    forceDir = Vector3.Lerp( forceDir, Vector3.Up * 2, 0.5f );
+			    }
+
+			    ent.Velocity += force * Vector3.Lerp( normal, forceDir, 0.5f );
+		    }
+
+		    Particles.Create( "particles/explosion.vpcf", pos );
+		}
+
+		public override void AttackSecondary()
+		{
+			base.AttackSecondary();
+
+			var pos = Owner.EyePos;
+			var dir = Owner.EyeRot.Forward;
+			
+			foreach ( var tr in TraceBullet( pos, pos + dir * 256, 4f ) )
+			{
+				if ( !tr.Hit )
+					return;
+
+				using ( Prediction.Off() )
+				{
+					RocketJump( tr.EndPos, tr.Normal );
+				}
+			}
+		}
+
 		public override void AttackPrimary()
 		{
 			TimeSincePrimaryAttack = 0;
@@ -126,7 +201,6 @@ namespace Instagib
 		[ClientRpc]
 		private void Shoot( Vector3 pos, Vector3 dir )
 		{
-			DebugOverlay.Line( pos, pos + dir * 100000, 5f );
 			foreach ( var tr in TraceBullet( pos, pos + dir * 100000, 4f ) )
 			{
 				if ( tr.Entity is not InstagibPlayer )
@@ -135,7 +209,10 @@ namespace Instagib
 				// Do beam particles on client and server
 				beamParticles?.Destroy( true );
 				beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity,
-					"muzzle" );
+					"muzzle", false );
+
+				//var tr = Trace.Ray( Owner.EyePos, Owner.EyeRot.Forward * 1000000f ).Ignore( Owner ).WorldOnly().Run();
+				beamParticles.SetPos( 1, tr.EndPos );
 
 				if ( !tr.Entity.IsValid() ) continue;
 
@@ -150,13 +227,7 @@ namespace Instagib
 		{
 			base.Simulate( owner );
 
-			if ( beamParticles != null )
-			{
-				var tr = Trace.Ray( Owner.EyePos, Owner.EyeRot.Forward * 1000000f ).Ignore( Owner ).WorldOnly().Run();
-				beamParticles.SetPos( 1, tr.EndPos );
-			}
-
-			isZooming = Input.Down( InputButton.View );
+			isZooming = Input.Down( InputButton.Run ); // TODO: We should probably show inputs to the user on-screen
 		}
 
 		public override void PostCameraSetup( ref CameraSetup camSetup )
