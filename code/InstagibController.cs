@@ -624,7 +624,12 @@ namespace Instagib
 				return;
 			}
 
+			// Clear on the pawn
+			Pawn.GroundEntity = null;
+			
+			// Clear on the controller
 			GroundEntity = null;
+			
 			GroundNormal = Vector3.Up;
 			SurfaceFriction = 1.0f;
 		}

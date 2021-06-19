@@ -55,6 +55,7 @@ namespace Instagib
 		{
 			base.Simulate( cl );
 			SimulateActiveChild( cl, ActiveChild );
+			TickPlayerUse();
 
 			if ( cl == Local.Client )
 			{
@@ -77,7 +78,7 @@ namespace Instagib
 			EnableAllCollisions = false;
 			
 			_ = Particles.Create( "particles/gib_blood.vpcf", Position + (Vector3.Up * (8)) );
-			PlaySound( "kill" );
+			
 			Sound.FromWorld( "gibbing", Position );
 			Camera = new SpectateRagdollCamera();
 		}
@@ -86,6 +87,8 @@ namespace Instagib
 		public void OnDamageOther( Vector3 pos, float amount )
 		{
 			Log.Trace( $"{Local.DisplayName} damaged another player" );
+			
+			PlaySound( "kill" );
 			
 			Hitmarker.CurrentHitmarker.OnHit();
 		}

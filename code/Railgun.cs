@@ -90,7 +90,7 @@ namespace Instagib
 			    if ( player.GroundEntity != null )
 			    {
 				    ( player.Controller as InstagibController )?.ClearGroundEntity();
-				    player.GroundEntity = null;
+				    
 				    forceDir = Vector3.Lerp( forceDir, Vector3.Up * 2, 0.5f );
 			    }
 
