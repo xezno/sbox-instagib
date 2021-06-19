@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 
 namespace Instagib
 {
@@ -25,23 +26,24 @@ namespace Instagib
 			Unstuck = new Unstuck( this );
 		}
 
-		public float Speed { get; set; } = 310.0f;
-		public float Acceleration { get; set; } = 8.0f;
-		public float AirAcceleration { get; set; } = 64.0f;
-		public float GroundFriction { get; set; } = 4.0f;
-		public float StopSpeed { get; set; } = 100.0f;
-		public float DistEpsilon { get; set; } = 0.03125f;
-		public float GroundAngle { get; set; } = 46.0f;
-		public float StepSize { get; set; } = 18.0f;
-		public float MaxNonJumpVelocity { get; set; } = 128.0f;
-		public float BodyGirth { get; set; } = 32.0f;
-		public float BodyHeight { get; set; } = 72.0f;
-		public float EyeHeight { get; set; } = 64.0f;
-		public float Gravity { get; set; } = 800.0f;
-		public float AirControl { get; set; } = 40.0f;
-		public bool AutoJump { get; set; } = true;
-		public float JumpMultiplier { get; set; } = 0.9f;
-		public float SpeedLimit { get; set; } = 1024f; // Hard limit (excludes Z)
+		public float Speed => 310.0f;
+		public float AirSpeed => 512.0f;
+		public float Acceleration => 8.0f;
+		public float AirAcceleration => 4.0f;
+		public float GroundFriction => 4.0f;
+		public float StopSpeed => 100.0f;
+		public float DistEpsilon => 0.03125f;
+		public float GroundAngle => 46.0f;
+		public float StepSize => 18.0f;
+		public float MaxNonJumpVelocity => 128.0f;
+		public float BodyGirth => 32.0f;
+		public float BodyHeight => 72.0f;
+		public float EyeHeight => 64.0f;
+		public float Gravity => 800.0f;
+		public float AirControl => Single.PositiveInfinity;
+		public bool AutoJump => false;
+		public float JumpMultiplier => 0.9f;
+		public float SpeedLimit => 768f; // Hard limit (excludes Z)
 
 		/// <summary>
 		///     This is temporary, get the hull size for the player's collision
@@ -177,8 +179,6 @@ namespace Instagib
 				Velocity = Velocity.WithZ( 0 );
 			}
 
-			// CheckFalling(); // fall damage etc
-
 			LimitSpeed();
 
 			if ( Debug )
@@ -203,9 +203,12 @@ namespace Instagib
 
 		public virtual void LimitSpeed()
 		{
+			// if ( GroundEntity != null )
+			// 	return;
+				
 			if ( Velocity.WithZ( 0 ).Length > SpeedLimit )
 			{
-				Velocity = Velocity.LerpTo( (Velocity.Normal * SpeedLimit).WithZ( Velocity.z ), 10f * Time.Delta );
+				Velocity = Velocity.LerpTo( (Velocity.Normal * SpeedLimit).WithZ( Velocity.z ), 1f * Time.Delta );
 			}
 		}
 
@@ -216,6 +219,9 @@ namespace Instagib
 			{
 				return ws;
 			}
+
+			if ( GroundEntity == null )
+				return AirSpeed;
 
 			return Speed;
 		}
@@ -362,6 +368,32 @@ namespace Instagib
 			Velocity += wishdir * accelspeed;
 		}
 
+		public virtual void AirAccelerate( Vector3 wishdir, float wishspeed, float acceleration )
+		{
+			// See if we are changing direction a bit
+			var currentspeed = Velocity.Dot( wishdir );
+
+			// Reduce wishspeed by the amount of veer.
+			var addspeed = wishspeed - currentspeed;
+
+			// If not going to add any speed, done.
+			if ( addspeed <= 0 )
+			{
+				return;
+			}
+
+			// Determine amount of acceleration.
+			var accelspeed = acceleration * Time.Delta * wishspeed * SurfaceFriction;
+
+			// Cap at addspeed
+			if ( accelspeed > addspeed )
+			{
+				accelspeed = addspeed;
+			}
+
+			Velocity += wishdir * accelspeed;
+		}
+
 		/// <summary>
 		///     Remove ground friction from velocity
 		/// </summary>
@@ -422,10 +454,13 @@ namespace Instagib
 
 		public virtual void AirMove()
 		{
-			var wishdir = WishVelocity.Normal;
+			var wishdir = (Input.Rotation.Forward * Input.Forward) + (Input.Rotation.Left * Input.Left);
+			wishdir = Vector3.Lerp( wishdir, WishVelocity.Normal, 0.5f );
+			wishdir = wishdir.WithZ( 0 );
+			
 			var wishspeed = WishVelocity.Length;
 
-			Accelerate( wishdir, wishspeed, AirControl, AirAcceleration );
+			AirAccelerate( wishdir, wishspeed, AirAcceleration );
 
 			Velocity += BaseVelocity;
 

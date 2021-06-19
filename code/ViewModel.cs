@@ -5,6 +5,7 @@ namespace Instagib
 	public class ViewModel : BaseViewModel
 	{
 		[ClientVar( "viewmodel_centered" )] public static bool Centered { get; set; } = false;
+		[ClientVar( "viewmodel_visible" )] public static bool Visible { get; set; } = true;
 
 		protected float SwingInfluence => 0.025f;
 		protected float ReturnSpeed => 5.0f;
@@ -25,6 +26,15 @@ namespace Instagib
 		public override void PostCameraSetup( ref CameraSetup camSetup )
 		{
 			base.PostCameraSetup( ref camSetup );
+
+			if ( !Visible )
+			{
+				EnableDrawing = false;
+			}
+			else
+			{
+				EnableDrawing = true;
+			}
 
 			if ( !Local.Pawn.IsValid() )
 				return;
