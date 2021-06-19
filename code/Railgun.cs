@@ -211,7 +211,10 @@ namespace Instagib
 				// Do beam particles on client and server
 				beamParticles?.Destroy( true );
 				beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity,
-					"muzzle" );
+					"muzzle", false );
+
+				// var tr = Trace.Ray( Owner.EyePos, Owner.EyeRot.Forward * 1000000f ).Ignore( Owner ).WorldOnly().Run();
+				beamParticles.SetPos( 1, tr.EndPos );
 
 				if ( !tr.Entity.IsValid() ) continue;
 
@@ -226,13 +229,7 @@ namespace Instagib
 		{
 			base.Simulate( owner );
 
-			if ( beamParticles != null )
-			{
-				var tr = Trace.Ray( Owner.EyePos, Owner.EyeRot.Forward * 1000000f ).Ignore( Owner ).WorldOnly().Run();
-				beamParticles.SetPos( 1, tr.EndPos );
-			}
-
-			isZooming = Input.Down( InputButton.View );
+			isZooming = Input.Down( InputButton.Run ); // TODO: We should probably show inputs to the user on-screen
 		}
 
 		public override void PostCameraSetup( ref CameraSetup camSetup )
