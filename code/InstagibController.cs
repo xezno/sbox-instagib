@@ -29,7 +29,7 @@ namespace Instagib
 		public float Speed => 310.0f;
 		public float AirSpeed => 310.0f;
 		public float Acceleration => 10.0f;
-		public float AirAcceleration => 18.0f;
+		public float AirAcceleration => 16.0f;
 		public float GroundFriction => 4.0f;
 		public float StopSpeed => 100.0f;
 		public float DistEpsilon => 0.03125f;
@@ -118,7 +118,7 @@ namespace Instagib
 				BaseVelocity = BaseVelocity.WithZ( 0 );
 			}
 
-			if ( AutoJump ? Input.Down( InputButton.Attack2 ) || Input.Down( InputButton.Jump ) : Input.Pressed( InputButton.Attack2 ) || Input.Pressed( InputButton.Jump ) )
+			if ( AutoJump ? Input.Down( InputButton.Jump ) : Input.Pressed( InputButton.Jump ) )
 			{
 				CheckJumpButton();
 			}
