@@ -25,7 +25,7 @@ namespace Instagib
 			var eyePos = pawn.EyePos;
 			if ( eyePos.Distance( lastPos ) < 250 )
 			{
-				Pos = Vector3.Lerp( eyePos.WithZ( lastPos.z ), eyePos, 20.0f * Time.Delta );
+				Pos = Vector3.Lerp( eyePos.WithZ( lastPos.Z ), eyePos, 20.0f * Time.Delta );
 			}
 			else
 			{

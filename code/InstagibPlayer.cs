@@ -152,7 +152,7 @@ namespace Instagib
 
 			var tx = new Sandbox.UI.PanelTransform();
 			tx.AddRotation( 0, 0, lean * -0.2f ); 
-			var zOffset = (lastCameraPos - setup.Position).z * 2f;
+			var zOffset = (lastCameraPos - setup.Position).Z * 2f;
 			zOffset = lastHudOffset.LerpTo( zOffset, 25.0f * Time.Delta );
 			tx.AddTranslateY( zOffset );
 

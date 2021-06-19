@@ -110,7 +110,7 @@ namespace Instagib
 			if ( !IsTouchingLadder )
 			{
 				Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
-				Velocity += new Vector3( 0, 0, BaseVelocity.z ) * Time.Delta;
+				Velocity += new Vector3( 0, 0, BaseVelocity.Z ) * Time.Delta;
 
 				BaseVelocity = BaseVelocity.WithZ( 0 );
 			}
@@ -205,7 +205,7 @@ namespace Instagib
 		{
 			if ( Velocity.WithZ( 0 ).Length > SpeedLimit )
 			{
-				Velocity = Velocity.LerpTo( (Velocity.Normal * SpeedLimit).WithZ( Velocity.z ), 10f * Time.Delta );
+				Velocity = Velocity.LerpTo( (Velocity.Normal * SpeedLimit).WithZ( Velocity.Z ), 10f * Time.Delta );
 			}
 		}
 
@@ -244,7 +244,7 @@ namespace Instagib
 				}
 
 				// first try just moving to the destination	
-				var dest = (Position + Velocity * Time.Delta).WithZ( Position.z );
+				var dest = (Position + Velocity * Time.Delta).WithZ( Position.Z );
 
 				var pm = TraceBBox( Position, dest );
 
@@ -405,7 +405,7 @@ namespace Instagib
 			ClearGroundEntity();
 
 			var flMul = 268.3281572999747f * ( Gravity / 600f ) * JumpMultiplier;
-			var startz = Velocity.z;
+			var startz = Velocity.Z;
 
 			if ( Duck.IsActive )
 			{
@@ -503,18 +503,18 @@ namespace Instagib
 			//
 			//  Shooting up really fast.  Definitely not on ground trimed until ladder shit
 			//
-			var movingUpRapidly = Velocity.z > MaxNonJumpVelocity;
+			var movingUpRapidly = Velocity.Z > MaxNonJumpVelocity;
 			var moveToEndPos = false;
 
 			if ( GroundEntity != null ) // and not underwater
 			{
 				moveToEndPos = true;
-				point.z -= StepSize;
+				point.WithZ( point.Z - StepSize );
 			}
 			else if ( stayOnGround )
 			{
 				moveToEndPos = true;
-				point.z -= StepSize;
+				point.WithZ( point.Z - StepSize );
 			}
 
 			if ( movingUpRapidly ) // or ladder and moving up
@@ -530,7 +530,7 @@ namespace Instagib
 				ClearGroundEntity();
 				moveToEndPos = false;
 
-				if ( Velocity.z > 0 )
+				if ( Velocity.Z > 0 )
 				{
 					SurfaceFriction = 0.25f;
 				}
