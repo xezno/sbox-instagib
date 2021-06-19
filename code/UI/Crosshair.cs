@@ -7,6 +7,8 @@ namespace Instagib.UI
 {
 	public class Crosshair : Label
 	{
+		private static Crosshair Instance { get; set; }
+		
 		private Panel up;
 		private Panel left;
 		private Panel right;
@@ -14,6 +16,8 @@ namespace Instagib.UI
 		
 		public Crosshair()
 		{
+			Instance = this;
+			
 			SetClass( "crosshair", true );
 			SetText( "a" );
 
@@ -36,6 +40,15 @@ namespace Instagib.UI
 			left.SetClass( "active", input.Down( InputButton.Left ) );
 			right.SetClass( "active", input.Down( InputButton.Right ) );
 			down.SetClass( "active", input.Down( InputButton.Back ) );
+		}
+
+		[ClientCmd( "crosshair_glyph" )]
+		public static void SetCrosshair( string character )
+		{
+			if ( character.Length != 1 )
+				return;
+			
+			Instance.SetText( character );
 		}
 	}
 }
