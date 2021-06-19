@@ -11,7 +11,6 @@ namespace Instagib
 	{
 		public override string ViewModelPath => "weapons/railgun/models/wpn_qc_railgun.vmdl";
 		public override float PrimaryRate => 1 / 1.5f;
-		public override float SecondaryRate => 1 / 0.5f;
 
 		private const float maxHitTolerance = (90f / 1000f) * 500; // (tickrate / 1000ms) * desired_ms, number of ticks tolerance given to a hit. 
 		private float zoomFov = 60f;
@@ -42,76 +41,6 @@ namespace Instagib
 				return false;
 
 			return base.CanPrimaryAttack();
-		}
-
-		public override bool CanSecondaryAttack()
-		{
-			if ( !Input.Pressed( InputButton.Attack2) )
-				return false;
-
-			if ( Owner.Health <= 0 )
-				return false;
-
-			return base.CanSecondaryAttack();
-		}
-
-		private void RocketJump( Vector3 pos, Vector3 normal )
-		{	
-	        var sourcePos = pos;
-	        var radius = 128;
-	        var overlaps = Physics.GetEntitiesInSphere( sourcePos, radius );
-	        
-		    DebugOverlay.Sphere( pos, radius, Color.Yellow, true, 5f );
-		    
-		    foreach ( var overlap in overlaps )
-		    {
-			    if ( overlap is not ModelEntity ent || !ent.IsValid() ) continue;
-			    if ( ent.LifeState != LifeState.Alive && !ent.PhysicsBody.IsValid() && ent.IsWorld ) continue;
-			    if ( ent is not InstagibPlayer player ) continue;
-
-			    var targetPos = player.PhysicsBody.MassCenter;
-			    var dist = Vector3.DistanceBetween( sourcePos, targetPos );
-
-			    if ( dist > radius ) continue;
-
-			    DebugOverlay.Line( sourcePos, targetPos, 5 );
-			    var distanceFactor = 1.0f - Math.Clamp( dist / radius, 0.25f, 0.75f );
-			    var force = 0.75f * distanceFactor * player.PhysicsBody.Mass;
-			    var forceDir = ( targetPos - sourcePos ).Normal;
-
-			    if ( player.GroundEntity != null )
-			    {
-				    ( player.Controller as InstagibController )?.ClearGroundEntity();
-				    player.GroundEntity = null;
-				    forceDir = Vector3.Lerp( forceDir, Vector3.Up * 2, 0.5f );
-			    }
-
-			    ent.Velocity += force * Vector3.Lerp( normal, forceDir, 0.5f );
-		    }
-		}
-
-		public override void AttackSecondary()
-		{
-			base.AttackSecondary();
-			Log.Trace( "Secondary attack" );
-
-			var pos = Owner.EyePos;
-			var dir = Owner.EyeRot.Forward;
-			
-			DebugOverlay.Line( pos, pos + dir * 256, 5f );
-			foreach ( var tr in TraceBullet( pos, pos + dir * 256, 4f ) )
-			{
-				if ( !tr.Hit )
-					return;
-				
-				if ( tr.Entity is not InstagibPlayer )
-					tr.Surface.DoBulletImpact( tr );
-
-				using ( Prediction.Off() )
-				{
-					RocketJump( tr.EndPos, tr.Normal );
-				}
-			}
 		}
 
 		public override void AttackPrimary()
