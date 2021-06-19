@@ -68,7 +68,7 @@ text.alert
 	font-family: Crosshairs;
 	color: white;
 	text-align: center;
-	font-size: 22px;
+	font-size: 24px;
 	width: 6px;
 	height: 6px;
 	padding: 5px;
@@ -79,8 +79,8 @@ text.alert
 	.crosshair-move {
 		position: absolute;
 		transform: translate( -50% -50% );
-		top: -16.5px; // subpixel bad whatever idc
-		left: -26.5px;
+		top: -15px;
+		left: -26px;
 		
 		width: 64px;
 		height: 64px;
