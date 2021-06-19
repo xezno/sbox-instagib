@@ -29,7 +29,7 @@ namespace Instagib
 		public float Speed => 310.0f;
 		public float AirSpeed => 512.0f;
 		public float Acceleration => 8.0f;
-		public float AirAcceleration => 4.0f;
+		public float AirAcceleration => 10.0f;
 		public float GroundFriction => 4.0f;
 		public float StopSpeed => 100.0f;
 		public float DistEpsilon => 0.03125f;
