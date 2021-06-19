@@ -27,9 +27,9 @@ namespace Instagib
 		}
 
 		public float Speed => 310.0f;
-		public float AirSpeed => 480.0f;
+		public float AirSpeed => 420.0f;
 		public float Acceleration => 10.0f;
-		public float AirAcceleration => 12.0f;
+		public float AirAcceleration => 18.0f;
 		public float GroundFriction => 4.0f;
 		public float StopSpeed => 100.0f;
 		public float DistEpsilon => 0.03125f;
@@ -43,6 +43,7 @@ namespace Instagib
 		public float AirControl => Single.PositiveInfinity;
 		public bool AutoJump => false;
 		public float JumpMultiplier => 0.9f;
+		public float AirSpeedLimit => 768f;
 		public float SpeedLimit => 768f; // Hard limit (excludes Z)
 
 		/// <summary>
@@ -203,12 +204,20 @@ namespace Instagib
 
 		public virtual void LimitSpeed()
 		{
-			// if ( GroundEntity != null )
-			// 	return;
-				
-			if ( Velocity.WithZ( 0 ).Length > SpeedLimit )
+			float lerpRate = 10f;
+			if ( GroundEntity != null )
 			{
-				Velocity = Velocity.LerpTo( (Velocity.Normal * SpeedLimit).WithZ( Velocity.z ), 1f * Time.Delta );
+				if ( Velocity.WithZ( 0 ).Length > SpeedLimit )
+				{
+					Velocity = Velocity.LerpTo( (Velocity.Normal * AirSpeedLimit).WithZ( Velocity.z ), lerpRate * Time.Delta );
+				}
+			}
+			else
+			{
+				if ( Velocity.WithZ( 0 ).Length > SpeedLimit )
+				{
+					Velocity = Velocity.LerpTo( (Velocity.Normal * SpeedLimit).WithZ( Velocity.z ), lerpRate * Time.Delta );
+				}	
 			}
 		}
 

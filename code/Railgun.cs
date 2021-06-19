@@ -202,7 +202,6 @@ namespace Instagib
 		[ClientRpc]
 		private void Shoot( Vector3 pos, Vector3 dir )
 		{
-			DebugOverlay.Line( pos, pos + dir * 100000, 5f );
 			foreach ( var tr in TraceBullet( pos, pos + dir * 100000, 4f ) )
 			{
 				if ( tr.Entity is not InstagibPlayer )
@@ -213,7 +212,7 @@ namespace Instagib
 				beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity,
 					"muzzle", false );
 
-				// var tr = Trace.Ray( Owner.EyePos, Owner.EyeRot.Forward * 1000000f ).Ignore( Owner ).WorldOnly().Run();
+				//var tr = Trace.Ray( Owner.EyePos, Owner.EyeRot.Forward * 1000000f ).Ignore( Owner ).WorldOnly().Run();
 				beamParticles.SetPos( 1, tr.EndPos );
 
 				if ( !tr.Entity.IsValid() ) continue;
