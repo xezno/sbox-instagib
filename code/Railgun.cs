@@ -11,6 +11,7 @@ namespace Instagib
 	{
 		public override string ViewModelPath => "weapons/railgun/models/wpn_qc_railgun.vmdl";
 		public override float PrimaryRate => 1 / 1.5f;
+		public override float SecondaryRate => 2f;
 
 		private const float maxHitTolerance = (90f / 1000f) * 500; // (tickrate / 1000ms) * desired_ms, number of ticks tolerance given to a hit. 
 		private float zoomFov = 60f;
@@ -116,6 +117,8 @@ namespace Instagib
 					RocketJump( tr.EndPos, tr.Normal );
 				}
 			}
+
+			RocketEffects();
 		}
 
 		public override void AttackPrimary()
@@ -250,6 +253,22 @@ namespace Instagib
 		}
 
 		[ClientRpc]
+		public virtual void RocketEffects()
+		{
+			Host.AssertClient();
+
+			// Sound.FromEntity( "railgun_fire", this );
+
+			ViewModelEntity?.SetAnimBool( "fire", true );
+			CrosshairPanel?.OnEvent( "onattack" );
+
+			if ( IsLocalPawn )
+			{
+				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 4.0f, 2.0f );
+			}
+		}
+
+		[ClientRpc]
 		public virtual void ShootEffects()
 		{
 			Host.AssertClient();
@@ -261,7 +280,7 @@ namespace Instagib
 
 			if ( IsLocalPawn )
 			{
-				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 4.0f );
+				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 4.0f );
 			}
 		}
 

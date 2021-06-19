@@ -1,7 +1,9 @@
-﻿using Sandbox;
+﻿using System.Linq;
+using Sandbox;
 using Sandbox.Hooks;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
+using Sandbox.UI.Tests;
 
 public partial class ClassicChatBox : Panel
 {
@@ -10,6 +12,8 @@ public partial class ClassicChatBox : Panel
 	public Panel Canvas { get; protected set; }
 	public TextEntry Input { get; protected set; }
 
+	private VirtualScrollPanel<ClassicChatEntry> MessagePanel;
+
 	public ClassicChatBox()
 	{
 		Current = this;
@@ -17,6 +21,7 @@ public partial class ClassicChatBox : Panel
 		StyleSheet.Load( "/Code/UI/ClassicChatBox.scss" );
 
 		Canvas = Add.Panel( "classicchat_canvas" );
+		// Canvas.PreferScrollToBottom = true;
 
 		Input = Add.TextEntry( "" );
 		Input.AddEvent( "onsubmit", () => Submit() );
@@ -27,11 +32,17 @@ public partial class ClassicChatBox : Panel
 		Chat.OnOpenChat += Open;
 	}
 
+	void ResetScroll()
+	{
+		Log.Info( Canvas.ScrollOffset );
+		Canvas.TryScroll( 1.0f );
+	}
+
 	void Open()
 	{
 		AddClass( "open" );
-		Input.Focus(); 
-
+		Input.Focus();
+		
 		foreach ( ClassicChatEntry message in Canvas.Children )
 		{
 			if ( message.HasClass( "hide" ) )
@@ -45,7 +56,7 @@ public partial class ClassicChatBox : Panel
 	{
 		RemoveClass( "open" );
 		Input.Blur();
-
+		
 		foreach ( ClassicChatEntry message in Canvas.Children )
 		{
 			if ( message.HasClass( "show" ) )
@@ -66,18 +77,26 @@ public partial class ClassicChatBox : Panel
 		if ( string.IsNullOrWhiteSpace( msg ) )
 			return;
 
+		ResetScroll();
+		
 		Say( msg );
 	}
 
 	public void AddEntry( string name, string message, string avatar )
 	{
 		var e = Canvas.AddChild<ClassicChatEntry>();
+		// e.Parent = scrollPanel;
 		e.Message.Text = message;
 		e.NameLabel.Text = name;
 		e.Avatar.SetTexture( avatar );
 
 		e.SetClass( "noname", string.IsNullOrEmpty( name ) );
 		e.SetClass( "noavatar", string.IsNullOrEmpty( avatar ) );
+
+		if ( !HasClass( "open" ))
+			ResetScroll();
+
+		// scrollPanel.AddItem( e );
 	}
 
 	[ClientCmd( "chat_add", CanBeCalledFromServer = true )]

@@ -15,12 +15,19 @@ namespace Instagib.UI
 			if ( IsClient )
 			{
 				// RootPanel.AddChild<MainMenu>();
+				
+				//
+				// Stuff that doesn't move / tilt / etc.
+				//
 				RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
 				RootPanel.AddChild<Crosshair>();
+				RootPanel.AddChild<ClassicChatBox>();
 				RootPanel.AddChild<Hitmarker>();
 				
+				//
+				// Stuff that moves / tilts / etc.
+				//
 				var mainPanel = RootPanel.AddChild<MainPanel>();
-				mainPanel.AddChild<KillFeed>();
 				
 				CurrentHudPanel = mainPanel;
 				CurrentHud = this;

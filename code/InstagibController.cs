@@ -113,7 +113,7 @@ namespace Instagib
 			if ( !IsTouchingLadder )
 			{
 				Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
-				Velocity += new Vector3( 0, 0, BaseVelocity.Z ) * Time.Delta;
+				Velocity += new Vector3( 0, 0, BaseVelocity.z ) * Time.Delta;
 
 				BaseVelocity = BaseVelocity.WithZ( 0 );
 			}
@@ -209,14 +209,14 @@ namespace Instagib
 			{
 				if ( Velocity.WithZ( 0 ).Length > SpeedLimit )
 				{
-					Velocity = Velocity.LerpTo( (Velocity.Normal * AirSpeedLimit).WithZ( Velocity.Z ), lerpRate * Time.Delta );
+					Velocity = Velocity.LerpTo( (Velocity.Normal * AirSpeedLimit).WithZ( Velocity.z ), lerpRate * Time.Delta );
 				}
 			}
 			else
 			{
 				if ( Velocity.WithZ( 0 ).Length > SpeedLimit )
 				{
-					Velocity = Velocity.LerpTo( (Velocity.Normal * SpeedLimit).WithZ( Velocity.Z ), lerpRate * Time.Delta );
+					Velocity = Velocity.LerpTo( (Velocity.Normal * SpeedLimit).WithZ( Velocity.z ), lerpRate * Time.Delta );
 				}
 			}
 		}
@@ -259,7 +259,7 @@ namespace Instagib
 				}
 
 				// first try just moving to the destination	
-				var dest = (Position + Velocity * Time.Delta).WithZ( Position.Z );
+				var dest = (Position + Velocity * Time.Delta).WithZ( Position.z );
 
 				var pm = TraceBBox( Position, dest );
 
@@ -446,7 +446,7 @@ namespace Instagib
 			ClearGroundEntity();
 
 			var flMul = 268.3281572999747f * ( Gravity / 600f ) * JumpMultiplier;
-			var startz = Velocity.Z;
+			var startz = Velocity.z;
 
 			if ( Duck.IsActive )
 			{
@@ -547,18 +547,18 @@ namespace Instagib
 			//
 			//  Shooting up really fast.  Definitely not on ground trimed until ladder shit
 			//
-			var movingUpRapidly = Velocity.Z > MaxNonJumpVelocity;
+			var movingUpRapidly = Velocity.z > MaxNonJumpVelocity;
 			var moveToEndPos = false;
 
 			if ( GroundEntity != null ) // and not underwater
 			{
 				moveToEndPos = true;
-				point.WithZ( point.Z - StepSize );
+				point.z -= StepSize;
 			}
 			else if ( stayOnGround )
 			{
 				moveToEndPos = true;
-				point.WithZ( point.Z - StepSize );
+				point.z -= StepSize;
 			}
 
 			if ( movingUpRapidly ) // or ladder and moving up
@@ -574,7 +574,7 @@ namespace Instagib
 				ClearGroundEntity();
 				moveToEndPos = false;
 
-				if ( Velocity.Z > 0 )
+				if ( Velocity.z > 0 )
 				{
 					SurfaceFriction = 0.25f;
 				}
