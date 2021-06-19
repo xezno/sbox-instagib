@@ -27,7 +27,7 @@ namespace Instagib
 		}
 
 		public float Speed => 310.0f;
-		public float AirSpeed => 420.0f;
+		public float AirSpeed => 310.0f;
 		public float Acceleration => 10.0f;
 		public float AirAcceleration => 18.0f;
 		public float GroundFriction => 4.0f;
