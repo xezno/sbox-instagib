@@ -1,0 +1,44 @@
+﻿slider {
+  width: 80%;
+  height: 50px;
+
+  cursor: pointer;
+}
+
+.line {
+  height: 2px;
+  width: 100%;
+  background-color: #374151;
+  margin-top: 25px;
+}
+
+label {
+  padding: 10px;
+  width: 100px;
+  text-align: center;
+  align-items: center;
+}
+
+.needle {
+  width: 16px;
+  height: 16px;
+  border-radius: 1000px;
+  
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  
+  cursor: pointer;
+  
+  background-color: #6B7280;
+  
+  transition: background-color 100ms ease;
+
+  &:active {
+    sound-in: ui.button.press;
+  }
+  
+  &:hover {
+    background-color: #9CA3AF;
+  }
+}

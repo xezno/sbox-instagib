@@ -50,6 +50,7 @@ public partial class ClassicChatBox : Panel
 				message.AddClass( "show" );
 			}
 		}
+		ResetScroll();
 	}
 
 	void Close()
@@ -65,6 +66,7 @@ public partial class ClassicChatBox : Panel
 				message.AddClass( "expired" );
 			}	
 		}
+		ResetScroll();
 	}
 
 	void Submit()
@@ -93,6 +95,8 @@ public partial class ClassicChatBox : Panel
 		e.SetClass( "noname", string.IsNullOrEmpty( name ) );
 		e.SetClass( "noavatar", string.IsNullOrEmpty( avatar ) );
 
+
+		ResetScroll();
 		if ( !HasClass( "open" ))
 			ResetScroll();
 

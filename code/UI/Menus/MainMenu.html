@@ -1,10 +1,46 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+﻿<div>
+    <div class="menu-inner">
+        <text class="title">Settings</text>
+        
+        <div class="settings-items" @ref="Items">
+            <span>
+                <text>Nickname</text>
+                <textentry>Alex</textentry>               
+            </span>
 
-</body>
-</html>
+            <span>
+                <text>FOV</text>
+                <slider @ref="FovSlider"></slider>               
+            </span>
+
+            <span>
+                <text>Snap Rate</text>
+                <slider @ref="TestSlider"></slider>               
+            </span>
+
+            <span>
+                <text>Crosshair</text>
+                <textentry style="font-family: Crosshairs; font-size: 32px; text-align: center">hello world</textentry>               
+            </span>
+            
+            <span>
+                <text>Viewmodel Centered</text>
+                <checkbox></checkbox>
+            </span>
+
+            <span>
+                <text>Viewmodel Visible</text>
+                <checkbox></checkbox>
+            </span>
+            <button>Test</button>
+
+            <button>Test2</button>
+        </div>
+        
+        
+        <div class="buttons">
+            <button onclick="Delete()">Back</button>
+            <button onclick="Delete()">Apply</button>
+        </div>
+    </div>
+</div> 

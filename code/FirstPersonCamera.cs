@@ -4,6 +4,7 @@ namespace Instagib
 {
 	public class FirstPersonCamera : Camera
 	{
+		public int defaultFov = 100;
 		Vector3 lastPos;
 
 		public override void Activated()
@@ -34,7 +35,7 @@ namespace Instagib
 
 			Rot = pawn.EyeRot;
 
-			FieldOfView = 100;
+			FieldOfView = defaultFov;
 
 			Viewer = pawn;
 			lastPos = Pos;
