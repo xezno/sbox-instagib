@@ -14,9 +14,9 @@ namespace Instagib.UI
 		{
 			if ( IsClient )
 			{
-				RootPanel.AddChild<MainMenu>();
-
-				return;
+				// RootPanel.AddChild<MainMenu>();
+				//
+				// return;
 				
 				//
 				// Stuff that doesn't move / tilt / etc.
