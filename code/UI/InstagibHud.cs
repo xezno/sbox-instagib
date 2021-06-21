@@ -1,4 +1,5 @@
-﻿using Instagib.UI;
+﻿using System.Collections.Generic;
+using Instagib.UI;
 using Instagib.UI.Menus;
 using Sandbox;
 using Sandbox.UI;
@@ -7,33 +8,59 @@ namespace Instagib.UI
 {
 	public partial class InstagibHud : Sandbox.HudEntity<RootPanel>
 	{
-		public static Panel CurrentHudPanel;
+		public static Panel TiltingHudPanel;
+		public static Panel StaticHudPanel;
+		private MainMenu mainMenu;
+		
 		public static InstagibHud CurrentHud;
+
+		private bool menuVisible = false;
 		
 		public InstagibHud()
 		{
 			if ( IsClient )
 			{
-				// RootPanel.AddChild<MainMenu>();
-				//
-				// return;
+				ToggleMenu( false );
 				
-				//
-				// Stuff that doesn't move / tilt / etc.
-				//
-				RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
-				RootPanel.AddChild<Crosshair>();
-				RootPanel.AddChild<ClassicChatBox>();
-				RootPanel.AddChild<Hitmarker>();
-				
-				//
-				// Stuff that moves / tilts / etc.
-				//
-				var mainPanel = RootPanel.AddChild<MainPanel>();
-				
-				CurrentHudPanel = mainPanel;
 				CurrentHud = this;
 			}
+		}
+
+		public static void ToggleMainMenu() => CurrentHud.ToggleMenu();
+
+		private void ToggleMenu( bool? forceState = null )
+		{
+			void HideMenu()
+			{
+				mainMenu?.Delete();
+				
+				StaticHudPanel = RootPanel.Add.Panel( "staticpanel" );
+				StaticHudPanel.StyleSheet.Load( "/Code/UI/InstagibHud.scss" );
+				StaticHudPanel.AddChild<Scoreboard<ScoreboardEntry>>();
+				StaticHudPanel.AddChild<Crosshair>();
+				StaticHudPanel.AddChild<ClassicChatBox>();
+				StaticHudPanel.AddChild<Hitmarker>();
+				
+				TiltingHudPanel = RootPanel.AddChild<MainPanel>();
+			}
+			
+			void ShowMenu()
+			{
+				StaticHudPanel?.Delete();
+				TiltingHudPanel?.Delete();
+				
+				mainMenu = RootPanel.AddChild<MainMenu>();
+			}
+
+			if ( forceState != null )
+				menuVisible = forceState.Value;
+			else
+				menuVisible = !menuVisible;
+			
+			if ( menuVisible ) 
+				ShowMenu();
+			else
+				HideMenu();
 		}
 
 		public void OnKilledMessage( InstagibPlayer attacker, InstagibPlayer victim, string[] medals )
@@ -43,6 +70,16 @@ namespace Instagib.UI
 
 			var fragMessage = new FragMessage( victim.GetClientOwner().Name, medals );
 			fragMessage.Parent = RootPanel;
+		}
+
+		[Event.Tick.Client]
+		public void OnTick()
+		{
+			if ( Input.Pressed( InputButton.Menu ) )
+			{
+				Log.Trace( "Toggling menu" );
+				ToggleMenu();
+			}
 		}
 	}
 }

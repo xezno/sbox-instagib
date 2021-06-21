@@ -2,45 +2,53 @@
     <div class="menu-inner">
         <text class="title">Settings</text>
         
-        <div class="settings-items" @ref="Items">
-            <span>
+        <div class="settings-items">
+            <!--<span>
                 <text>Nickname</text>
                 <textentry>Alex</textentry>               
-            </span>
+            </span>-->
 
+            <text class="big">Game</text>
             <span>
                 <text>FOV</text>
                 <slider @ref="FovSlider"></slider>               
             </span>
 
-            <span>
-                <text>Snap Rate</text>
-                <slider @ref="TestSlider"></slider>               
-            </span>
+            <text class="big">HUD</text>
 
             <span>
-                <text>Crosshair</text>
-                <textentry style="font-family: Crosshairs; font-size: 32px; text-align: center">hello world</textentry>               
+                <text>Draw Crosshair</text>
+                <checkbox @ref="CrosshairToggle"></checkbox>
             </span>
             
             <span>
-                <text>Viewmodel Centered</text>
-                <checkbox></checkbox>
+                <text>Crosshair (TODO: Dropdown)</text>
+                <textentry @ref="CrosshairGlyph" style="font-family: Crosshairs; font-size: 32px; text-align: center">a</textentry>               
+            </span>
+
+            <text class="big">Viewmodel</text>
+            <span>
+                <text>Viewmodel X</text>
+                <slider @ref="ViewmodelSlider"></slider>               
             </span>
 
             <span>
                 <text>Viewmodel Visible</text>
-                <checkbox></checkbox>
+                <checkbox @ref="ViewmodelToggle"></checkbox>
             </span>
-            <button>Test</button>
 
-            <button>Test2</button>
+            <span>
+                <text>Left Handed</text>
+                <checkbox @ref="ViewmodelFlip"></checkbox>
+            </span>
+            
+            <text class="big">Cosmetics</text>
+            <text>TODO: Golden railgun, beam colour, etc</text>
         </div>
         
         
         <div class="buttons">
-            <button onclick="Delete()">Back</button>
-            <button onclick="Delete()">Apply</button>
+            <button onclick="Toggle()" Icon="arrow_back">Back</button>
         </div>
     </div>
 </div> 

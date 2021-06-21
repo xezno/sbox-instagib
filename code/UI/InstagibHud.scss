@@ -1,4 +1,4 @@
-text,label,input,textentry
+text,label,input,textentry,icon,iconpanel
 {
 	font-family: Kairos Sans;
 	font-weight: 700;
@@ -53,6 +53,7 @@ text.alert
 	
 	.speed {
 		font-size: 24px;
+		align-items: center;
 	}
 	
 	text {
@@ -61,20 +62,24 @@ text.alert
 }
 
 .crosshair {
-	position: absolute; 
-	left: 50%;
-	top: 50%;
-	border-radius: 10px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	
 	font-family: Crosshairs;
 	color: white;
+	
 	text-align: center;
-	font-size: 24px;
-	width: 6px;
-	height: 6px;
+	align-items: center;
+	justify-content: center;
+	
+	font-size: 22px;
 	padding: 5px;
 	
 	margin-left: -6px;
-	margin-top: -16px;
+	margin-top: 1px;
 }
 
 .frag {
@@ -112,17 +117,12 @@ text.alert
 	}
 }
 
-.highlight {
-	color: #40c0ff;
-	text-shadow: 0 0 10px rgba( black, 0.2 );
-}
-
-.mainpanel { 
+.mainpanel,.staticpanel { 
 	position: absolute; 
 	top: 0; 
 	right: 0; 
 	left: 0; 
-	bottom: 0; 
+	bottom: 0;
 }
 
 hitmarker {
@@ -149,4 +149,15 @@ hitmarker {
 			opacity: 0;
 		}
 	}
+}
+
+iconpanel,icon
+{
+	font-size: 32px;
+	font-family: MaterialIcons;
+	margin: 0;
+	padding: 0;
+
+	margin-right: -32px;
+	color: white;
 }

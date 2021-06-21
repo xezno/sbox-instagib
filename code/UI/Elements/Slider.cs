@@ -41,12 +41,30 @@ namespace Instagib.UI.Elements
 			private void DoMove()
 			{
 				var leftPos = Mouse.Position.x - Parent.Box.Left;
-				var width = line.Box.Rect.width; 
+				var width = line.Box.Rect.width;
+				
+				// I have zero idea why this works, but these numbers fix the offset bug.
+				width *= 1.055f;
+				leftPos *= 1.055f;
+				// I should probably look into why - it's probably something to do with padding/margins.
 					
 				leftPos = leftPos.Clamp( 0, width );
 
 				slider.Value = (leftPos / width);
-					
+				
+				Style.Left = leftPos;
+				Style.Dirty();
+			}
+
+			public void SetValue( float value )
+			{
+				var width = line.Box.Rect.width;
+				var leftPos = (value * width);
+				
+				// Crappy offset bug fix again
+				width *= 1.055f;
+				leftPos *= 1.055f;
+				
 				Style.Left = leftPos;
 				Style.Dirty();
 			}
@@ -74,16 +92,29 @@ namespace Instagib.UI.Elements
 		//
 		// API
 		//
-		
+
+		private float value;
+
 		/// <summary>
 		/// The current slider value from 0 to 1.
 		/// </summary>
-		public new float Value;
+		public new float Value
+		{
+			get => this.value;
+			set
+			{
+				this.value = value;
+				valueDirty = true;
+			}
+		}
 
 		/// <summary>
 		/// The user-facing value as calculated by <see cref="ValueCalcFunc"/> 
 		/// </summary>
-		public int CalcValue => ValueCalcFunc?.Invoke( Value ) ?? 0;
+		public int CalcValue
+		{
+			get => ValueCalcFunc?.Invoke( Value ) ?? 0;
+		} 
 
 		/// <summary>
 		/// This is where the value gets calculated. This is also shown to the user.
@@ -103,6 +134,8 @@ namespace Instagib.UI.Elements
 		/// </summary>
 		public SliderChangeEvent OnValueChange;
 
+		private bool valueDirty = false;
+
 		public Slider()
 		{
 			StyleSheet.Load( "/Code/UI/Elements/Slider.scss" );
@@ -120,9 +153,8 @@ namespace Instagib.UI.Elements
 			base.Tick();
 			
 			var userValue = ValueCalcFunc?.Invoke( Value );
-			
-			userValue /= SnapRate;
-			userValue *= SnapRate;
+
+			userValue = (int)(Math.Round( (float)userValue / SnapRate ) * SnapRate);
 			
 			if ( lastValue != userValue )
 			{
@@ -132,6 +164,13 @@ namespace Instagib.UI.Elements
 			
 			lastValue = userValue ?? 0;
 			text.Text = userValue.ToString();
+			
+			if ( valueDirty )
+			{
+				needle.SetValue( Value );
+				// TODO: Fix this crap!
+				// valueDirty = false;
+			}
 		}
 
 		protected override void OnClick( MousePanelEvent e )

@@ -32,12 +32,6 @@ public partial class ClassicChatBox : Panel
 		Chat.OnOpenChat += Open;
 	}
 
-	void ResetScroll()
-	{
-		Log.Info( Canvas.ScrollOffset );
-		Canvas.TryScroll( 1.0f );
-	}
-
 	void Open()
 	{
 		AddClass( "open" );
@@ -50,7 +44,6 @@ public partial class ClassicChatBox : Panel
 				message.AddClass( "show" );
 			}
 		}
-		ResetScroll();
 	}
 
 	void Close()
@@ -66,7 +59,6 @@ public partial class ClassicChatBox : Panel
 				message.AddClass( "expired" );
 			}	
 		}
-		ResetScroll();
 	}
 
 	void Submit()
@@ -78,8 +70,6 @@ public partial class ClassicChatBox : Panel
 
 		if ( string.IsNullOrWhiteSpace( msg ) )
 			return;
-
-		ResetScroll();
 		
 		Say( msg );
 	}
@@ -94,11 +84,6 @@ public partial class ClassicChatBox : Panel
 
 		e.SetClass( "noname", string.IsNullOrEmpty( name ) );
 		e.SetClass( "noavatar", string.IsNullOrEmpty( avatar ) );
-
-
-		ResetScroll();
-		if ( !HasClass( "open" ))
-			ResetScroll();
 
 		// scrollPanel.AddItem( e );
 	}

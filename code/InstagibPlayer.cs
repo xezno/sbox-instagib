@@ -27,6 +27,20 @@ namespace Instagib
 		{
 			Inventory = new BaseInventory( this );
 		}
+
+		[ClientRpc]
+		private void AssignSettings()
+		{
+			if ( Camera is FirstPersonCamera camera )
+				camera.defaultFov = Cookie.Get( "Instagib.Fov", 90 );
+
+			ViewModel.Offset = Cookie.Get<float>( "Instagib.ViewmodelOffset", 0 );
+			ViewModel.Visible = Cookie.Get( "Instagib.ViewmodelVisible", true );
+			ViewModel.Flip = Cookie.Get( "Instagib.ViewmodelFlip", false );
+				
+			Crosshair.Visible = Cookie.Get( "Instagib.CrosshairVisible", true );
+			Crosshair.SetCrosshair( Cookie.Get( "Instagib.CrosshairGlyph", "a" ));
+		}
 		
 		public override void Respawn()
 		{
@@ -47,6 +61,8 @@ namespace Instagib
 
 			CurrentStreak = 0;
 			CurrentDamageDealt = 0;
+
+			AssignSettings();
 			
 			base.Respawn();
 		}
@@ -168,10 +184,10 @@ namespace Instagib
 
 			lastHudOffset = zOffset;
 
-			if ( InstagibHud.CurrentHudPanel != null )
+			if ( InstagibHud.TiltingHudPanel != null )
 			{
-				InstagibHud.CurrentHudPanel.Style.Transform = tx;
-				InstagibHud.CurrentHudPanel.Style.Dirty();
+				InstagibHud.TiltingHudPanel.Style.Transform = tx;
+				InstagibHud.TiltingHudPanel.Style.Dirty();
 			}
 
 			lastCameraPos = setup.Position;

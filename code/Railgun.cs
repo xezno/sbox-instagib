@@ -206,6 +206,12 @@ namespace Instagib
 		{
 			foreach ( var tr in TraceBullet( pos, pos + dir * 100000, 4f ) )
 			{
+				if ( Prediction.FirstTime )
+				{
+					var impactParticles = Particles.Create( "weapons/railgun/particles/railgun_impact.vpcf", tr.EndPos );
+					impactParticles.SetForward( 0, tr.Normal );
+				}
+				
 				if ( tr.Entity is not InstagibPlayer )
 					tr.Surface.DoBulletImpact( tr );
 				

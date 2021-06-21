@@ -1,0 +1,43 @@
+﻿checkbox {
+  width: 32px;
+  height: 32px;
+  
+  background-color: #374151;
+  border-radius: 5px;
+  border: 2px solid #1F2937;
+  margin: 5px;
+  
+  align-items: center;
+  justify-content: center;
+  
+  transition: all 100ms ease;
+  cursor: pointer;
+  
+  &:active {
+    sound-in: ui.button.press;
+  }
+  
+  &:hover {
+    sound-in: ui.button.over;
+    border: 2px solid #6B7280;  
+    
+    .checkmark {
+      background-color: #6B7280;
+    }
+  }
+}
+
+.checkmark {
+  width: 10px;
+  height: 10px;
+  background-color: #1F2937;
+  
+  border-radius: 3px;
+  opacity: 0;
+  
+  transition: all 100ms ease;
+  
+  &.visible {
+    opacity: 1;  
+  }
+}

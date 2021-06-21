@@ -4,8 +4,9 @@ namespace Instagib
 {
 	public class ViewModel : BaseViewModel
 	{
-		[ClientVar( "viewmodel_centered" )] public static bool Centered { get; set; } = false;
 		[ClientVar( "viewmodel_visible" )] public static bool Visible { get; set; } = true;
+		[ClientVar( "viewmodel_offset" )] public static float Offset { get; set; } = 0f;
+		[ClientVar( "viewmodel_flip" )] public static bool Flip { get; set; } = false;
 
 		protected float SwingInfluence => 0.025f;
 		protected float ReturnSpeed => 5.0f;
@@ -19,9 +20,8 @@ namespace Instagib
 		private float bobAnim;
 
 		private bool activated;
-
-		private Vector3 CenteredOffset => new( -25f, 0f, 10f );
-		private Vector3 RightHandOffset => new( -25f, 10f, 10f );
+		
+		private Vector3 ViewmodelOffset => new( -25f, 10f, 10f );
 
 		public override void PostCameraSetup( ref CameraSetup camSetup )
 		{
@@ -67,14 +67,11 @@ namespace Instagib
 			var offset = CalcSwingOffset( pitchDelta, yawDelta );
 			offset += CalcBobbingOffset( playerVelocity );
 
-			if ( Centered )
-			{
-				offset -= CenteredOffset;
-			}
-			else
-			{
-				offset -= RightHandOffset;
-			}
+			offset -= ViewmodelOffset;
+			offset = offset.WithY( offset.y + Offset );
+			
+			if ( Flip )
+				offset.y = 0f - offset.y;
 
 			Position += Rotation * offset;
 

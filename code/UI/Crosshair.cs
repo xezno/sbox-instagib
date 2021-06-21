@@ -7,14 +7,32 @@ namespace Instagib.UI
 {
 	public class Crosshair : Label
 	{
+		private static bool visible;
+		public static bool Visible
+		{
+			get => visible;
+			set
+			{
+				visible = value;
+				if ( visible )
+					Instance.AddClass( "visible" );
+				else
+					Instance.RemoveClass( "visible" );
+			}
+		}
+
+		public static string Glyph;
+
 		private static Crosshair Instance { get; set; }
 		
 		public Crosshair()
 		{
 			Instance = this;
+			Visible = true;
 			
-			SetClass( "crosshair", true );
-			SetText( "a" );
+			AddClass( "crosshair" );
+			AddClass( "visible" );
+			SetText( Glyph );
 			
 			StyleSheet.Load( "/Code/UI/InstagibHud.scss" );
 		}
@@ -24,8 +42,9 @@ namespace Instagib.UI
 		{
 			if ( character.Length != 1 )
 				return;
-			
-			Instance.SetText( character );
+
+			Glyph = character;
+			Instance.SetText( Glyph );
 		}
 	}
 }
