@@ -4,10 +4,6 @@ namespace Instagib
 {
 	public class ViewModel : BaseViewModel
 	{
-		[ClientVar( "viewmodel_visible" )] public static bool Visible { get; set; } = true;
-		[ClientVar( "viewmodel_offset" )] public static float Offset { get; set; } = 0f;
-		[ClientVar( "viewmodel_flip" )] public static bool Flip { get; set; } = false;
-
 		protected float SwingInfluence => 0.025f;
 		protected float ReturnSpeed => 5.0f;
 		protected float MaxOffsetLength => 10.0f;
@@ -27,7 +23,7 @@ namespace Instagib
 		{
 			base.PostCameraSetup( ref camSetup );
 
-			if ( !Visible )
+			if ( !PlayerSettings.ViewmodelVisible )
 			{
 				EnableDrawing = false;
 			}
@@ -68,9 +64,9 @@ namespace Instagib
 			offset += CalcBobbingOffset( playerVelocity );
 
 			offset -= ViewmodelOffset;
-			offset = offset.WithY( offset.y + Offset );
+			offset = offset.WithY( offset.y + PlayerSettings.ViewmodelOffset );
 			
-			if ( Flip )
+			if ( PlayerSettings.ViewmodelFlip )
 				offset.y = 0f - offset.y;
 
 			Position += Rotation * offset;

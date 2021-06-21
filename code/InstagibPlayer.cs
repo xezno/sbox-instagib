@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using Instagib.UI;
+using Sandbox.ScreenShake;
 
 namespace Instagib
 {
@@ -31,15 +32,7 @@ namespace Instagib
 		[ClientRpc]
 		private void AssignSettings()
 		{
-			if ( Camera is FirstPersonCamera camera )
-				camera.defaultFov = Cookie.Get( "Instagib.Fov", 90 );
-
-			ViewModel.Offset = Cookie.Get<float>( "Instagib.ViewmodelOffset", 0 );
-			ViewModel.Visible = Cookie.Get( "Instagib.ViewmodelVisible", true );
-			ViewModel.Flip = Cookie.Get( "Instagib.ViewmodelFlip", false );
-				
-			Crosshair.Visible = Cookie.Get( "Instagib.CrosshairVisible", true );
-			Crosshair.SetCrosshair( Cookie.Get( "Instagib.CrosshairGlyph", "a" ));
+			PlayerSettings.Load();
 		}
 		
 		public override void Respawn()
@@ -61,10 +54,10 @@ namespace Instagib
 
 			CurrentStreak = 0;
 			CurrentDamageDealt = 0;
-
-			AssignSettings();
 			
 			base.Respawn();
+			
+			AssignSettings( To.Single( GetClientOwner() ) );
 		}
 
 		public override void Simulate( Client cl )
@@ -95,8 +88,23 @@ namespace Instagib
 			
 			_ = Particles.Create( "particles/gib_blood.vpcf", Position + (Vector3.Up * (8)) );
 			
+			ShakeScreen( To.Everyone, Position );
+			
 			Sound.FromWorld( "gibbing", Position );
 			Camera = new SpectateRagdollCamera();
+		}
+
+		[ClientRpc]
+		private void ShakeScreen( Vector3 position )
+		{
+			float strengthMul = 10f;
+			float strengthDist = 512f;
+			
+			float strength = strengthDist - Local.Pawn.Position.Distance( position ).Clamp( 0, strengthDist );
+			strength /= strengthDist;
+			strength *= strengthMul;
+			
+			_ = new Sandbox.ScreenShake.Perlin( 1f, 0.75f, strength );
 		}
 
 		[ClientRpc]

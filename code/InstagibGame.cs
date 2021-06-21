@@ -2,6 +2,7 @@
 using System.Linq;
 using Instagib.UI;
 using Sandbox;
+using Sandbox.ScreenShake;
 
 namespace Instagib
 {
@@ -53,7 +54,7 @@ namespace Instagib
 			string[] medalArr = new string[ medals.Count ];
 			for ( int i = 0; i < medals.Count; ++i )
 				medalArr[i] = medals[i].Name;
-			
+
 			PlayerKilledRpc( To.Single( attacker ), attacker, victim, medalArr );
 		}
 

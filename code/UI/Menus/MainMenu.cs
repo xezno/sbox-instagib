@@ -14,69 +14,43 @@ namespace Instagib.UI.Menus
 		public TextEntry CrosshairGlyph { get; set; }
 
 		// TODO: Range struct
-		private (float, float) fovRange = ( 70f, 130f );
-		private (float, float) viewmodelRange = ( 0f, 10f );
-		
+		private (float, float) fovRange = (70f, 130f);
+		private (float, float) viewmodelRange = (0f, 10f);
+
 		public MainMenu()
 		{
 			SetTemplate( "/Code/UI/Menus/MainMenu.html" );
 			StyleSheet.Load( "/Code/UI/Menus/MainMenu.scss" ); // Loading in HTML doesn't work for whatever reason
 
-			FovSlider.OnValueChange += value =>
-			{
-				if ( Local.Pawn is InstagibPlayer player )
-				{
-					if ( !player.IsValid() || player.Health <= 0 )
-						return;
-
-					if ( player.Camera is FirstPersonCamera camera )
-					{
-						camera.defaultFov = value;
-					}
-				}
-			};
 			FovSlider.SnapRate = 5;
 			FovSlider.ValueCalcFunc = value => fovRange.Item1.LerpTo( fovRange.Item2, value ).CeilToInt();
 
 			FovSlider.Value = 110f;
 
-			ViewmodelSlider.OnValueChange += v => ViewModel.Offset = v;
 			ViewmodelSlider.SnapRate = 1;
-			ViewmodelSlider.ValueCalcFunc = value => viewmodelRange.Item1.LerpTo( viewmodelRange.Item2, value ).CeilToInt();
-			
-			CrosshairToggle.Value = Crosshair.Visible;
-			CrosshairToggle.OnValueChange += b => Crosshair.Visible = b;
+			ViewmodelSlider.ValueCalcFunc =
+				value => viewmodelRange.Item1.LerpTo( viewmodelRange.Item2, value ).CeilToInt();
 
-			ViewmodelToggle.Value = ViewModel.Visible;
-			ViewmodelToggle.OnValueChange += b => ViewModel.Visible = b;
-
-			ViewmodelFlip.Value = ViewModel.Flip;
-			ViewmodelFlip.OnValueChange += b => ViewModel.Flip = b;
-			
-			CrosshairGlyph.AddEvent("onchange", () =>
-			{
-				Crosshair.SetCrosshair( CrosshairGlyph.Text );
-			});
-			
-			// Load settings
-			FovSlider.Value = Cookie.Get<float>( "Instagib.Fov", 100 ).LerpInverse( fovRange.Item1, fovRange.Item2 );
-			ViewmodelSlider.Value = Cookie.Get<float>( "Instagib.ViewmodelOffset", 0 ).LerpInverse( viewmodelRange.Item1, viewmodelRange.Item2 );
-			ViewmodelToggle.Value = Cookie.Get( "Instagib.ViewmodelVisible", true );
-			CrosshairToggle.Value = Cookie.Get( "Instagib.CrosshairVisible", true );
-			ViewmodelFlip.Value = Cookie.Get( "Instagib.ViewmodelFlip", false );
-			CrosshairGlyph.Text = Cookie.Get( "Instagib.CrosshairGlyph", "t" );
+			// Apply loaded settings
+			PlayerSettings.Load();
+			FovSlider.Value = ((float)PlayerSettings.Fov).LerpInverse( fovRange.Item1, fovRange.Item2 );
+			ViewmodelSlider.Value = PlayerSettings.ViewmodelOffset.LerpInverse( viewmodelRange.Item1, viewmodelRange.Item2 );
+			ViewmodelToggle.Value = PlayerSettings.ViewmodelVisible;
+			CrosshairToggle.Value = PlayerSettings.CrosshairVisible;
+			ViewmodelFlip.Value = PlayerSettings.ViewmodelFlip;
+			CrosshairGlyph.Text = PlayerSettings.CrosshairGlyph;
 		}
 
-		public override void OnDeleted()
+		public void ApplySettings()
 		{
-			// Save settings
-			Cookie.Set( "Instagib.Fov", FovSlider.CalcValue );
-			Cookie.Set( "Instagib.ViewmodelOffset", ViewmodelSlider.CalcValue );
-			Cookie.Set( "Instagib.ViewmodelVisible", ViewmodelToggle.Value );
-			Cookie.Set( "Instagib.CrosshairVisible", CrosshairToggle.Value );
-			Cookie.Set( "Instagib.ViewmodelFlip", ViewmodelFlip.Value );
-			Cookie.Set( "Instagib.CrosshairGlyph", CrosshairGlyph.Text );
-			base.OnDeleted();	
+			PlayerSettings.Fov = FovSlider.CalcValue;
+			PlayerSettings.ViewmodelOffset = ViewmodelSlider.CalcValue;
+			PlayerSettings.ViewmodelVisible = ViewmodelToggle.Value; 
+			PlayerSettings.CrosshairVisible = CrosshairToggle.Value; 
+			PlayerSettings.ViewmodelFlip = ViewmodelFlip.Value; 
+			PlayerSettings.CrosshairGlyph = CrosshairGlyph.Text;
+
+			PlayerSettings.Save();
 		}
 
 		private ViewModel GetViewModel()
