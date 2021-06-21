@@ -18,6 +18,11 @@ namespace Instagib
 			Precache.Add( "weapons/railgun/particles/railgun_beam.vpcf" );
 			Precache.Add( "weapons/railgun/particles/railgun_pulse.vpcf" );
 			Precache.Add( "weapons/railgun/sounds/railgun_fire.vsnd" );
+
+			if ( IsClient )
+			{
+				PlayerSettings.Load();
+			}
 			
 			if ( IsServer )
 			{

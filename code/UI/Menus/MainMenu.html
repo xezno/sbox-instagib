@@ -25,6 +25,11 @@
                 <text>Crosshair (TODO: Dropdown)</text>
                 <textentry @ref="CrosshairGlyph" style="font-family: Crosshairs; font-size: 32px; text-align: center">a</textentry>               
             </span>
+            
+            <span>
+                <text>Crosshair Size</text>
+                <slider @ref="CrosshairSlider"></slider>               
+            </span>
 
             <text class="big">Viewmodel</text>
             <span>
@@ -48,7 +53,7 @@
         
         
         <div class="buttons">
-            <button onclick="Toggle()" Icon="arrow_back">Back</button>
+            <button onclick="RestoreSettings(); Toggle();" Icon="arrow_back">Back</button>
             <button onclick="ApplySettings(); Toggle();" Icon="check">Apply</button>
         </div>
     </div>

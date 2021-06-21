@@ -49,9 +49,9 @@ namespace Instagib.UI.Elements
 				// I should probably look into why - it's probably something to do with padding/margins.
 					
 				leftPos = leftPos.Clamp( 0, width );
-
-				slider.Value = (leftPos / width);
 				
+				slider.Value = (leftPos / width);
+
 				Style.Left = leftPos;
 				Style.Dirty();
 			}
@@ -113,7 +113,7 @@ namespace Instagib.UI.Elements
 		/// </summary>
 		public int CalcValue
 		{
-			get => ValueCalcFunc?.Invoke( Value ) ?? 0;
+			get => (int)(Math.Round( (float)ValueCalcFunc.Invoke( Value ) / SnapRate ) * SnapRate);
 		} 
 
 		/// <summary>

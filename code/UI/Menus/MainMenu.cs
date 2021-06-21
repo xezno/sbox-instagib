@@ -12,10 +12,12 @@ namespace Instagib.UI.Menus
 		public Checkbox ViewmodelFlip { get; set; }
 		public Checkbox CrosshairToggle { get; set; }
 		public TextEntry CrosshairGlyph { get; set; }
+		public Slider CrosshairSlider { get; set; }
 
 		// TODO: Range struct
 		private (float, float) fovRange = (70f, 130f);
 		private (float, float) viewmodelRange = (0f, 10f);
+		private (float, float) crosshairRange = (16f, 64f);
 
 		public MainMenu()
 		{
@@ -24,33 +26,46 @@ namespace Instagib.UI.Menus
 
 			FovSlider.SnapRate = 5;
 			FovSlider.ValueCalcFunc = value => fovRange.Item1.LerpTo( fovRange.Item2, value ).CeilToInt();
-
 			FovSlider.Value = 110f;
 
 			ViewmodelSlider.SnapRate = 1;
 			ViewmodelSlider.ValueCalcFunc =
 				value => viewmodelRange.Item1.LerpTo( viewmodelRange.Item2, value ).CeilToInt();
+			
 
-			// Apply loaded settings
+			CrosshairSlider.SnapRate = 2;
+			CrosshairSlider.ValueCalcFunc =
+				value => crosshairRange.Item1.LerpTo( crosshairRange.Item2, value ).CeilToInt();
+			
+			// Make it so that we can preview the settings live
+			FovSlider.OnValueChange += v => PlayerSettings.Fov = v;
+			ViewmodelSlider.OnValueChange += v => PlayerSettings.ViewmodelOffset = v;
+			CrosshairToggle.OnValueChange += b => PlayerSettings.CrosshairVisible = b;
+			ViewmodelToggle.OnValueChange += b => PlayerSettings.ViewmodelVisible = b;
+			ViewmodelFlip.OnValueChange += b => PlayerSettings.ViewmodelFlip = b;
+			CrosshairSlider.OnValueChange += b => PlayerSettings.CrosshairSize = b;
+			CrosshairGlyph.AddEvent("onchange", () => PlayerSettings.CrosshairGlyph = CrosshairGlyph.Text );
+
+			// Set values to existing settings
 			PlayerSettings.Load();
-			FovSlider.Value = ((float)PlayerSettings.Fov).LerpInverse( fovRange.Item1, fovRange.Item2 );
+			
+			FovSlider.Value = PlayerSettings.Fov.LerpInverse( fovRange.Item1, fovRange.Item2 );
 			ViewmodelSlider.Value = PlayerSettings.ViewmodelOffset.LerpInverse( viewmodelRange.Item1, viewmodelRange.Item2 );
 			ViewmodelToggle.Value = PlayerSettings.ViewmodelVisible;
 			CrosshairToggle.Value = PlayerSettings.CrosshairVisible;
 			ViewmodelFlip.Value = PlayerSettings.ViewmodelFlip;
 			CrosshairGlyph.Text = PlayerSettings.CrosshairGlyph;
+			CrosshairSlider.Value = ((float)PlayerSettings.CrosshairSize).LerpInverse( crosshairRange.Item1, crosshairRange.Item2 );
 		}
-
+		
 		public void ApplySettings()
 		{
-			PlayerSettings.Fov = FovSlider.CalcValue;
-			PlayerSettings.ViewmodelOffset = ViewmodelSlider.CalcValue;
-			PlayerSettings.ViewmodelVisible = ViewmodelToggle.Value; 
-			PlayerSettings.CrosshairVisible = CrosshairToggle.Value; 
-			PlayerSettings.ViewmodelFlip = ViewmodelFlip.Value; 
-			PlayerSettings.CrosshairGlyph = CrosshairGlyph.Text;
-
 			PlayerSettings.Save();
+		}
+
+		public void RestoreSettings()
+		{
+			PlayerSettings.Load();
 		}
 
 		private ViewModel GetViewModel()

@@ -8,6 +8,7 @@ namespace Instagib.UI
 		
 		public Crosshair()
 		{
+			StyleSheet.Load( "/Code/UI/InstagibHud.scss" );
 			Instance = this;
 			
 			AddClass( "crosshair" );
@@ -16,7 +17,7 @@ namespace Instagib.UI
 			
 			SetText( PlayerSettings.CrosshairGlyph );
 			
-			StyleSheet.Load( "/Code/UI/InstagibHud.scss" );
+			StyleSheet.Parse( $"crosshair {{ font-size: {PlayerSettings.CrosshairSize}px; }}" );
 		}
 	}
 }

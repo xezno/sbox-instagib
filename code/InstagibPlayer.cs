@@ -28,12 +28,6 @@ namespace Instagib
 		{
 			Inventory = new BaseInventory( this );
 		}
-
-		[ClientRpc]
-		private void AssignSettings()
-		{
-			PlayerSettings.Load();
-		}
 		
 		public override void Respawn()
 		{
@@ -56,8 +50,6 @@ namespace Instagib
 			CurrentDamageDealt = 0;
 			
 			base.Respawn();
-			
-			AssignSettings( To.Single( GetClientOwner() ) );
 		}
 
 		public override void Simulate( Client cl )

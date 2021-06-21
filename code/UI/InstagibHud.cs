@@ -32,6 +32,7 @@ namespace Instagib.UI
 		{
 			void HideMenu()
 			{
+				mainMenu?.RestoreSettings();
 				mainMenu?.Delete();
 				
 				StaticHudPanel = RootPanel.Add.Panel( "staticpanel" );

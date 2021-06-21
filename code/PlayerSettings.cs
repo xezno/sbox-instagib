@@ -11,6 +11,7 @@ namespace Instagib
 		public static bool CrosshairVisible { get; set; } = true;
 		public static bool ViewmodelFlip { get; set; } = false;
 		public static string CrosshairGlyph { get; set; } = "a";
+		public static int CrosshairSize { get; set; } = 24;
 
 		public static void Load()
 		{
@@ -22,6 +23,7 @@ namespace Instagib
 			CrosshairVisible = Cookie.Get( "Instagib.CrosshairVisible", true );
 			ViewmodelFlip = Cookie.Get( "Instagib.ViewmodelFlip", false );
 			CrosshairGlyph = Cookie.Get( "Instagib.CrosshairGlyph", "t" );
+			CrosshairSize = Cookie.Get( "Instagib.CrosshairSize", 24 );
 		}
 
 		public static void Save()
@@ -34,6 +36,7 @@ namespace Instagib
 			Cookie.Set( "Instagib.CrosshairVisible", CrosshairVisible );
 			Cookie.Set( "Instagib.ViewmodelFlip", ViewmodelFlip );
 			Cookie.Set( "Instagib.CrosshairGlyph", CrosshairGlyph );
+			Cookie.Set( "Instagib.CrosshairSize", CrosshairSize );
 		}
 	}
 }
