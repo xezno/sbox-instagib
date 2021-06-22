@@ -36,6 +36,8 @@ namespace Instagib
 
 			var player = new InstagibPlayer();
 			client.Pawn = player;
+			
+			client.SetScore( "steamid", client.SteamId );
 
 			player.Respawn();
 		}
@@ -62,6 +64,12 @@ namespace Instagib
 				medalArr[i] = medals[i].Name;
 
 			PlayerKilledRpc( To.Single( attacker ), attacker, victim, medalArr );
+
+			var attackerClient = attacker.GetClientOwner(); 
+			attackerClient.SetScore( "kills", attackerClient.GetScore<int>( "kills" ) + 1 );
+			
+			var victimClient = victim.GetClientOwner(); 
+			victimClient.SetScore( "deaths", victimClient.GetScore<int>( "deaths" ) + 1 );
 		}
 
 		[ServerCmd( "recreatehud", Help = "Recreate hud object" )]
