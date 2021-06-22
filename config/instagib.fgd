@@ -1,5 +1,5 @@
 // 
-// Instagib.InstagibGame : Sandbox.Game 
+// Instagib.Game : Sandbox.Game 
 // 
 @PointClass = instagib : ""
 [

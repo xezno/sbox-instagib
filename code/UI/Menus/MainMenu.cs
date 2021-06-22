@@ -70,7 +70,7 @@ namespace Instagib.UI.Menus
 
 		private ViewModel GetViewModel()
 		{
-			var player = Local.Pawn as InstagibPlayer;
+			var player = Local.Pawn as Player;
 			var weapon = player.Inventory.Active as Railgun;
 			
 			return weapon.ViewModelEntity as ViewModel;

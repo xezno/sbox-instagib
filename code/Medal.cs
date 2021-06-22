@@ -16,7 +16,7 @@ namespace Instagib
 		public ConditionDelegate Condition { get; set; }
 		public int Experience { get; set; }
 
-		public delegate bool ConditionDelegate( InstagibPlayer attacker, InstagibPlayer victim );
+		public delegate bool ConditionDelegate( Player attacker, Player victim );
 		
 		public Medal( string name, string description, ConditionDelegate condition, int experience )
 		{

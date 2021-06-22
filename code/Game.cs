@@ -7,10 +7,10 @@ using Sandbox.ScreenShake;
 namespace Instagib
 {
 	[Library( "instagib", Title = "Instagib")]
-	public partial class InstagibGame : Sandbox.Game
+	public partial class Game : Sandbox.Game
 	{
 		private static InstagibHud hud;
-		public InstagibGame()
+		public Game()
 		{
 			Precache.Add( "particles/gib_blood.vpcf" );
 			Precache.Add( "sounds/jump.vsnd" );
@@ -34,7 +34,7 @@ namespace Instagib
 		{
 			base.ClientJoined( client );
 
-			var player = new InstagibPlayer();
+			var player = new Player();
 			client.Pawn = player;
 			
 			client.SetScore( "steamid", client.SteamId );
@@ -49,7 +49,7 @@ namespace Instagib
 			//
 			// Check to make sure we have a victim
 			// 
-			if ( pawn is not InstagibPlayer victim )
+			if ( pawn is not Player victim )
 				return;
 			
 			// Apply a death
@@ -59,7 +59,7 @@ namespace Instagib
 			//
 			// Check to make sure we have an attacker
 			//
-			if ( pawn.LastAttacker is not InstagibPlayer attacker )
+			if ( pawn.LastAttacker is not Player attacker )
 				return;
 			
 			// Apply a kill
@@ -91,7 +91,7 @@ namespace Instagib
 		}
 
 		[ClientRpc]
-		public void PlayerKilledRpc( InstagibPlayer attacker, InstagibPlayer victim, string[] medals )
+		public void PlayerKilledRpc( Player attacker, Player victim, string[] medals )
 		{
 			InstagibHud.CurrentHud.OnKilledMessage( attacker, victim, medals );
 		}

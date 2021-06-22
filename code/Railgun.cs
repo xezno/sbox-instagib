@@ -73,7 +73,7 @@ namespace Instagib
 		    {
 			    if ( overlap is not ModelEntity ent || !ent.IsValid() ) continue;
 			    if ( ent.LifeState != LifeState.Alive && !ent.PhysicsBody.IsValid() && ent.IsWorld ) continue;
-			    if ( ent is not InstagibPlayer player ) continue;
+			    if ( ent is not Player player ) continue;
 
 			    var targetPos = player.PhysicsBody.MassCenter;
 			    var dist = Vector3.DistanceBetween( sourcePos, targetPos );
@@ -89,7 +89,7 @@ namespace Instagib
 
 			    if ( player.GroundEntity != null )
 			    {
-				    ( player.Controller as InstagibController )?.ClearGroundEntity();
+				    ( player.Controller as PlayerController )?.ClearGroundEntity();
 				    
 				    forceDir = Vector3.Lerp( forceDir, Vector3.Up * 2, 0.5f );
 			    }
@@ -143,14 +143,14 @@ namespace Instagib
 			// In order to prevent people from just typing stuff like "shoot Alex", we'll do some light checking to
 			// verify stuff
 			//	
-			if ( target is not InstagibPlayer )
+			if ( target is not Player )
 			{
 				// Fail silently - player probably missed their shot?
 				Log.Trace( "Target wasn't a player" );
 				return;
 			}
 			
-			if ( owner is not Player )
+			if ( owner is not Instagib.Player )
 			{
 				// This should never happen 
 				Log.Trace( "Owner wasn't a player" );
@@ -212,7 +212,7 @@ namespace Instagib
 					impactParticles.SetForward( 0, tr.Normal );
 				}
 				
-				if ( tr.Entity is not InstagibPlayer )
+				if ( tr.Entity is not Player )
 					tr.Surface.DoBulletImpact( tr );
 				
 				// Do beam particles on client and server

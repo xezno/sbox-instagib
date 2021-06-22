@@ -64,7 +64,7 @@ namespace Instagib.UI
 				HideMenu();
 		}
 
-		public void OnKilledMessage( InstagibPlayer attacker, InstagibPlayer victim, string[] medals )
+		public void OnKilledMessage( Player attacker, Player victim, string[] medals )
 		{
 			if ( attacker.GetClientOwner().SteamId != (Local.Client?.SteamId) )
 				return;

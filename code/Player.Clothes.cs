@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Instagib
 {
-	partial class InstagibPlayer
+	partial class Player
 	{
 		private ModelEntity trousers, jacket, shoes, hat;
 		private bool dressed = false;

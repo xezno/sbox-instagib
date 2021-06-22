@@ -4,7 +4,7 @@ using Sandbox;
 namespace Instagib
 {
 	[Library]
-	public class InstagibController : BasePlayerController
+	public class PlayerController : BasePlayerController
 	{
 		public Duck Duck;
 
@@ -20,7 +20,7 @@ namespace Instagib
 		protected float SurfaceFriction;
 		public Unstuck Unstuck;
 
-		public InstagibController()
+		public PlayerController()
 		{
 			Duck = new Duck( this );
 			Unstuck = new Unstuck( this );

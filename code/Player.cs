@@ -6,7 +6,7 @@ using Sandbox.ScreenShake;
 
 namespace Instagib
 {
-	public partial class InstagibPlayer : Player
+	public partial class Player : Sandbox.Player
 	{
 		private DamageInfo lastDamageInfo;
 		
@@ -24,7 +24,7 @@ namespace Instagib
 		private Rotation lastCameraRot = Rotation.Identity;
 		private float lastHudOffset;
 
-		public InstagibPlayer()
+		public Player()
 		{
 			Inventory = new BaseInventory( this );
 		}
@@ -33,7 +33,7 @@ namespace Instagib
 		{
 			SetModel( "models/citizen/citizen.vmdl" );
 
-			Controller = new InstagibController();
+			Controller = new PlayerController();
 			Animator = new StandardPlayerAnimator();
 			Camera = new FirstPersonCamera();
 
@@ -116,7 +116,7 @@ namespace Instagib
 			base.TakeDamage( info );
 			lastDamageInfo = info;
 
-			if ( info.Attacker is InstagibPlayer attacker )
+			if ( info.Attacker is Player attacker )
 			{
 				attacker.OnDamageOther( To.Single( attacker ), info.Position, info.Damage );
 			}
