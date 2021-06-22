@@ -43,6 +43,7 @@ namespace Instagib
 		public override void OnKilled( Client client, Entity pawn )
 		{
 			base.OnKilled( client, pawn );
+			
 			if ( pawn.LastAttacker == null )
 				return;
 

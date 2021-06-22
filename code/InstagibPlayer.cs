@@ -74,6 +74,8 @@ namespace Instagib
 		public override void OnKilled()
 		{
 			base.OnKilled();
+			
+			Inventory.DeleteContents();
 
 			EnableDrawing = false;
 			EnableAllCollisions = false;
