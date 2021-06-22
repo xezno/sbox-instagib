@@ -46,30 +46,40 @@ namespace Instagib
 		{
 			base.OnKilled( client, pawn );
 			
-			if ( pawn.LastAttacker == null )
-				return;
-
-			if ( pawn.LastAttacker is not InstagibPlayer attacker )
-				return;
-			
+			//
+			// Check to make sure we have a victim
+			// 
 			if ( pawn is not InstagibPlayer victim )
 				return;
 			
+			// Apply a death
+			var victimClient = victim.GetClientOwner(); 
+			victimClient.SetScore( "deaths", victimClient.GetScore<int>( "deaths" ) + 1 );
+			
+			//
+			// Check to make sure we have an attacker
+			//
+			if ( pawn.LastAttacker is not InstagibPlayer attacker )
+				return;
+			
+			// Apply a kill
+			var attackerClient = attacker.GetClientOwner(); 
+			attackerClient.SetScore( "kills", attackerClient.GetScore<int>( "kills" ) + 1 );
+			
+			// Killstreak tracking
 			attacker.CurrentStreak++;
 			
+			//
+			// Give out medals to the attacker
+			//
 			List<Medal> medals = Medals.KillMedals.Where( medal => medal.Condition.Invoke( attacker, victim ) ).ToList();
 
 			string[] medalArr = new string[ medals.Count ];
 			for ( int i = 0; i < medals.Count; ++i )
 				medalArr[i] = medals[i].Name;
 
-			PlayerKilledRpc( To.Single( attacker ), attacker, victim, medalArr );
-
-			var attackerClient = attacker.GetClientOwner(); 
-			attackerClient.SetScore( "kills", attackerClient.GetScore<int>( "kills" ) + 1 );
-			
-			var victimClient = victim.GetClientOwner(); 
-			victimClient.SetScore( "deaths", victimClient.GetScore<int>( "deaths" ) + 1 );
+			// Display "YOU FRAGGED" message
+			PlayerKilledRpc( To.Single( attacker ), attacker, victim, medalArr );			
 		}
 
 		[ServerCmd( "recreatehud", Help = "Recreate hud object" )]

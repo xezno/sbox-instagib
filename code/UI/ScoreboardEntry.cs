@@ -16,8 +16,6 @@ namespace Instagib.UI
 		private Label deaths;
 		private Label ratio;
 
-		private Label steamId;
-
 		public ScoreboardEntry()
 		{
 			AddClass( "entry" );
@@ -26,7 +24,6 @@ namespace Instagib.UI
 			kills = Add.Label( "k", "kills" );
 			deaths = Add.Label( "d", "deaths" );
 			ratio = Add.Label( "r", "ratio" );
-			steamId = Add.Label( "steamid", "steamid" );
 		}
 
 		public virtual void UpdateFrom( PlayerScore.Entry entry )
@@ -46,8 +43,6 @@ namespace Instagib.UI
 				ratioVal = killVal;
 			
 			ratio.Text = ratioVal.ToString("N1");
-			steamId.Text = (entry.Get<ulong>( "steamid", 0 ) == Local.Client.SteamId).ToString();
-
 			SetClass( "me", Local.Client != null && entry.Get<ulong>( "steamid", 0 ) == Local.Client.SteamId );
 		}
 	}

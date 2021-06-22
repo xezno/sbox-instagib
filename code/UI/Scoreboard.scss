@@ -42,6 +42,7 @@
 		font-weight: 200;
 		min-width: 30%;
 		margin-bottom: 10px;
+		padding: 4px 16px;
 
 		label {
 			font-weight: 500;
@@ -60,11 +61,11 @@
 		.entry
 		{
 			margin-bottom: 2px;
-			padding: 4px;
+			padding: 4px 16px;
 
 			&.me
 			{
-				color: #b6ff00;
+				background-color: #1F2937;
 			}
 		}
 	}
