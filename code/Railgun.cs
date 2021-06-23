@@ -245,7 +245,7 @@ namespace Instagib
 
 			if ( isZooming )
 			{
-				camSetup.FieldOfView = zoomFov;
+				camSetup.FieldOfView = zoomFov; // TODO: Lerp
 			}
 		}
 		
