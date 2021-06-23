@@ -7,7 +7,8 @@
   "baseCfg": {
     "timelimit": 10,
     "fraglimit": 50,
-    "maxplayers": 16
+    "maxplayers": 16,
+    "capturelimit": 3
   },
   "mapOverrides": [
     {
@@ -24,8 +25,10 @@
       "maxplayers": 12
     },
     {
-      "name": "alex.ctf_test",
-      "capturelimit": 3
+      "name": "alex.ctf_test"
+    },
+    {
+      "name": "gumby.gumbo"
     }
   ],
   "mapModes": {
