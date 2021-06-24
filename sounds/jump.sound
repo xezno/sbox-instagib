@@ -4,7 +4,12 @@
 	{
 		sounds = 
 		[
-			"sounds/jump.vsnd",
+			"sounds/jump.1.vsnd",
+			"sounds/jump.2.vsnd",
+			"sounds/jump.3.vsnd",
+			"sounds/jump.4.vsnd",
+			"sounds/jump.5.vsnd",
+			"sounds/jump.6.vsnd",
 		]
 		UI = false
 		Volume = 0.4

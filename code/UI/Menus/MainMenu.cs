@@ -13,6 +13,8 @@ namespace Instagib.UI.Menus
 		public Checkbox CrosshairToggle { get; set; }
 		public TextEntry CrosshairGlyph { get; set; }
 		public Slider CrosshairSlider { get; set; }
+		
+		public Panel Scroll { get; set; }
 
 		// TODO: Range struct
 		private (float, float) fovRange = (70f, 130f);
@@ -56,6 +58,10 @@ namespace Instagib.UI.Menus
 			ViewmodelFlip.Value = PlayerSettings.ViewmodelFlip;
 			CrosshairGlyph.Text = PlayerSettings.CrosshairGlyph;
 			CrosshairSlider.Value = ((float)PlayerSettings.CrosshairSize).LerpInverse( crosshairRange.Item1, crosshairRange.Item2 );
+			
+			// Add scrollbar
+			var scrollbar = AddChild<Scrollbar>();
+			scrollbar.Panel = Scroll;
 		}
 		
 		public void ApplySettings()

@@ -1,0 +1,22 @@
+﻿scrollbar {
+  position: absolute;
+  
+  top: 0;
+  left: 650px;
+  bottom: 0;
+  width: 10px;
+  
+  margin-left: -10px;
+  margin-top: 150px;
+  margin-bottom: 250px;
+}
+
+scrollhandle {
+  top: 0;
+  right: 0;
+  left: 0;
+
+  height: 100px;
+  background-color: #374151;
+  position: absolute;
+}
