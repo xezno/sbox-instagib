@@ -3,7 +3,7 @@ using Sandbox;
 
 namespace Instagib.Utils
 {
-	public static class HSV
+	public static class ColorUtils
 	{
 		public struct HSVColor
 		{
@@ -72,5 +72,7 @@ namespace Instagib.Utils
 
 			return new HSVColor( hue, saturation, value );
 		}
+		
+		public static byte ComponentToByte( float v ) => (byte)MathF.Floor( (v >= 1.0f) ? 255f : v * 256.0f );
 	}
 }

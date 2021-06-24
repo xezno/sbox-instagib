@@ -8,34 +8,24 @@ namespace Instagib.UI.Elements
 {
 	public class ColorPicker : Panel
 	{
-		private class RgbInput : Panel
+		private class HexInput : Panel
 		{
-			private TextEntry rEntry;
-			private TextEntry gEntry;
-			private TextEntry bEntry;
+			private TextEntry hexEntry;
 			
-			public RgbInput()
+			public HexInput()
 			{
-				var rPanel = Add.Panel();
-				rPanel.Add.Label( "R" );
-				rEntry = rPanel.Add.TextEntry( "0" );
-				
-				var gPanel = Add.Panel();
-				gPanel.Add.Label( "G" );
-				gEntry = gPanel.Add.TextEntry( "0" );
-				
-				var bPanel = Add.Panel();
-				bPanel.Add.Label( "B" );
-				bEntry = bPanel.Add.TextEntry( "0" );
+				var hexPanel = Add.Panel();
+				hexPanel.Add.Label( "Hex" );
+				hexEntry = hexPanel.Add.TextEntry( "0" );
 			}
 
-			public void SetValues( Color color )
+			public void SetValue( Color color )
 			{
-				rEntry.Text = (color.r).ToString("F0");
-				gEntry.Text = (color.g).ToString("F0");
-				bEntry.Text = (color.b).ToString("F0");
+				hexEntry.Text = color.Hex;
 			}
 		}
+
+		private class PickedColor : Panel { }
 
 		private byte[] imageData;
 		private int width = 360;
@@ -43,35 +33,37 @@ namespace Instagib.UI.Elements
 		private int stride = 4;
 
 		private Slider valueSlider;
-		private RgbInput input;
+		private HexInput input;
 		private Image image;
+		private PickedColor pickedColor;
+
+		private bool move;
 		
 		public ColorPicker()
 		{
 			StyleSheet.Load( "/Code/UI/Elements/ColorPicker.scss" );
 			
 			image = Add.Image();
-			input = AddChild<RgbInput>();
+
+			CreateTexture();
 			
-			DoTextureStuff();
+			pickedColor = AddChild<PickedColor>();
 				
 			var valPanel = Add.Panel();
-			valPanel.Add.Label( "Value" );
+			// valPanel.Add.Label( "Value" );
 			valueSlider = valPanel.AddChild<Slider>();
 			valueSlider.SnapRate = 5;
 			valueSlider.Value = 1.0f;
 			valueSlider.OnValueChange += value =>
 			{
-				DoTextureStuff( value );
+				CreateTexture( value );
 			};
 		}
 
-		private void DoTextureStuff( int value = 0 )
+		private void CreateTexture( int value = 0 )
 		{
 			float fValue = value / 100f;
-			
-			var pixelColor = Color.Red;
-			var hslColor = HSV.ColorToHSV( pixelColor );
+			var hslColor = ColorUtils.ColorToHSV( Color.Red );
 
 			hslColor.value = fValue;
 
@@ -82,12 +74,10 @@ namespace Instagib.UI.Elements
 				data[i] = 255;
 
 			void SetPixel( int x, int y, Color col )
-			{ 
-				byte ColToByte( float v ) => (byte)MathF.Floor( (v >= 1.0f) ? 255f : v * 256.0f );
-
-				data[((x + (y * width)) * stride) + 0] = ColToByte( col.r );
-				data[((x + (y * width)) * stride) + 1] = ColToByte( col.g );
-				data[((x + (y * width)) * stride) + 2] = ColToByte( col.b );
+			{
+				data[((x + (y * width)) * stride) + 0] = ColorUtils.ComponentToByte( col.r );
+				data[((x + (y * width)) * stride) + 1] = ColorUtils.ComponentToByte( col.g );
+				data[((x + (y * width)) * stride) + 2] = ColorUtils.ComponentToByte( col.b );
 				data[((x + (y * width)) * stride) + 3] = 255;
 			}
 
@@ -98,11 +88,10 @@ namespace Instagib.UI.Elements
 				for (int x = 0; x < width; x++)
 				{
 					var hsvConvert = hslColor.HSVToColor();
-					pixelColor = hsvConvert;
-					SetPixel( x, y, pixelColor );
+					SetPixel( x, y, hsvConvert );
 					hslColor.hue += 1;
 				}
-				hslColor.saturation -= (y * 0.0001f); // 40 works, don't change it
+				hslColor.saturation -= (y * 0.0001f);
 			}
 
 			var texture = Texture.Create( width, height ).WithStaticUsage().WithData( data ).WithName( "hsvColor" ).Finish();
@@ -110,18 +99,16 @@ namespace Instagib.UI.Elements
 			image.Texture = texture;
 		}
 
-		protected override void OnClick( MousePanelEvent e )
+		private void MoveShit()
 		{
-			base.OnClick( e );
-			
 			Color GetPixel( int x, int y )
 			{
 				var col = new Color
 				{
-					r = imageData[((x + (y * width)) * stride) + 0],
-					g = imageData[((x + (y * width)) * stride) + 1],
-					b = imageData[((x + (y * width)) * stride) + 2],
-					a = imageData[((x + (y * width)) * stride) + 3]
+					r = imageData[((x + (y * width)) * stride) + 0] / 255f,
+					g = imageData[((x + (y * width)) * stride) + 1] / 255f,
+					b = imageData[((x + (y * width)) * stride) + 2] / 255f,
+					a = imageData[((x + (y * width)) * stride) + 3] / 255f
 				};
 
 				return col;
@@ -134,10 +121,37 @@ namespace Instagib.UI.Elements
 			var normalizedPos = localPos / image.Box.Rect.Size;
 
 			var arrayPos = normalizedPos * new Vector2( width, height );
-			
 			var arrayEntry = GetPixel( (int)arrayPos.x, (int)arrayPos.y );
+			
+			pickedColor.Style.Left = MousePosition.x;
+			pickedColor.Style.Top = MousePosition.y;
+			pickedColor.Style.Opacity = 1;
+			pickedColor.Style.Dirty();
+			pickedColor.Style.BackgroundColor = arrayEntry;
+		}
 
-			input.SetValues( arrayEntry );
+		protected override void OnMouseDown( MousePanelEvent e )
+		{
+			base.OnMouseDown( e );
+			move = true;
+		}
+
+		protected override void OnMouseUp( MousePanelEvent e )
+		{
+			base.OnMouseUp( e );
+			move = false;
+		}
+
+		protected override void OnClick( MousePanelEvent e )
+		{
+			base.OnClick( e );
+			MoveShit();
+		}
+
+		public override void Tick()
+		{
+			if ( move )
+				MoveShit();
 		}
 	}
 }

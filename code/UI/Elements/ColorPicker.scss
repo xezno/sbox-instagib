@@ -1,7 +1,7 @@
 ﻿colorpicker {
   align-items: center;
   flex-direction: column;
-  width: 250px;
+  width: 150px;
   
   image {
     transition: none;
@@ -15,18 +15,36 @@
     border-radius: 5px;
   }
   
+  pickedcolor {
+    opacity: 0;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    
+    transform: translate( -50% -50% );
+    
+    border: 2px solid black;
+  }
+  
   panel {
     align-items: center;
   }
 
   slider {
-    margin: 0;
-    width: 60%;
-    margin-left: 15px;
+    padding: 0;
+    margin-left: 0px;
+    margin-right: 0px;
+    
+    label {
+      display: none;
+    }
   }
   
-  rgbinput {
-    margin: 10px 0;
+  hexinput {
     display: flex;
     flex-direction: row;
     
@@ -36,7 +54,7 @@
     panel {
       align-items: center;
       flex-direction: column;
-      width: 75px;
+      width: 150px;
     }
     
     textentry {
