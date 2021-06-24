@@ -1,0 +1,50 @@
+﻿colorpicker {
+  align-items: center;
+  flex-direction: column;
+  width: 250px;
+  
+  image {
+    transition: none;
+    width: 150px;
+    height: 150px;
+    background-size: 100%;
+    cursor: pointer;
+
+    padding: 4px;
+    border: 4px solid #374151;
+    border-radius: 5px;
+  }
+  
+  panel {
+    align-items: center;
+  }
+
+  slider {
+    margin: 0;
+    width: 60%;
+    margin-left: 15px;
+  }
+  
+  rgbinput {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+    
+    align-items: center;
+    justify-content: center;
+    
+    panel {
+      align-items: center;
+      flex-direction: column;
+      width: 75px;
+    }
+    
+    textentry {
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+    
+    text-align: center;
+  }
+}
