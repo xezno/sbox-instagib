@@ -38,6 +38,9 @@ namespace Instagib.UI.Elements
 		private PickedColor pickedColor;
 
 		private bool move;
+
+		public delegate void ColorPickerChangeEvent( Color color );
+		public ColorPickerChangeEvent OnValueChange;
 		
 		public ColorPicker()
 		{
@@ -57,12 +60,14 @@ namespace Instagib.UI.Elements
 			valueSlider.OnValueChange += value =>
 			{
 				CreateTexture( value );
+				MoveShit();
 			};
 		}
 
 		private void CreateTexture( int value = 0 )
 		{
 			float fValue = value / 100f;
+
 			var hslColor = Color.Red.ToHsv();
 
 			hslColor.value = fValue;
@@ -128,6 +133,8 @@ namespace Instagib.UI.Elements
 			pickedColor.Style.Opacity = 1;
 			pickedColor.Style.Dirty();
 			pickedColor.Style.BackgroundColor = arrayEntry;
+
+			OnValueChange?.Invoke( arrayEntry );
 		}
 
 		protected override void OnMouseDown( MousePanelEvent e )
@@ -150,6 +157,7 @@ namespace Instagib.UI.Elements
 
 		public override void Tick()
 		{
+			base.Tick();
 			if ( move )
 				MoveShit();
 		}

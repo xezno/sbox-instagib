@@ -12,23 +12,20 @@ iconpanel,icon
 }
 
 mainmenu {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba( $gray-900, 0.5 );
-  
-  pointer-events: all;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba( $gray-900, 0.8 );
+    pointer-events: all;
+    opacity: 1;
+    left: 0;
+    transition: all 150ms ease;
 
-  opacity: 1;
-  left: 0;
-  
-  transition: all 150ms ease;
-
-  &:intro, &:outro {
-    opacity: 0;
-    left: -50px;
-  }
+    &:intro, &:outro {
+        opacity: 0;
+        left: -50px;
+    }
 }
 
 .menu-inner {
@@ -104,8 +101,8 @@ button {
 
 .settings-items {
   position: absolute;
-  top: 100px;
-  padding: 50px;
+  top: 120px;
+  padding: 10px 50px;
   width: 100%;
   height: 75%;
   

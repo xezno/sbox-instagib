@@ -1,4 +1,5 @@
-﻿using Instagib.UI.Elements;
+﻿using instagib.UI.Menus;
+using Instagib.UI.Elements;
 using Sandbox;
 using Sandbox.UI;
 
@@ -13,7 +14,10 @@ namespace Instagib.UI.Menus
 		public Checkbox CrosshairToggle { get; set; }
 		public TextEntry CrosshairGlyph { get; set; }
 		public Slider CrosshairSlider { get; set; }
-		
+		public Label Nickname { get; set; }
+		public ColorPicker NicknameColor { get; set; }
+
+
 		public Panel Scroll { get; set; }
 
 		// TODO: Range struct
@@ -34,10 +38,11 @@ namespace Instagib.UI.Menus
 			ViewmodelSlider.ValueCalcFunc =
 				value => viewmodelRange.Item1.LerpTo( viewmodelRange.Item2, value ).CeilToInt();
 			
-
 			CrosshairSlider.SnapRate = 2;
 			CrosshairSlider.ValueCalcFunc =
 				value => crosshairRange.Item1.LerpTo( crosshairRange.Item2, value ).CeilToInt();
+
+			Nickname.Text = Local.DisplayName;
 			
 			// Make it so that we can preview the settings live
 			FovSlider.OnValueChange += v => PlayerSettings.Fov = v;
@@ -47,6 +52,11 @@ namespace Instagib.UI.Menus
 			ViewmodelFlip.OnValueChange += b => PlayerSettings.ViewmodelFlip = b;
 			CrosshairSlider.OnValueChange += b => PlayerSettings.CrosshairSize = b;
 			CrosshairGlyph.AddEvent("onchange", () => PlayerSettings.CrosshairGlyph = CrosshairGlyph.Text );
+			NicknameColor.OnValueChange += c =>
+			{
+				Nickname.Style.FontColor = c;
+				Nickname.Style.Dirty();
+			};
 
 			// Set values to existing settings
 			PlayerSettings.Load();
@@ -62,6 +72,9 @@ namespace Instagib.UI.Menus
 			// Add scrollbar
 			var scrollbar = AddChild<Scrollbar>();
 			scrollbar.Panel = Scroll;
+
+			// Railgun renderer
+			var railgunRender = AddChild<RailgunRender>();
 		}
 		
 		public void ApplySettings()
