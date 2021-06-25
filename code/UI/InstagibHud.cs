@@ -10,7 +10,7 @@ namespace Instagib.UI
 	{
 		public static Panel TiltingHudPanel;
 		public static Panel StaticHudPanel;
-		private MainMenu mainMenu;
+		private SettingsMenu settingsMenu;
 		
 		public static InstagibHud CurrentHud;
 
@@ -32,8 +32,8 @@ namespace Instagib.UI
 		{
 			void HideMenu()
 			{
-				mainMenu?.RestoreSettings();
-				mainMenu?.Delete();
+				settingsMenu?.RestoreSettings();
+				settingsMenu?.Delete();
 				
 				StaticHudPanel = RootPanel.Add.Panel( "staticpanel" );
 				StaticHudPanel.StyleSheet.Load( "/Code/UI/InstagibHud.scss" );
@@ -50,7 +50,7 @@ namespace Instagib.UI
 				StaticHudPanel?.Delete();
 				TiltingHudPanel?.Delete();
 				
-				mainMenu = RootPanel.AddChild<MainMenu>();
+				settingsMenu = RootPanel.AddChild<SettingsMenu>();
 			}
 
 			if ( forceState != null )
