@@ -1,4 +1,4 @@
-﻿using instagib.UI.Menus;
+﻿using Instagib.UI.Menus;
 using Instagib.UI.Elements;
 using Sandbox;
 using Sandbox.UI;
@@ -16,7 +16,6 @@ namespace Instagib.UI.Menus
 		public Slider CrosshairSlider { get; set; }
 		public Label Nickname { get; set; }
 		public ColorPicker NicknameColor { get; set; }
-
 
 		public Panel Scroll { get; set; }
 
@@ -68,7 +67,7 @@ namespace Instagib.UI.Menus
 			ViewmodelFlip.Value = PlayerSettings.ViewmodelFlip;
 			CrosshairGlyph.Text = PlayerSettings.CrosshairGlyph;
 			CrosshairSlider.Value = ((float)PlayerSettings.CrosshairSize).LerpInverse( crosshairRange.Item1, crosshairRange.Item2 );
-			
+
 			// Add scrollbar
 			var scrollbar = AddChild<Scrollbar>();
 			scrollbar.Panel = Scroll;

@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace instagib.UI.Menus
+namespace Instagib.UI.Menus
 {
 	public class RailgunRender : Panel
 	{
@@ -46,11 +46,34 @@ namespace instagib.UI.Menus
 			sceneCapture = null;
 		}
 
+		public override void OnButtonEvent( ButtonEvent e )
+		{
+			if ( e.Button == "mouseleft" )
+			{
+				SetMouseCapture( e.Pressed );
+			}
+
+			base.OnButtonEvent( e );
+		}
+
 		public override void Tick()
 		{
 			base.Tick();
 
-			CamAngles.yaw += Time.Delta * 45f;
+			if ( HasMouseCapture )
+			{
+				CamAngles.pitch += Mouse.Delta.y;
+				CamAngles.yaw -= Mouse.Delta.x;
+			}
+			else
+			{
+				CamAngles.yaw += Time.Delta * 45f;
+				CamAngles.pitch = CamAngles.pitch.LerpTo( 0, 10f * Time.Delta );
+			}
+
+			CamAngles.yaw %= 360f;
+			CamAngles.pitch = CamAngles.pitch.Clamp( -90f, 90f );
+
 			sceneCapture?.SetCamera( CamAngles.Direction * -75, CamAngles, 45 );
 		}
 	}

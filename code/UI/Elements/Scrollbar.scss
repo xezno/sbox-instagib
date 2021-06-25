@@ -1,4 +1,6 @@
-﻿scrollbar {
+﻿@import "Colors";
+
+scrollbar {
   position: absolute;
   
   top: 0;
@@ -17,6 +19,6 @@ scrollhandle {
   left: 0;
 
   height: 100px;
-  background-color: #374151;
+  background-color: $gray-800;
   position: absolute;
 }

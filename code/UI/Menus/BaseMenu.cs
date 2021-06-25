@@ -1,6 +1,7 @@
-﻿using Sandbox.UI;
+﻿using Instagib.UI.Elements;
+using Sandbox.UI;
 
-namespace instagib.UI.Menus
+namespace Instagib.UI.Menus
 {
 	public class BaseMenu : Menu
 	{

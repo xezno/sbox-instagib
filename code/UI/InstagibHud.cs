@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Instagib.UI;
-using Instagib.UI.Menus;
+﻿using Instagib.UI.Menus;
 using Sandbox;
 using Sandbox.UI;
 

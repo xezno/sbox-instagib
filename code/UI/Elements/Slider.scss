@@ -1,4 +1,6 @@
-﻿slider {
+﻿@import "Colors";
+
+slider {
   width: 80%;
   height: 50px;
 
@@ -8,7 +10,7 @@
 .line {
   height: 2px;
   width: 100%;
-  background-color: #374151;
+  background-color: $gray-800;
   margin-top: 25px;
 }
 
@@ -26,10 +28,12 @@ label {
   
   position: absolute;
   top: 18px;
+
+  margin-left: -8px;
   
   cursor: pointer;
   
-  background-color: #6B7280;
+  background-color: $gray-800;
   
   transition: background-color 100ms ease;
 
@@ -38,6 +42,6 @@ label {
   }
   
   &:hover {
-    background-color: #9CA3AF;
+    background-color: $gray-700;
   }
 }

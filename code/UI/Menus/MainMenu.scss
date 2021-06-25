@@ -1,1 +1,22 @@
 ﻿@import "Colors";
+
+:not() { // why
+    flex-shrink: 0;
+}
+
+.menu-items {
+    height: 100%;
+    justify-content: center;
+
+    button {
+        padding: 25px 50px;
+    }
+
+    position: relative;
+
+    span {
+        height: 75px;
+        top: -75px;
+        left: -50px;
+    }
+}

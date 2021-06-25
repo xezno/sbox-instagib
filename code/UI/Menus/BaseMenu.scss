@@ -2,7 +2,7 @@
 
 iconpanel, icon {
     font-size: 32px;
-    font-family: MaterialIcons;
+    font-family: MaterialIconsRound;
     margin: 0;
     padding: 0;
     text-shadow: 0 0 12px rgba( black, 0.5 );
@@ -14,7 +14,7 @@ iconpanel, icon {
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba( $gray-900, 0.8 );
+    background-color: rgba( $gray-900, 0.7 );
     pointer-events: all;
     opacity: 1;
     left: 0;
@@ -33,10 +33,21 @@ iconpanel, icon {
 }
 
 text, label, input, textentry {
-    font-family: Kairos Sans;
+    font-family: Poppins;
     font-weight: 400;
     color: white;
-    text-shadow: 2px 2px 10px rgba( black, 0.8 );
+}
+
+text.subtitle {
+    font-size: 16px;
+    font-weight: 700;
+    text-shadow: 0 0 50px rgba( black, 0.1 );
+    height: 60px;
+    left: 50px;
+    top: 30px;
+    position: absolute;
+    color: $gray-500;
+    font-family: Poppins-ExtraBoldItalic;
 }
 
 text.title {
@@ -47,7 +58,8 @@ text.title {
     left: 50px;
     top: 50px;
     color: white;
-    border-bottom: 5px solid #374151;
+    border-bottom: 5px solid $accent;
+    font-family: Poppins-ExtraBoldItalic;
 }
 
 text.big {
@@ -71,14 +83,28 @@ button {
 
     iconpanel {
         font-size: 20px;
+        transition: all 100ms ease;
         margin-right: 10px;
-        text-shadow: 0 0 10px rgba( black, 0.2 );
+    }
+
+    label {
+        transition: all 100ms ease;
     }
 
     &:hover {
-        background-color: $gray-600;
+        background-color: $accent;
         border-radius: 10px;
         sound-in: ui.button.over;
+
+        label {
+            color: $accent-text;
+            // Terrible hack to improve font rendering here
+            text-shadow: 0.25px 0.25px 0px black, -0.25px 0.25px 0px black, 0.25px -0.25px 0px black, -0.25px -0.25px 0px black;
+        }
+
+        iconpanel {
+            color: $accent-text;
+        }
     }
 
     &:active {

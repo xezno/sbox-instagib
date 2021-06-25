@@ -1,84 +1,16 @@
 ﻿<div>
     <div class="menu-inner">
-        <text class="title">Settings</text>
-        
         <div class="menu-items" @ref="Scroll">
-            <text class="big no-shrink">Game</text>
-            <span class="no-shrink">
-                <text>Name</text>
-                <label @ref="Nickname">Magnum Dong</label>
+            <span>
+                <text class="subtitle">WELCOME TO</text>
+                <text class="title">Alex's Instagib</text>
             </span>
 
-            <span class="no-shrink">
-                <text>Name Color</text>
-                <colorpicker @ref="NicknameColor"></colorpicker>
-            </span>
-
-            <span class="no-shrink">
-                <text>Field of View</text>
-                <slider @ref="FovSlider"></slider>
-            </span>
-
-            <text class="big no-shrink">HUD</text>
-
-            <span class="no-shrink">
-                <text>Draw Crosshair</text>
-                <checkbox @ref="CrosshairToggle"></checkbox>
-            </span>
-
-            <span class="no-shrink">
-                <text>Crosshair (TODO: Dropdown)</text>
-                <textentry @ref="CrosshairGlyph" style="font-family: Crosshairs; font-size: 32px; text-align: center">a</textentry>
-            </span>
-
-            <span class="no-shrink">
-                <text>Crosshair Size</text>
-                <slider @ref="CrosshairSlider"></slider>
-            </span>
-
-            <text class="big no-shrink">Viewmodel</text>
-            <span class="no-shrink">
-                <text>Viewmodel X</text>
-                <slider @ref="ViewmodelSlider"></slider>
-            </span>
-
-            <span class="no-shrink">
-                <text>Viewmodel Visible</text>
-                <checkbox @ref="ViewmodelToggle"></checkbox>
-            </span>
-
-            <span class="no-shrink">
-                <text>Left Handed</text>
-                <checkbox @ref="ViewmodelFlip"></checkbox>
-            </span>
-
-            <text class="big no-shrink">Cosmetics</text>
-            <span class="no-shrink">
-                <text>Player Skin</text>
-                <textentry style="width: 100px; text-align: center">0</textentry>
-            </span>
-
-            <span class="no-shrink">
-                <text>Railgun Skin</text>
-                <textentry style="width: 100px; text-align: center">0</textentry>
-            </span>
-
-            <text class="big no-shrink">Outlines</text>
-            <span class="no-shrink">
-                <text>Team Outline Color</text>
-                <colorpicker></colorpicker>
-            </span>
-
-            <span class="no-shrink">
-                <text>Enemy Outline Color</text>
-                <colorpicker></colorpicker>
-            </span>
+            <button onclick="" Icon="login">Enter</button>
+            <button onclick="" Icon="settings">Settings</button>
+            <button onclick="" Icon="account_circle">Profile</button>
+            <button onclick="" Icon="bar_chart">Stats</button>
+            <button onclick.console="disconnect" Icon="close">Disconnect</button>
         </div>
-        
-        <div class="buttons">
-            <button onclick="RestoreSettings(); Toggle();" Icon="arrow_back">Back</button>
-            <button onclick="ApplySettings(); Toggle();" Icon="check">Apply</button>
-        </div>
-
     </div>
-</div> 
+</div>

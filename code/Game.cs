@@ -46,9 +46,6 @@ namespace Instagib
 		{
 			base.OnKilled( client, pawn );
 			
-			//
-			// Check to make sure we have a victim
-			// 
 			if ( pawn is not Player victim )
 				return;
 			
@@ -56,9 +53,6 @@ namespace Instagib
 			var victimClient = victim.GetClientOwner(); 
 			victimClient.SetScore( "deaths", victimClient.GetScore<int>( "deaths" ) + 1 );
 			
-			//
-			// Check to make sure we have an attacker
-			//
 			if ( pawn.LastAttacker is not Player attacker )
 				return;
 			
