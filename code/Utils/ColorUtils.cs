@@ -19,7 +19,7 @@ namespace Instagib.Utils
 			}
 		}
 		
-		public static Color HSVToColor( this HSVColor hsv )
+		public static Color ToColor( this HSVColor hsv )
 		{
 			var hi = Convert.ToInt32( MathF.Floor( hsv.hue / 60.0f ) ) % 6;
 			var f = hsv.hue / 60.0f - MathF.Floor( hsv.hue / 60.0f );
@@ -61,7 +61,7 @@ namespace Instagib.Utils
 			return MathF.Round( hue );
 		}
 		
-		public static HSVColor ColorToHSV( this Color color )
+		public static HSVColor ToHsv( this Color color )
 		{
 			float max = MathF.Max( color.r, Math.Max( color.g, color.b ) );
 			float min = MathF.Min( color.r, Math.Min( color.g, color.b ) );

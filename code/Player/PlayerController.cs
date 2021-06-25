@@ -40,11 +40,10 @@ namespace Instagib
 		public float BodyHeight => 72.0f;
 		public float EyeHeight => 64.0f;
 		public float Gravity => 800.0f;
-		public float AirControl => Single.PositiveInfinity;
 		public bool AutoJump => false;
 		public float JumpMultiplier => 0.9f;
-		public float AirSpeedLimit => 768f;
-		public float SpeedLimit => 768f; // Hard limit (excludes Z)
+		public float AirSpeedLimit => 800f;
+		public float SpeedLimit => 800f; // Hard limit (excludes Z)
 
 		/// <summary>
 		///     This is temporary, get the hull size for the player's collision

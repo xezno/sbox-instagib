@@ -63,7 +63,7 @@ namespace Instagib.UI.Elements
 		private void CreateTexture( int value = 0 )
 		{
 			float fValue = value / 100f;
-			var hslColor = ColorUtils.ColorToHSV( Color.Red );
+			var hslColor = Color.Red.ToHsv();
 
 			hslColor.value = fValue;
 
@@ -87,7 +87,7 @@ namespace Instagib.UI.Elements
 				
 				for (int x = 0; x < width; x++)
 				{
-					var hsvConvert = hslColor.HSVToColor();
+					var hsvConvert = hslColor.ToColor();
 					SetPixel( x, y, hsvConvert );
 					hslColor.hue += 1;
 				}

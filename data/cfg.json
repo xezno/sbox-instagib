@@ -49,6 +49,9 @@
     ],
     "captureTheFlag": [
       "alex.ctf_test"
+    ],
+    "hookDeathmatch": [
+      "alex.scale_test"
     ]
   }
 }

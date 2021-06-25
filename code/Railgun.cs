@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Sandbox;
 using Trace = Sandbox.Trace;
@@ -91,8 +90,10 @@ namespace Instagib
 			    {
 				    ( player.Controller as PlayerController )?.ClearGroundEntity();
 				    
-				    forceDir = Vector3.Lerp( forceDir, Vector3.Up * 2, 0.5f );
+				    forceDir = Vector3.Lerp( forceDir, Vector3.Up * 3.5f, 0.5f );
 			    }
+
+			    forceDir = forceDir.Normal;
 
 			    ent.Velocity += force * Vector3.Lerp( normal, forceDir, 0.5f );
 		    }
