@@ -71,9 +71,6 @@ namespace Instagib.UI.Menus
 			// Add scrollbar
 			var scrollbar = AddChild<Scrollbar>();
 			scrollbar.Panel = Scroll;
-
-			// Railgun renderer
-			var railgunRender = AddChild<RailgunRender>();
 		}
 		
 		public void ApplySettings()
@@ -96,7 +93,7 @@ namespace Instagib.UI.Menus
 
 		public void Toggle()
 		{
-			InstagibHud.ToggleMainMenu();
+			InstagibHud.CurrentHud.SetCurrentMenu( new MainMenu() );
 		}
 	}
 }

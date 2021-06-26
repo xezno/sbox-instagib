@@ -13,6 +13,9 @@ namespace Instagib
 		public static string CrosshairGlyph { get; set; } = "a";
 		public static int CrosshairSize { get; set; } = 24;
 
+		//public static Color TeamOutlineColor { get; set; } = new Color();
+		public static Color EnemyOutlineColor { get; set; } = new Color();
+
 		public static void Load()
 		{
 			Host.AssertClient();

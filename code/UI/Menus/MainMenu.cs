@@ -12,5 +12,15 @@ namespace Instagib.UI.Menus
 			SetTemplate( "/Code/UI/Menus/MainMenu.html" );
 			StyleSheet.Load( "/Code/UI/Menus/MainMenu.scss" ); // Loading in HTML doesn't work for whatever reason
 		}
+
+		public void ShowSettings()
+		{
+			InstagibHud.CurrentHud.SetCurrentMenu( new SettingsMenu() );
+		}
+
+		public void HideMenu()
+		{
+			InstagibHud.CurrentHud.SetCurrentMenu( null );
+		}
 	}
 }

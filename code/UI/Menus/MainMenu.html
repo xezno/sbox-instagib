@@ -2,14 +2,15 @@
     <div class="menu-inner">
         <div class="menu-items" @ref="Scroll">
             <span>
-                <text class="subtitle">WELCOME TO</text>
-                <text class="title">Alex's Instagib</text>
+                <text class="subtitle">YOU'RE PLAYING</text>
+                <text class="title" style="max-width: 245px">Alex's Instagib</text>
             </span>
 
-            <button onclick="" Icon="login">Enter</button>
-            <button onclick="" Icon="settings">Settings</button>
+            <button onclick="HideMenu()" Icon="login">Enter</button>
+            <button onclick="ShowSettings()" Icon="settings">Settings</button>
+            <button onclick="" Icon="shopping_cart">Shop</button>
+            <button onclick="" Icon="checkroom">Customize</button>
             <button onclick="" Icon="account_circle">Profile</button>
-            <button onclick="" Icon="bar_chart">Stats</button>
             <button onclick.console="disconnect" Icon="close">Disconnect</button>
         </div>
     </div>
