@@ -40,12 +40,12 @@ namespace Instagib.UI.Elements
 
 			private void DoMove()
 			{
-				var leftPos = Mouse.Position.x - Parent.Box.Left;
+				var leftPos = Mouse.Position.x * Parent.ScaleFromScreen - Parent.Box.Left * Parent.ScaleFromScreen;
 				var width = line.Box.Rect.width;
 					
-				leftPos = leftPos.Clamp( 0, width );
+				leftPos = leftPos.Clamp( 0, width * Parent.ScaleFromScreen );
 				
-				slider.Value = (leftPos / width);
+				slider.value = (leftPos / width);
 
 				Style.Left = leftPos;
 				Style.Dirty();

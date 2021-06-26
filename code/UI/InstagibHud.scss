@@ -6,8 +6,7 @@ text,label,input,textentry,icon,iconpanel
 	text-shadow: 2px 2px 10px rgba( black, 0.8 );
 }
 
-text.alert 
-{
+text.alert {
 	font-size: 32px;
 	padding: 50px;
 	position: absolute;
@@ -17,6 +16,7 @@ text.alert
 	text-align: center;
 	color: rgba( white, 0.4 );
 	text-shadow: 0 0 50px rgba( black, 0.1 );
+	font-family: Poppins-ExtraBoldItalic;
 }
 
 .bottom {
@@ -87,30 +87,24 @@ text.alert
 	right: 0;
 	left: 0;
 	bottom: 0;
-	
 	align-items: center;
 	justify-content: center;
-
 	text-align: center;
 	padding-bottom: 400px;
-	
 	font-size: 24px;
-
 	flex-direction: column;
-	
 	opacity: 1;
 	transition: opacity 200ms ease;
-	
+
 	&:outro {
 		opacity: 0;
 	}
-	
+
 	.player {
-		color: #ff151c;
-		font-weight: 600;
+		color: #D3FF19;
 	}
 
-	.medals {		
+	.medals {
 		flex-direction: column;
 		font-size: 18px;
 	}

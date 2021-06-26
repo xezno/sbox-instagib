@@ -128,8 +128,8 @@ namespace Instagib.UI.Elements
 			var arrayPos = normalizedPos * new Vector2( width, height );
 			var arrayEntry = GetPixel( (int)arrayPos.x, (int)arrayPos.y );
 			
-			pickedColor.Style.Left = MousePosition.x;
-			pickedColor.Style.Top = MousePosition.y;
+			pickedColor.Style.Left = MousePosition.x * ScaleFromScreen;
+			pickedColor.Style.Top = MousePosition.y * ScaleFromScreen;
 			pickedColor.Style.Opacity = 1;
 			pickedColor.Style.Dirty();
 			pickedColor.Style.BackgroundColor = arrayEntry;
