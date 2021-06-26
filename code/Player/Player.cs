@@ -90,6 +90,8 @@ namespace Instagib
 			base.OnKilled();
 
 			Velocity = Vector3.Zero;
+
+			Camera = new SpectateRagdollCamera();
 			
 			Inventory.DeleteContents();
 
@@ -101,7 +103,6 @@ namespace Instagib
 			ShakeScreen( To.Everyone, Position );
 			
 			Sound.FromWorld( "gibbing", Position );
-			Camera = new SpectateRagdollCamera();
 		}
 
 		[ClientRpc]

@@ -66,14 +66,11 @@ namespace Instagib.UI
 		{
 			if ( Input.Pressed( InputButton.Menu ) )
 			{
-				// Prevent people from accidentally opening the menu
-				if ( Local.Pawn.Velocity.Cross( Vector3.Up ).Length > 30f )
-					return;
-
 				Log.Trace( "Toggling menu" );
 				if ( currentMenu is MainMenu )
 					SetCurrentMenu( null );
-				else
+				else if ( Local.Pawn.Velocity.Cross( Vector3.Up ).Length < 30f )
+					// Prevent people from accidentally opening the menu
 					SetCurrentMenu( new MainMenu() );
 			}
 		}

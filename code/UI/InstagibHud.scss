@@ -7,12 +7,20 @@ text,label,input,textentry,icon,iconpanel
 }
 
 text.alert {
-	font-size: 32px;
-	padding: 50px;
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
+	font-size: 32px;
+}
+
+text.menu-prompt {
+	font-size: 16px;
+	transition: opacity 100ms ease;
+}
+
+text.alert, text.menu-prompt {
+	padding: 75px 100px;
 	text-align: center;
 	color: rgba( white, 0.4 );
 	text-shadow: 0 0 50px rgba( black, 0.1 );
