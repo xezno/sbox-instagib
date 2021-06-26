@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Sandbox;
 using Trace = Sandbox.Trace;
@@ -91,8 +90,10 @@ namespace Instagib
 			    {
 				    ( player.Controller as PlayerController )?.ClearGroundEntity();
 				    
-				    forceDir = Vector3.Lerp( forceDir, Vector3.Up * 2, 0.5f );
+				    forceDir = Vector3.Lerp( forceDir, Vector3.Up * 3.5f, 0.5f );
 			    }
+
+			    forceDir = forceDir.Normal;
 
 			    ent.Velocity += force * Vector3.Lerp( normal, forceDir, 0.5f );
 		    }
@@ -127,6 +128,9 @@ namespace Instagib
 			TimeSinceSecondaryAttack = 0;
 
 			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
+
+			var ownerClient = Owner.GetClientOwner();
+			ownerClient.SetScore( "totalShots", ownerClient.GetScore<int>( "totalShots", 0 ) + 1 );
 		}
 
 		// This should ideally not be a user-invoked command
@@ -150,13 +154,16 @@ namespace Instagib
 				return;
 			}
 			
-			if ( owner is not Instagib.Player )
+			if ( owner is not Player )
 			{
 				// This should never happen 
 				Log.Trace( "Owner wasn't a player" );
 				return;
 			}
-			
+
+			var ownerClient = owner.GetClientOwner();
+			ownerClient.SetScore( "totalHits", ownerClient.GetScore<int>( "totalHits", 0 ) + 1 );
+
 			if ( tick - Time.Tick > maxHitTolerance )
 			{
 				Log.Trace( $"Too much time passed: {tick - Time.Tick}" );
@@ -245,7 +252,7 @@ namespace Instagib
 
 			if ( isZooming )
 			{
-				camSetup.FieldOfView = zoomFov;
+				camSetup.FieldOfView = zoomFov; // TODO: Lerp
 			}
 		}
 		

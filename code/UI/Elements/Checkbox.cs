@@ -1,4 +1,5 @@
 ﻿using Sandbox.UI;
+using Sandbox.UI.Construct;
 
 namespace Instagib.UI.Elements
 {
@@ -34,7 +35,8 @@ namespace Instagib.UI.Elements
 		{
 			StyleSheet.Load( "/Code/UI/Elements/Checkbox.scss" );
 
-			checkMark = Add.Panel( "checkmark" );
+			checkMark = Add.Icon( "check" );
+			checkMark.AddClass( "checkmark" );
 		}
 
 		protected override void OnClick( MousePanelEvent e )

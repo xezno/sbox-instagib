@@ -1,0 +1,75 @@
+﻿<div>
+    <div class="menu-inner">
+        <text class="title">SETTINGS</text>
+        
+        <div class="menu-items" @ref="Scroll">
+            <text class="big no-shrink">GAME</text>
+
+            <span class="no-shrink">
+                <text>Field of View</text>
+                <slider @ref="FovSlider"></slider>
+            </span>
+
+            <text class="big no-shrink">HUD</text>
+
+            <span class="no-shrink">
+                <text>Draw Crosshair</text>
+                <checkbox @ref="CrosshairToggle"></checkbox>
+            </span>
+
+            <span class="no-shrink">
+                <text>Crosshair (TODO: Dropdown)</text>
+                <textentry @ref="CrosshairGlyph" style="font-family: Crosshairs; font-size: 32px; text-align: center">a</textentry>
+            </span>
+
+            <span class="no-shrink">
+                <text>Crosshair Size</text>
+                <slider @ref="CrosshairSlider"></slider>
+            </span>
+
+            <text class="big no-shrink">VIEWMODEL</text>
+            <span class="no-shrink">
+                <text>Viewmodel X</text>
+                <slider @ref="ViewmodelSlider"></slider>
+            </span>
+
+            <span class="no-shrink">
+                <text>Viewmodel Visible</text>
+                <checkbox @ref="ViewmodelToggle"></checkbox>
+            </span>
+
+            <span class="no-shrink">
+                <text>Left Handed</text>
+                <checkbox @ref="ViewmodelFlip"></checkbox>
+            </span>
+
+            <!--<text class="big no-shrink">Cosmetics</text>
+            <span class="no-shrink">
+                <text>Player Skin</text>
+                <textentry style="width: 100px; text-align: center">0</textentry>
+            </span>
+
+            <span class="no-shrink">
+                <text>Railgun Skin</text>
+                <textentry style="width: 100px; text-align: center">0</textentry>
+            </span>-->
+
+            <text class="big no-shrink">OUTLINES</text>
+            <!--<span class="no-shrink">
+                <text>Team Outline Color</text>
+                <colorpicker></colorpicker>
+            </span>-->
+
+            <span class="no-shrink">
+                <text>Enemy Outline Color</text>
+                <colorpicker @ref="EnemyOutlineColor" NoColorSlider="true"></colorpicker>
+            </span>
+        </div>
+        
+        <div class="buttons">
+            <button onclick="RestoreSettings(); Toggle();" Icon="arrow_back">Back</button>
+            <button onclick="ApplySettings(); Toggle();" Icon="check">Apply</button>
+        </div>
+
+    </div>
+</div> 

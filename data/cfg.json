@@ -1,0 +1,57 @@
+{
+  "notes": {
+    "0": "This is a base configuration file for instagib.",
+    "0": "This defines a base configuration, along with overrides for maps and the modes that each map is compatible with.",
+    "0": "Eventually this should be transferred over to HJSON, because it's a lot easier to read & allows for comments."
+  },
+  "baseCfg": {
+    "timelimit": 10,
+    "fraglimit": 50,
+    "maxplayers": 16,
+    "capturelimit": 3
+  },
+  "mapOverrides": [
+    {
+      "name": "willow.utopia"
+    },
+    {
+      "name": "alex.q1_dm4",
+      "timelimit": 5,
+      "fraglimit": 25,
+      "maxplayers": 8
+    },
+    {
+      "name": "alex.scale_test",
+      "maxplayers": 12
+    },
+    {
+      "name": "alex.ctf_test"
+    },
+    {
+      "name": "gumby.gumbo"
+    }
+  ],
+  "mapModes": {
+    "deathmatch": [
+      "willow.utopia",
+      "alex.q1_dm4",
+      "alex.scale_test"
+    ],
+    "freezeTag": [
+      "willow.utopia",
+      "alex.q1_dm4",
+      "alex.scale_test"
+    ],
+    "teamDeathmatch": [
+      "willow.utopia",
+      "alex.q1_dm4",
+      "alex.scale_test"
+    ],
+    "captureTheFlag": [
+      "alex.ctf_test"
+    ],
+    "hookDeathmatch": [
+      "alex.scale_test"
+    ]
+  }
+}

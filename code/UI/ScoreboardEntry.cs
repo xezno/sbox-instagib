@@ -15,15 +15,22 @@ namespace Instagib.UI
 		private Label kills;
 		private Label deaths;
 		private Label ratio;
+		private Label ping;
+		private Label accuracy;
+
+		private Image avatar;
 
 		public ScoreboardEntry()
 		{
 			AddClass( "entry" );
 
+			avatar = Add.Image( null, "avatar" );
 			playerName = Add.Label( "PlayerName", "name" );
 			kills = Add.Label( "k", "kills" );
 			deaths = Add.Label( "d", "deaths" );
 			ratio = Add.Label( "r", "ratio" );
+			ping = Add.Label( "ping", "ping" );
+			accuracy = Add.Label( "%hit", "accuracy" );
 		}
 
 		public virtual void UpdateFrom( PlayerScore.Entry entry )
@@ -43,6 +50,19 @@ namespace Instagib.UI
 				ratioVal = killVal;
 			
 			ratio.Text = ratioVal.ToString("N1");
+
+			ping.Text = entry.Get<int>( "ping", -1 ).ToString();
+
+			var totalShotsVal = entry.Get<int>( "totalShots", 0 );
+			var totalHitsVal = entry.Get<int>( "totalHits", 0 );
+			var accuracyVal = ((float)totalHitsVal / totalShotsVal) * 100f;
+
+			if ( totalHitsVal == 0 )
+				accuracyVal = 0f;
+
+			accuracy.Text = accuracyVal.ToString( "N1" ) + "%";
+
+			avatar.SetTexture( $"avatar:{entry.Get<ulong>( "steamid", 0 )}" );
 			SetClass( "me", Local.Client != null && entry.Get<ulong>( "steamid", 0 ) == Local.Client.SteamId );
 		}
 	}

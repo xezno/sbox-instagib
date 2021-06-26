@@ -1,22 +1,30 @@
 text,label,input,textentry,icon,iconpanel
 {
-	font-family: Kairos Sans;
+	font-family: Poppins;
 	font-weight: 700;
 	color: white;
-	text-shadow: 2px 2px 10px rgba( black, 0.8 );
+	text-shadow: 0px 0px 20px rgba( black, 0.6 );
 }
 
-text.alert 
-{
-	font-size: 32px;
-	padding: 50px;
+text.alert {
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
+	font-size: 32px;
+}
+
+text.menu-prompt {
+	font-size: 16px;
+	transition: opacity 100ms ease;
+}
+
+text.alert, text.menu-prompt {
+	padding: 75px 100px;
 	text-align: center;
 	color: rgba( white, 0.4 );
 	text-shadow: 0 0 50px rgba( black, 0.1 );
+	font-family: Poppins-ExtraBoldItalic;
 }
 
 .bottom {
@@ -87,30 +95,24 @@ text.alert
 	right: 0;
 	left: 0;
 	bottom: 0;
-	
 	align-items: center;
 	justify-content: center;
-
 	text-align: center;
 	padding-bottom: 400px;
-	
 	font-size: 24px;
-
 	flex-direction: column;
-	
 	opacity: 1;
 	transition: opacity 200ms ease;
-	
+
 	&:outro {
 		opacity: 0;
 	}
-	
+
 	.player {
-		color: #ff151c;
-		font-weight: 600;
+		color: #D3FF19;
 	}
 
-	.medals {		
+	.medals {
 		flex-direction: column;
 		font-size: 18px;
 	}
@@ -150,13 +152,40 @@ hitmarker {
 	}
 }
 
-iconpanel,icon
-{
-	font-size: 32px;
-	font-family: MaterialIcons;
+iconpanel, icon {
+	font-size: 64px;
+	font-family: MaterialIconsRound;
 	margin: 0;
 	padding: 0;
+}
 
-	margin-right: -32px;
-	color: white;
+.round-start {
+	font-size: 32px;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	
+	padding-bottom: 250px;
+}
+
+.speed {
+	icon {
+		font-size: 32px;
+		margin-right: -32px;
+	}
+}
+
+.ammo {
+	icon {
+		color: #006EFF;
+		margin-left: -16px;
+	}
+}
+
+.health {
+	icon {
+		color: #D3FF19;
+		margin-right: -16px;
+	}
 }

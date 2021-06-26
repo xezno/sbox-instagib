@@ -1,20 +1,31 @@
 <div>
+	<text class="menu-prompt" @text="MenuPromptText"></text>
 	<text class="alert">INSTAGIB WORK-IN-PROGRESS</text>
-	
+
+	<!--	<div class="round-start">-->
+	<!--		<text>Game starting in 3...</text>-->
+	<!--	</div>-->
+	<!--	-->
+	<!--	<div class="game-state">-->
+	<!--		<text>Warmup</text>-->
+	<!--		<text>00:03</text>-->
+	<!--	</div>-->
+	<!--	-->
 	<div class="bottom">
+
 		<div class="health">
-			<div class="icon health"></div>
-			<text @text="PlayerHealth" class="health">69</text>			
+			<Icon>add_circle</Icon>
+			<text @text="PlayerHealthText" class="health">69</text>
 		</div>
-		
+
 		<span class="speed">
 			<Icon>speed</Icon>
-			<text @text="PlayerSpeed"></text>
+			<text @text="PlayerSpeedText"></text>
 		</span>
-			
+
 		<div class="ammo">
 			<text class="ammo">∞</text>
-			<div class="icon slugs"></div>
+			<Icon>offline_bolt</Icon>
 		</div>
 	</div>
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Instagib.UI;
-using Instagib.UI.Menus;
+﻿using Instagib.UI.Menus;
 using Sandbox;
 using Sandbox.UI;
 
@@ -10,7 +8,7 @@ namespace Instagib.UI
 	{
 		public static Panel TiltingHudPanel;
 		public static Panel StaticHudPanel;
-		private MainMenu mainMenu;
+		private SettingsMenu settingsMenu;
 		
 		public static InstagibHud CurrentHud;
 
@@ -20,48 +18,38 @@ namespace Instagib.UI
 		{
 			if ( IsClient )
 			{
-				ToggleMenu( false );
-				
+				SetCurrentMenu( null );
+
 				CurrentHud = this;
 			}
 		}
 
-		public static void ToggleMainMenu() => CurrentHud.ToggleMenu();
-
-		private void ToggleMenu( bool? forceState = null )
+		private BaseMenu currentMenu;
+		public void SetCurrentMenu( BaseMenu newMenu = null )
 		{
-			void HideMenu()
+			currentMenu?.Delete();
+			currentMenu = null;
+
+			if ( newMenu == null )
 			{
-				mainMenu?.RestoreSettings();
-				mainMenu?.Delete();
-				
+				// Show standard hud
 				StaticHudPanel = RootPanel.Add.Panel( "staticpanel" );
 				StaticHudPanel.StyleSheet.Load( "/Code/UI/InstagibHud.scss" );
 				StaticHudPanel.AddChild<Scoreboard<ScoreboardEntry>>();
 				StaticHudPanel.AddChild<Crosshair>();
 				StaticHudPanel.AddChild<ClassicChatBox>();
 				StaticHudPanel.AddChild<Hitmarker>();
-				
+
 				TiltingHudPanel = RootPanel.AddChild<MainPanel>();
 			}
-			
-			void ShowMenu()
+			else
 			{
 				StaticHudPanel?.Delete();
 				TiltingHudPanel?.Delete();
-				
-				mainMenu = RootPanel.AddChild<MainMenu>();
-			}
 
-			if ( forceState != null )
-				menuVisible = forceState.Value;
-			else
-				menuVisible = !menuVisible;
-			
-			if ( menuVisible ) 
-				ShowMenu();
-			else
-				HideMenu();
+				newMenu.Parent = RootPanel;
+				currentMenu = newMenu;
+			}
 		}
 
 		public void OnKilledMessage( Player attacker, Player victim, string[] medals )
@@ -79,7 +67,11 @@ namespace Instagib.UI
 			if ( Input.Pressed( InputButton.Menu ) )
 			{
 				Log.Trace( "Toggling menu" );
-				ToggleMenu();
+				if ( currentMenu is MainMenu )
+					SetCurrentMenu( null );
+				else if ( Local.Pawn.Velocity.Cross( Vector3.Up ).Length < 30f )
+					// Prevent people from accidentally opening the menu
+					SetCurrentMenu( new MainMenu() );
 			}
 		}
 	}

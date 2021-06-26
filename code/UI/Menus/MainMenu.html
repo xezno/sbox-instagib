@@ -1,60 +1,18 @@
 ﻿<div>
     <div class="menu-inner">
-        <text class="title">Settings</text>
-        
-        <div class="settings-items">
-            <!--<span>
-                <text>Nickname</text>
-                <textentry>Alex</textentry>               
-            </span>-->
-
-            <text class="big">Game</text>
+        <div class="menu-items">
             <span>
-                <text>FOV</text>
-                <slider @ref="FovSlider"></slider>               
+                <text class="subtitle">YOU'RE PLAYING</text>
+                <text class="title" style="max-width: 270px">ALEX'S INSTAGIB</text>
             </span>
 
-            <text class="big">HUD</text>
-
-            <span>
-                <text>Draw Crosshair</text>
-                <checkbox @ref="CrosshairToggle"></checkbox>
-            </span>
-            
-            <span>
-                <text>Crosshair (TODO: Dropdown)</text>
-                <textentry @ref="CrosshairGlyph" style="font-family: Crosshairs; font-size: 32px; text-align: center">a</textentry>               
-            </span>
-            
-            <span>
-                <text>Crosshair Size</text>
-                <slider @ref="CrosshairSlider"></slider>               
-            </span>
-
-            <text class="big">Viewmodel</text>
-            <span>
-                <text>Viewmodel X</text>
-                <slider @ref="ViewmodelSlider"></slider>               
-            </span>
-
-            <span>
-                <text>Viewmodel Visible</text>
-                <checkbox @ref="ViewmodelToggle"></checkbox>
-            </span>
-
-            <span>
-                <text>Left Handed</text>
-                <checkbox @ref="ViewmodelFlip"></checkbox>
-            </span>
-            
-            <text class="big">Cosmetics</text>
-            <text>TODO: Golden railgun, beam colour, etc</text>
-        </div>
-        
-        
-        <div class="buttons">
-            <button onclick="RestoreSettings(); Toggle();" Icon="arrow_back">Back</button>
-            <button onclick="ApplySettings(); Toggle();" Icon="check">Apply</button>
+            <button onclick="HideMenu()" Icon="login">Enter</button>
+            <button onclick="ShowSettings()" Icon="settings">Settings</button>
+            <button onclick="ShowShop()" Icon="shopping_cart">Shop</button>
+            <button onclick="ShowCustomize()" Icon="checkroom">Customize</button>
+            <button onclick="ShowProfile()" Icon="account_circle">Profile</button>
+            <button onclick="ShowBugReport()" Icon="bug_report">Report a Bug</button>
+            <button onclick.console="disconnect" Icon="close">Disconnect</button>
         </div>
     </div>
-</div> 
+</div>

@@ -40,17 +40,12 @@ namespace Instagib.UI.Elements
 
 			private void DoMove()
 			{
-				var leftPos = Mouse.Position.x - Parent.Box.Left;
+				var leftPos = Mouse.Position.x * Parent.ScaleFromScreen - Parent.Box.Left * Parent.ScaleFromScreen;
 				var width = line.Box.Rect.width;
-				
-				// I have zero idea why this works, but these numbers fix the offset bug.
-				width *= 1.055f;
-				leftPos *= 1.055f;
-				// I should probably look into why - it's probably something to do with padding/margins.
 					
-				leftPos = leftPos.Clamp( 0, width );
+				leftPos = leftPos.Clamp( 0, width * Parent.ScaleFromScreen );
 				
-				slider.Value = (leftPos / width);
+				slider.value = (leftPos / width);
 
 				Style.Left = leftPos;
 				Style.Dirty();
@@ -60,10 +55,6 @@ namespace Instagib.UI.Elements
 			{
 				var width = line.Box.Rect.width;
 				var leftPos = (value * width);
-				
-				// Crappy offset bug fix again
-				width *= 1.055f;
-				leftPos *= 1.055f;
 				
 				Style.Left = leftPos;
 				Style.Dirty();
@@ -105,6 +96,8 @@ namespace Instagib.UI.Elements
 			{
 				this.value = value;
 				valueDirty = true;
+
+				lastValue = CalcValue;
 			}
 		}
 
@@ -173,9 +166,9 @@ namespace Instagib.UI.Elements
 			}
 		}
 
-		protected override void OnClick( MousePanelEvent e )
+		protected override void OnMouseDown( MousePanelEvent e )
 		{
-			base.OnClick( e );
+			base.OnMouseDown( e );
 			needle.OneShot();
 		}
 	}

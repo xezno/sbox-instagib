@@ -44,42 +44,42 @@ namespace Instagib
 
 		public override void OnKilled( Client client, Entity pawn )
 		{
-			base.OnKilled( client, pawn );
-			
-			//
-			// Check to make sure we have a victim
-			// 
+			Host.AssertServer();
+
+			Log.Info( $"{client.Name} was killed" );
 			if ( pawn is not Player victim )
 				return;
-			
+
 			// Apply a death
-			var victimClient = victim.GetClientOwner(); 
+			var victimClient = victim.GetClientOwner();
 			victimClient.SetScore( "deaths", victimClient.GetScore<int>( "deaths" ) + 1 );
-			
-			//
-			// Check to make sure we have an attacker
-			//
+
 			if ( pawn.LastAttacker is not Player attacker )
+			{
+				OnKilledMessage( 0, "", client.SteamId, client.Name, "died" );
 				return;
-			
+			}
+
 			// Apply a kill
-			var attackerClient = attacker.GetClientOwner(); 
+			var attackerClient = attacker.GetClientOwner();
 			attackerClient.SetScore( "kills", attackerClient.GetScore<int>( "kills" ) + 1 );
-			
+
 			// Killstreak tracking
 			attacker.CurrentStreak++;
-			
+
 			//
 			// Give out medals to the attacker
 			//
 			List<Medal> medals = Medals.KillMedals.Where( medal => medal.Condition.Invoke( attacker, victim ) ).ToList();
 
-			string[] medalArr = new string[ medals.Count ];
+			string[] medalArr = new string[medals.Count];
 			for ( int i = 0; i < medals.Count; ++i )
 				medalArr[i] = medals[i].Name;
 
 			// Display "YOU FRAGGED" message
-			PlayerKilledRpc( To.Single( attacker ), attacker, victim, medalArr );			
+			PlayerKilledRpc( To.Single( attacker ), attacker, victim, medalArr );
+
+			OnKilledMessage( attackerClient.SteamId, attackerClient.Name, client.SteamId, client.Name, "Railgun" );
 		}
 
 		[ServerCmd( "recreatehud", Help = "Recreate hud object" )]
