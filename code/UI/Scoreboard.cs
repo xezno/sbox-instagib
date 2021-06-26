@@ -20,7 +20,7 @@ namespace Instagib.UI
 			AddClass( "scoreboard" );
 
 			Canvas = Add.Panel( "canvas" );
-			Canvas.Add.Label( "Score", "title" );
+			Canvas.Add.Label( "SCORE", "title" );
 			
 			AddHeader();
 
@@ -49,6 +49,8 @@ namespace Instagib.UI
 			Header.Add.Label( "Kills", "kills" );
 			Header.Add.Label( "Deaths", "deaths" );
 			Header.Add.Label( "Ratio", "ratio" );
+			Header.Add.Label( "Ping", "ping" );
+			Header.Add.Label( "Hit %", "accuracy" );
 		}
 
 		protected virtual void AddPlayer( PlayerScore.Entry entry )

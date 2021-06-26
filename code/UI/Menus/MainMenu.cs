@@ -2,6 +2,7 @@
 using Instagib.UI.Elements;
 using Sandbox;
 using Sandbox.UI;
+using System;
 
 namespace Instagib.UI.Menus
 {
@@ -21,6 +22,26 @@ namespace Instagib.UI.Menus
 		public void HideMenu()
 		{
 			InstagibHud.CurrentHud.SetCurrentMenu( null );
+		}
+
+		public void ShowCustomize()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ShowProfile()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ShowShop()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ShowBugReport()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

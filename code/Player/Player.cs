@@ -88,6 +88,8 @@ namespace Instagib
 		public override void OnKilled()
 		{
 			base.OnKilled();
+
+			Velocity = Vector3.Zero;
 			
 			Inventory.DeleteContents();
 

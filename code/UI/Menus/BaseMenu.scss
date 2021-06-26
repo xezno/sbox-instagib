@@ -5,7 +5,6 @@ iconpanel, icon {
     font-family: MaterialIconsRound;
     margin: 0;
     padding: 0;
-    text-shadow: 0 0 12px rgba( black, 0.5 );
     color: white;
 }
 
@@ -41,7 +40,6 @@ text, label, input, textentry {
 text.subtitle {
     font-size: 16px;
     font-weight: 700;
-    text-shadow: 0 0 50px rgba( black, 0.1 );
     height: 60px;
     left: 50px;
     top: 30px;
@@ -53,7 +51,6 @@ text.subtitle {
 text.title {
     font-size: 32px;
     font-weight: 700;
-    text-shadow: 0 0 50px rgba( black, 0.1 );
     height: 60px;
     left: 50px;
     top: 50px;
@@ -100,7 +97,7 @@ button {
         label {
             color: $accent-text;
             // Terrible hack to improve font rendering here
-            text-shadow: 0.25px 0.25px 0px black, -0.25px 0.25px 0px black, 0.25px -0.25px 0px black, -0.25px -0.25px 0px black;
+            text-shadow: $accent-text-hack;
         }
 
         iconpanel {

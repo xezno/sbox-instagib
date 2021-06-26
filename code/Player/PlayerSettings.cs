@@ -28,7 +28,7 @@ namespace Instagib
 			CrosshairVisible = Cookie.Get( "Instagib.CrosshairVisible", true );
 			CrosshairGlyph = Cookie.Get( "Instagib.CrosshairGlyph", "t" );
 			CrosshairSize = Cookie.Get( "Instagib.CrosshairSize", 24 );
-			EnemyOutlineColor = Cookie.Get( "Instagib.EnemyOutlineColor", Color.Red );
+			EnemyOutlineColor = Color.Parse( Cookie.Get( "Instagib.EnemyOutlineColor", Color.Red.Hex ) ) ?? Color.Red;
 		}
 
 		public static void Save()
@@ -42,7 +42,7 @@ namespace Instagib
 			Cookie.Set( "Instagib.CrosshairVisible", CrosshairVisible );
 			Cookie.Set( "Instagib.CrosshairGlyph", CrosshairGlyph );
 			Cookie.Set( "Instagib.CrosshairSize", CrosshairSize );
-			Cookie.Set( "Instagib.EnemyOutlineColor", EnemyOutlineColor );
+			Cookie.Set( "Instagib.EnemyOutlineColor", EnemyOutlineColor.Hex );
 		}
 	}
 }
