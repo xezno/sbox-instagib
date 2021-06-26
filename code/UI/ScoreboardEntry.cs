@@ -18,10 +18,13 @@ namespace Instagib.UI
 		private Label ping;
 		private Label accuracy;
 
+		private Image avatar;
+
 		public ScoreboardEntry()
 		{
 			AddClass( "entry" );
 
+			avatar = Add.Image( null, "avatar" );
 			playerName = Add.Label( "PlayerName", "name" );
 			kills = Add.Label( "k", "kills" );
 			deaths = Add.Label( "d", "deaths" );
@@ -59,6 +62,7 @@ namespace Instagib.UI
 
 			accuracy.Text = accuracyVal.ToString( "N1" ) + "%";
 
+			avatar.SetTexture( $"avatar:{entry.Get<ulong>( "steamid", 0 )}" );
 			SetClass( "me", Local.Client != null && entry.Get<ulong>( "steamid", 0 ) == Local.Client.SteamId );
 		}
 	}
