@@ -4,15 +4,6 @@
         
         <div class="menu-items" @ref="Scroll">
             <text class="big no-shrink">GAME</text>
-            <span class="no-shrink" style="margin: 20px 0;">
-                <text>Name</text>
-                <label @ref="Nickname">Magnum Dong</label>
-            </span>
-
-            <span class="no-shrink">
-                <text>Name Color</text>
-                <colorpicker @ref="NicknameColor"></colorpicker>
-            </span>
 
             <span class="no-shrink">
                 <text>Field of View</text>
@@ -71,7 +62,7 @@
 
             <span class="no-shrink">
                 <text>Enemy Outline Color</text>
-                <colorpicker></colorpicker>
+                <colorpicker @ref="EnemyOutlineColor" NoColorSlider="true"></colorpicker>
             </span>
         </div>
         

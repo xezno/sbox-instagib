@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using Instagib.UI;
 using Sandbox.ScreenShake;
+using Instagib.Utils;
 
 namespace Instagib
 {
@@ -70,7 +71,18 @@ namespace Instagib
 			GlowState = GlowStates.GlowStateOn;
 			GlowDistanceStart = -32;
 			GlowDistanceEnd = 4096;
-			GlowColor = Color.Red.WithAlpha( 0.5f );
+		}
+
+		[Event.Tick.Client]
+		public void OnClientTick()
+		{
+			// Outlines are per-client. They can be disabled and recolored at each clients' will
+			// Note that this isn't synced between clients at all
+
+			if ( IsServer )
+				return;
+
+			GlowColor = PlayerSettings.EnemyOutlineColor.ToHsv().WithValue( 1.0f ).ToColor();
 		}
 
 		public override void OnKilled()
@@ -180,17 +192,20 @@ namespace Instagib
 
 			setup.FieldOfView += fov;
 
-			var tx = new Sandbox.UI.PanelTransform();
-			tx.AddRotation( 0, 0, lean * -0.2f ); 
-			var zOffset = (lastCameraPos - setup.Position).z * 2f;
+			var panelTransform = new Sandbox.UI.PanelTransform();
+			panelTransform.AddRotation( 0, 0, lean * -0.2f ); 
+
+			var zOffset = (lastCameraPos - setup.Position).z * 4f;
+			zOffset = zOffset.Clamp( -16f, 16f );
 			zOffset = lastHudOffset.LerpTo( zOffset, 25.0f * Time.Delta );
-			tx.AddTranslateY( zOffset );
+
+			panelTransform.AddTranslateY( zOffset );
 
 			lastHudOffset = zOffset;
 
 			if ( InstagibHud.TiltingHudPanel != null )
 			{
-				InstagibHud.TiltingHudPanel.Style.Transform = tx;
+				InstagibHud.TiltingHudPanel.Style.Transform = panelTransform;
 				InstagibHud.TiltingHudPanel.Style.Dirty();
 			}
 

@@ -41,7 +41,20 @@ namespace Instagib.UI.Elements
 
 		public delegate void ColorPickerChangeEvent( Color color );
 		public ColorPickerChangeEvent OnValueChange;
-		
+
+		private bool noColorSlider;
+
+		public bool NoColorSlider
+		{
+			get => noColorSlider;
+			set
+			{
+				if ( value )
+					valueSlider?.Delete();
+				noColorSlider = value;
+			}
+		}
+
 		public ColorPicker()
 		{
 			StyleSheet.Load( "/Code/UI/Elements/ColorPicker.scss" );
@@ -51,20 +64,23 @@ namespace Instagib.UI.Elements
 			CreateTexture();
 			
 			pickedColor = AddChild<PickedColor>();
-				
-			var valPanel = Add.Panel();
-			// valPanel.Add.Label( "Value" );
-			valueSlider = valPanel.AddChild<Slider>();
-			valueSlider.SnapRate = 5;
-			valueSlider.Value = 1.0f;
-			valueSlider.OnValueChange += value =>
+
+			if ( !NoColorSlider )
 			{
-				CreateTexture( value );
-				MoveShit();
-			};
+				var valPanel = Add.Panel();
+				// valPanel.Add.Label( "Value" );
+				valueSlider = valPanel.AddChild<Slider>();
+				valueSlider.SnapRate = 5;
+				valueSlider.Value = 1.0f;
+				valueSlider.OnValueChange += value =>
+				{
+					CreateTexture( value );
+					UpdateColor();
+				};
+			}
 		}
 
-		private void CreateTexture( int value = 0 )
+		private void CreateTexture( int value = 100 )
 		{
 			float fValue = value / 100f;
 
@@ -104,7 +120,7 @@ namespace Instagib.UI.Elements
 			image.Texture = texture;
 		}
 
-		private void MoveShit()
+		private void UpdateColor()
 		{
 			Color GetPixel( int x, int y )
 			{
@@ -152,14 +168,14 @@ namespace Instagib.UI.Elements
 		protected override void OnClick( MousePanelEvent e )
 		{
 			base.OnClick( e );
-			MoveShit();
+			UpdateColor();
 		}
 
 		public override void Tick()
 		{
 			base.Tick();
 			if ( move )
-				MoveShit();
+				UpdateColor();
 		}
 	}
 }

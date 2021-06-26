@@ -17,6 +17,21 @@ namespace Instagib.Utils
 				this.saturation = saturation;
 				this.value = value;
 			}
+
+			public HSVColor WithHue( float hue )
+			{
+				return new HSVColor( hue, this.saturation, this.value );
+			}
+
+			public HSVColor WithSaturation( float saturation )
+			{
+				return new HSVColor( this.hue, saturation, this.value );
+			}
+
+			public HSVColor WithValue( float value )
+			{
+				return new HSVColor( this.hue, this.saturation, value );
+			}
 		}
 		
 		public static Color ToColor( this HSVColor hsv )

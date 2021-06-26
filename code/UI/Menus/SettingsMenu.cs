@@ -14,8 +14,7 @@ namespace Instagib.UI.Menus
 		public Checkbox CrosshairToggle { get; set; }
 		public TextEntry CrosshairGlyph { get; set; }
 		public Slider CrosshairSlider { get; set; }
-		public Label Nickname { get; set; }
-		public ColorPicker NicknameColor { get; set; }
+		public ColorPicker EnemyOutlineColor { get; set; }
 
 		public Panel Scroll { get; set; }
 
@@ -40,8 +39,6 @@ namespace Instagib.UI.Menus
 			CrosshairSlider.SnapRate = 2;
 			CrosshairSlider.ValueCalcFunc =
 				value => crosshairRange.Item1.LerpTo( crosshairRange.Item2, value ).CeilToInt();
-
-			Nickname.Text = Local.DisplayName;
 			
 			// Make it so that we can preview the settings live
 			FovSlider.OnValueChange += v => PlayerSettings.Fov = v;
@@ -51,11 +48,7 @@ namespace Instagib.UI.Menus
 			ViewmodelFlip.OnValueChange += b => PlayerSettings.ViewmodelFlip = b;
 			CrosshairSlider.OnValueChange += b => PlayerSettings.CrosshairSize = b;
 			CrosshairGlyph.AddEvent("onchange", () => PlayerSettings.CrosshairGlyph = CrosshairGlyph.Text );
-			NicknameColor.OnValueChange += c =>
-			{
-				Nickname.Style.FontColor = c;
-				Nickname.Style.Dirty();
-			};
+			EnemyOutlineColor.OnValueChange += c => PlayerSettings.EnemyOutlineColor = c;
 
 			// Set values to existing settings
 			PlayerSettings.Load();

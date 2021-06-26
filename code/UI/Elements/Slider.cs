@@ -96,6 +96,8 @@ namespace Instagib.UI.Elements
 			{
 				this.value = value;
 				valueDirty = true;
+
+				lastValue = CalcValue;
 			}
 		}
 
