@@ -5,6 +5,7 @@ namespace Instagib.UI
 {
 	public class MainPanel : Panel
 	{
+		public string MenuPromptText => $"Press {Input.GetKeyWithBinding( "iv_menu" ).ToUpper()} to open the menu";
 		private float PlayerSpeed { get; set; }
 		private float PlayerSpeedMph => PlayerSpeed // in/s
 										* 0.0254f // m/s
