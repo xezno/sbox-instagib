@@ -26,22 +26,17 @@ namespace Instagib.UI.Menus
 
 		public void ShowCustomize()
 		{
-			throw new NotImplementedException();
+			InstagibHud.CurrentHud.SetCurrentMenu( new CustomizeMenu() );
 		}
 
 		public void ShowProfile()
 		{
-			throw new NotImplementedException();
+			InstagibHud.CurrentHud.SetCurrentMenu( new ProfileMenu() );
 		}
 
 		public void ShowShop()
 		{
-			throw new NotImplementedException();
-		}
-
-		public void ShowBugReport()
-		{
-			throw new NotImplementedException();
+			InstagibHud.CurrentHud.SetCurrentMenu( new ShopMenu() );
 		}
 	}
 }

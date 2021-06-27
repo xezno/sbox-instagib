@@ -10,5 +10,10 @@ namespace Instagib.UI.Menus
 			AddClass( "menu" );
 			StyleSheet.Load( "/Code/UI/Menus/BaseMenu.scss" );
 		}
+
+		public void Toggle()
+		{
+			InstagibHud.CurrentHud.SetCurrentMenu( new MainMenu() );
+		}
 	}
 }

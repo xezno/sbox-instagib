@@ -91,7 +91,11 @@ namespace Instagib
 
 			Velocity = Vector3.Zero;
 
-			Camera = new SpectateRagdollCamera();
+			Camera = new LookAtCamera();
+			(Camera as LookAtCamera).TargetEntity = LastAttacker;
+			(Camera as LookAtCamera).Origin = EyePos;
+			(Camera as LookAtCamera).Rot = EyeRot;
+			(Camera as LookAtCamera).TargetOffset = Vector3.Up * 64f;
 			
 			Inventory.DeleteContents();
 

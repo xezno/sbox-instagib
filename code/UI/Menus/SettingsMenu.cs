@@ -83,10 +83,5 @@ namespace Instagib.UI.Menus
 			
 			return weapon.ViewModelEntity as ViewModel;
 		}
-
-		public void Toggle()
-		{
-			InstagibHud.CurrentHud.SetCurrentMenu( new MainMenu() );
-		}
 	}
 }
