@@ -133,8 +133,7 @@ namespace Instagib
 			ownerClient.SetScore( "totalShots", ownerClient.GetScore<int>( "totalShots", 0 ) + 1 );
 		}
 
-		// This should ideally not be a user-invoked command
-		[ServerCmd( "send_shoot" )]
+		[ServerCmd]
 		private static void CmdShoot( int targetIdent, int ownerIdent, Vector3 startPos, Vector3 endPos, Vector3 forward, int tick )
 		{
 			Host.AssertServer();
@@ -233,7 +232,7 @@ namespace Instagib
 				if ( !tr.Entity.IsValid() ) continue;
 
 				// This is the only way to do client->server RPCs :(
-				ConsoleSystem.Run( "send_shoot", tr.Entity.NetworkIdent, Owner.NetworkIdent, pos, tr.EndPos, dir, Time.Tick );
+				CmdShoot( tr.Entity.NetworkIdent, Owner.NetworkIdent, pos, tr.EndPos, dir, Time.Tick );
 			}
 
 			ShootEffects();

@@ -108,15 +108,6 @@ namespace Instagib
 			
 			Sound.FromWorld( "gibbing", Position );
 		}
-		
-
-		[ClientRpc]
-		public void ChangeCameraRpc( Player attacker )
-		{
-			Log.Trace( "changed camera" );
-			Local.Pawn.Camera = new LookAtCamera();
-			(Local.Pawn.Camera as LookAtCamera).TargetEntity = attacker;
-		}
 
 		[ClientRpc]
 		private void ShakeScreen( Vector3 position )
