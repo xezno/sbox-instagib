@@ -6,7 +6,7 @@ namespace Instagib.UI.Menus
 {
 	public class RailgunRender : Panel
 	{
-		SceneCapture sceneCapture;
+		private Scene scene;
 		Angles CamAngles;
 
 		private Vector2 renderSize = new( 800, 600 );
@@ -20,6 +20,7 @@ namespace Instagib.UI.Menus
 			using ( SceneWorld.SetCurrent( new SceneWorld() ) )
 			{
 				SceneObject.CreateModel( "weapons/railgun/models/wpn_qc_railgun.vmdl", new Transform( new( 0, 17f, 0f ) ) );
+				// SceneObject.CreateModel( "models/citizen/citizen.vmdl", new Transform( new( 0, 0f, -64f ) ) );
 
 				var lightStrength = 10000.0f;
 				var lightRadius = 512.0f;
@@ -30,20 +31,18 @@ namespace Instagib.UI.Menus
 				Light.Point( Vector3.Right * lightDist, lightRadius, Color.White * lightStrength );
 				Light.Point( Vector3.Down * lightDist, lightRadius, Color.White * lightStrength );
 
-				sceneCapture = SceneCapture.Create( "RailgunRender", (int)renderSize.x, (int)renderSize.y );
-				sceneCapture.AmbientColor = Color.White * 1.0f;
-				sceneCapture.SetCamera( Vector3.Up * 10 + CamAngles.Direction * -50, CamAngles, 45 );
+				scene = Add.Scene( SceneWorld.Current, Vector3.Up * 10 + CamAngles.Direction * -50, CamAngles, 45 );
+				scene.Style.Width = Length.Percent( 100 );
+				scene.Style.Height = Length.Percent( 100 );
 			}
-
-			Style.SetBackgroundImage( "scene:RailgunRender" );
 		}
 
 		public override void OnDeleted()
 		{
 			base.OnDeleted();
 
-			sceneCapture?.Delete();
-			sceneCapture = null;
+			scene?.Delete();
+			scene = null;
 		}
 
 		public override void OnButtonEvent( ButtonEvent e )
@@ -58,7 +57,7 @@ namespace Instagib.UI.Menus
 
 		public override void Tick()
 		{
-			base.Tick();
+			base.Tick(); 
 
 			if ( HasMouseCapture )
 			{
@@ -74,7 +73,8 @@ namespace Instagib.UI.Menus
 			CamAngles.yaw %= 360f;
 			CamAngles.pitch = CamAngles.pitch.Clamp( -90f, 90f );
 
-			sceneCapture?.SetCamera( CamAngles.Direction * -75, CamAngles, 45 );
+			scene.Pos = CamAngles.Direction * -75;
+			scene.Rot = CamAngles;
 		}
 	}
 }

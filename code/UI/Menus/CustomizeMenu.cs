@@ -7,6 +7,8 @@ namespace Instagib.UI.Menus
 	{
 		public CustomizeMenu()
 		{
+			// Railgun renderer
+			var railgunRender = AddChild<RailgunRender>();
 		}
 	}
 }
