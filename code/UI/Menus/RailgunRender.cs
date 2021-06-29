@@ -22,9 +22,9 @@ namespace Instagib.UI.Menus
 				SceneObject.CreateModel( "weapons/railgun/models/wpn_qc_railgun.vmdl", new Transform( new( 0, 17f, 0f ) ) );
 				// SceneObject.CreateModel( "models/citizen/citizen.vmdl", new Transform( new( 0, 0f, -64f ) ) );
 
-				var lightStrength = 10000.0f;
-				var lightRadius = 512.0f;
-				var lightDist = 150.0f;
+				var lightStrength = 2000.0f;
+				var lightRadius = 128.0f;
+				var lightDist = 64.0f;
 
 				Light.Point( Vector3.Up * lightDist, lightRadius, Color.White * lightStrength );
 				Light.Point( Vector3.Left * lightDist, lightRadius, Color.White * lightStrength );
@@ -73,8 +73,8 @@ namespace Instagib.UI.Menus
 			CamAngles.yaw %= 360f;
 			CamAngles.pitch = CamAngles.pitch.Clamp( -90f, 90f );
 
-			scene.Pos = CamAngles.Direction * -75;
-			scene.Rot = CamAngles;
+			scene.Position = CamAngles.Direction * -75;
+			scene.Angles = CamAngles;
 		}
 	}
 }
