@@ -227,7 +227,7 @@ namespace Instagib
 					"muzzle", false );
 
 				//var tr = Trace.Ray( Owner.EyePos, Owner.EyeRot.Forward * 1000000f ).Ignore( Owner ).WorldOnly().Run();
-				beamParticles.SetPos( 1, tr.EndPos );
+				beamParticles.SetPosition( 1, tr.EndPos );
 
 				if ( !tr.Entity.IsValid() ) continue;
 
