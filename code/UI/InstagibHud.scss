@@ -3,7 +3,7 @@ text,label,input,textentry,icon,iconpanel
 	font-family: Poppins;
 	font-weight: 700;
 	color: white;
-	text-shadow: 0px 0px 20px rgba( black, 0.6 );
+	text-shadow: 0px 0px 2px rgba( black, 0.6 );
 }
 
 text.alert {
@@ -23,7 +23,7 @@ text.alert, text.menu-prompt {
 	padding: 75px 100px;
 	text-align: center;
 	color: rgba( white, 0.4 );
-	text-shadow: 0 0 50px rgba( black, 0.1 );
+	text-shadow: 0 0 5px rgba( black, 0.1 );
 	font-family: Poppins-ExtraBoldItalic;
 }
 
