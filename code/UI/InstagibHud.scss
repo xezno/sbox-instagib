@@ -13,6 +13,13 @@ text.alert {
 	font-size: 32px;
 }
 
+text.alert, text.menu-prompt {
+	padding: 75px 100px;
+	text-align: center;
+	opacity: 0.2;
+	font-family: Poppins-ExtraBoldItalic;
+}
+
 text.menu-prompt {
 	font-size: 16px;
 	transition: opacity 100ms ease;
@@ -22,13 +29,6 @@ text.menu-prompt {
 	&.visible {
 		opacity: 0.2;
 	}
-}
-
-text.alert, text.menu-prompt {
-	padding: 75px 100px;
-	text-align: center;
-	opacity: 0.2;
-	font-family: Poppins-ExtraBoldItalic;
 }
 
 .bottom {
