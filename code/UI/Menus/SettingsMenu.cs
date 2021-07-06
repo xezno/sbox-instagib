@@ -2,6 +2,7 @@
 using Instagib.UI.Elements;
 using Sandbox;
 using Sandbox.UI;
+using Checkbox = Instagib.UI.Elements.Checkbox;
 
 namespace Instagib.UI.Menus
 {
