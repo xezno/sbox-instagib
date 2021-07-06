@@ -2,7 +2,6 @@
 using Instagib.UI.Elements;
 using Sandbox;
 using Sandbox.UI;
-using Checkbox = Instagib.UI.Elements.Checkbox;
 
 namespace Instagib.UI.Menus
 {
@@ -44,11 +43,13 @@ namespace Instagib.UI.Menus
 			// Make it so that we can preview the settings live
 			FovSlider.OnValueChange += v => PlayerSettings.Fov = v;
 			ViewmodelSlider.OnValueChange += v => PlayerSettings.ViewmodelOffset = v;
-			CrosshairToggle.OnValueChange += b => PlayerSettings.CrosshairVisible = b;
-			ViewmodelToggle.OnValueChange += b => PlayerSettings.ViewmodelVisible = b;
-			ViewmodelFlip.OnValueChange += b => PlayerSettings.ViewmodelFlip = b;
+			
+			CrosshairToggle.AddEventListener( "onchange", e => PlayerSettings.CrosshairVisible = (bool)e.Value );
+			ViewmodelToggle.AddEventListener( "onchange", e => PlayerSettings.ViewmodelVisible = (bool)e.Value );
+			ViewmodelFlip.AddEventListener( "onchange", e => PlayerSettings.ViewmodelFlip = (bool)e.Value );
+			
 			CrosshairSlider.OnValueChange += b => PlayerSettings.CrosshairSize = b;
-			CrosshairGlyph.AddEvent("onchange", () => PlayerSettings.CrosshairGlyph = CrosshairGlyph.Text );
+			CrosshairGlyph.AddEventListener("onchange", () => PlayerSettings.CrosshairGlyph = CrosshairGlyph.Text );
 			EnemyOutlineColor.OnValueChange += c => PlayerSettings.EnemyOutlineColor = c;
 
 			// Set values to existing settings
@@ -56,9 +57,9 @@ namespace Instagib.UI.Menus
 			
 			FovSlider.Value = PlayerSettings.Fov.LerpInverse( fovRange.Item1, fovRange.Item2 );
 			ViewmodelSlider.Value = PlayerSettings.ViewmodelOffset.LerpInverse( viewmodelRange.Item1, viewmodelRange.Item2 );
-			ViewmodelToggle.Value = PlayerSettings.ViewmodelVisible;
-			CrosshairToggle.Value = PlayerSettings.CrosshairVisible;
-			ViewmodelFlip.Value = PlayerSettings.ViewmodelFlip;
+			ViewmodelToggle.Checked = PlayerSettings.ViewmodelVisible;
+			CrosshairToggle.Checked = PlayerSettings.CrosshairVisible;
+			ViewmodelFlip.Checked = PlayerSettings.ViewmodelFlip;
 			CrosshairGlyph.Text = PlayerSettings.CrosshairGlyph;
 			CrosshairSlider.Value = ((float)PlayerSettings.CrosshairSize).LerpInverse( crosshairRange.Item1, crosshairRange.Item2 );
 

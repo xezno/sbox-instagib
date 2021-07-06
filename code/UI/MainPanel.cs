@@ -5,6 +5,7 @@ namespace Instagib.UI
 {
 	public class MainPanel : Panel
 	{
+		public Label MenuPrompt { get; set; }
 		public string MenuPromptText => $"Press {Input.GetKeyWithBinding( "iv_menu" ).ToUpper()} to open the menu";
 		private float PlayerSpeed { get; set; }
 		private float PlayerSpeedMph => PlayerSpeed // in/s
@@ -28,6 +29,8 @@ namespace Instagib.UI
 			base.Tick();
 
 			PlayerSpeed = Local.Pawn.Velocity.Cross( Vector3.Up ).Length;
+
+			MenuPrompt.SetClass( "visible", PlayerSpeed < 30f );
 
 			if ( PlayerSpeed.CeilToInt() > topSpeed )
 				topSpeed = PlayerSpeed.CeilToInt();

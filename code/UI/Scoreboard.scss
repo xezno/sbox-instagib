@@ -16,6 +16,8 @@
 	transform-origin: 50% 50%;
 	font-weight: 400;
 	color: white;
+	
+	backdrop-filter: blur( 10px );
 
 	&.open {
 		opacity: 1;

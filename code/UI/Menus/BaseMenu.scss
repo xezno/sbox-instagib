@@ -19,6 +19,8 @@ iconpanel, icon {
     left: 0;
     transition: all 150ms ease;
 
+    backdrop-filter: blur( 10px );
+
     &:intro, &:outro {
         opacity: 0;
         left: -50px;
