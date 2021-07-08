@@ -12,10 +12,10 @@
 			"sounds/jump.6.vsnd",
 		]
 		UI = false
-		Volume = 0.4
+		Volume = 0.5
 		VolumeRandom = 0.0
 		Pitch = 1.0
 		PitchRandom = 0.0
-		DistanceMax = 1024.0
+		DistanceMax = 512.0
 	}
 }
