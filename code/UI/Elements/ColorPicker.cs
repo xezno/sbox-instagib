@@ -86,7 +86,7 @@ namespace Instagib.UI.Elements
 
 			var hslColor = Color.Red.ToHsv();
 
-			hslColor.value = fValue;
+			hslColor.Value = fValue;
 
 			var data = new byte[width * height * stride];
 			imageData = data;
@@ -104,15 +104,15 @@ namespace Instagib.UI.Elements
 
 			for (int y = 0; y < height; y++)
 			{
-				hslColor.hue = 0;
+				hslColor.Hue = 0;
 				
 				for (int x = 0; x < width; x++)
 				{
 					var hsvConvert = hslColor.ToColor();
 					SetPixel( x, y, hsvConvert );
-					hslColor.hue += 1;
+					hslColor.Hue += 1;
 				}
-				hslColor.saturation -= (y * 0.0001f);
+				hslColor.Saturation -= (y * 0.0001f);
 			}
 
 			var texture = Texture.Create( width, height ).WithStaticUsage().WithData( data ).WithName( "hsvColor" ).Finish();

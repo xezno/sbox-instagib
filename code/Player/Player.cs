@@ -82,7 +82,9 @@ namespace Instagib
 			if ( IsServer )
 				return;
 
-			GlowColor = PlayerSettings.EnemyOutlineColor.ToHsv().WithValue( 1.0f ).ToColor();
+			var hsvColor = PlayerSettings.EnemyOutlineColor.ToHsv();
+			hsvColor.Value = 1.0f;
+			GlowColor = hsvColor.ToColor();
 		}
 
 		public override void OnKilled()
