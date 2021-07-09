@@ -7,6 +7,7 @@ namespace Instagib.UI.Menus
 	{
 		public ProfileMenu()
 		{
+			StyleSheet.Load( "/Code/UI/Menus/ProfileMenu.scss" );
 		}
 	}
 }

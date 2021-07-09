@@ -1,0 +1,100 @@
+﻿@import "Colors";
+
+.profile {
+  width: 100%;
+  height: 150px;
+  background-color: #f0f;
+  padding: 25px 50px;
+
+  border-radius: 15px 10px 10px 15px; // Hack: prevents white from showing up below profile pic
+  
+  background-image: url( /textures/ui/action-shots/action-shot-1.png );
+  background-size: cover;
+  background-position: center;
+  
+  .level-bar {
+    height: 5px;
+    width: 100%;
+    left: -1px;
+    background-color: rgba( $gray-800, 0.5 );
+    
+    .level-bar-inner {
+      width: 25%;
+      background-color: $gray-700;
+    }
+  }
+  
+  .profile-image {
+    aspect-ratio: 1;
+    left: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: #f0f;
+    background-image: url( avatar:76561198128972602 );
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px 0 0 10px;
+  }
+  
+  span {
+    left: 125px;
+    flex-direction: column;
+  }
+  
+  text {
+    height: 50%;
+    align-items: center;
+    // justify-content: center;
+    text-shadow: 0 0 2px rgba( black, 0.2 );
+  }
+}
+
+stats {
+  background-color: $gray-800;
+  border-radius: 10px;
+  
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  
+  padding: 25px 0;
+  margin: 10px 0;
+  
+  stat {
+    width: 33%;
+    flex-direction: column;
+    align-items: center;
+    
+    text {
+      padding: 5px 0;
+    }
+    
+    text:not(.medium) {
+      font-size: 18px;
+    }
+  }
+}
+
+text.medium {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: Poppins-ExtraBoldItalic;  
+}
+
+text.small {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: Poppins-ExtraBoldItalic;
+}
+
+game {
+  background-color: $gray-800;
+  border-radius: 10px;
+
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: column;
+
+  padding: 25px 0;  
+}
