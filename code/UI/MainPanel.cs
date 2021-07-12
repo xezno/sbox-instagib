@@ -9,7 +9,7 @@ namespace Instagib.UI
 		public string MenuPromptText => $"Press {Input.GetKeyWithBinding( "iv_menu" ).ToUpper()} to open the menu";
 		private float PlayerSpeed { get; set; }
 		private float PlayerSpeedMph => PlayerSpeed // in/s
-										* 0.0254f // m/s
+						* 0.0254f // m/s
 		                                * 2.23694f; // mph
 		
 		public string PlayerHealthText => $"{Local.Client.Pawn.Health.CeilToInt()}";
