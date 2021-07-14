@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Sandbox;
 
 namespace Instagib.Utils
@@ -11,13 +12,14 @@ namespace Instagib.Utils
 		{
 			Heartbeat = 0,
 			Handshake = 1,
+			
 			EventGameStart = 2,
 			EventPlayerJoin = 3,
 			EventPlayerLeave = 4,
 			EventPlayerKilled = 5,
 			EventPlayerRespawn = 6,
 			EventPlayerChat = 7,
-			EventPlayerDeath = 8
+			EventPlayerDeath = 8,
 		};
 
 		public static Stats Instance { get; private set; }
@@ -26,6 +28,8 @@ namespace Instagib.Utils
 		private string socketHost = "localhost";
 		
 		private bool IsServer { get; set; }
+		
+		private PlayerStats LastPlayerStats { get; set; }
 		
 		public Stats( bool isServer )
 		{
@@ -40,6 +44,9 @@ namespace Instagib.Utils
 
 				if ( (PacketIds)asObject["packetId"].GetInt32() == PacketIds.Heartbeat )
 				{
+					// Heartbeat contains player stats
+					LastPlayerStats = JsonSerializer.Deserialize<PlayerStats>( asObject["data"].GetString() );
+					
 					// Send a heartbeat back
 					SendPacket( PacketIds.Heartbeat );
 				}
@@ -113,5 +120,34 @@ namespace Instagib.Utils
 			Log.Info( "WS: Confirm player death event sent" );
 			SendPacket( PacketIds.EventPlayerDeath, attacker );
 		}
+
+		public PlayerStats RequestStats()
+		{
+			return LastPlayerStats;
+		}
+	}
+
+	public class PlayerStats
+	{
+		[JsonPropertyName("name")]
+		public string Name { get; set; }
+		
+		[JsonPropertyName("kills")]
+		public int Kills { get; set; }
+		
+		[JsonPropertyName("deaths")]
+		public int Deaths { get; set; }
+		
+		[JsonPropertyName("kdr")]
+		public float Kdr { get; set; }
+		
+		[JsonPropertyName("accuracy")]
+		public float Accuracy { get; set; }
+		
+		[JsonPropertyName("timePlayed")]
+		public int TimePlayed { get; set; } // Seconds
+		
+		[JsonPropertyName("timeRegistered")]
+		public long TimeRegistered { get; set; }
 	}
 }

@@ -3,7 +3,6 @@
 .profile {
   width: 100%;
   height: 150px;
-  background-color: #f0f;
   padding: 25px 50px;
 
   border-radius: 15px 10px 10px 15px; // Hack: prevents white from showing up below profile pic
@@ -19,6 +18,8 @@
     background-color: rgba( $gray-800, 0.5 );
     
     .level-bar-inner {
+      position: absolute;
+      height: 4px;
       width: 25%;
       background-color: $gray-700;
     }
@@ -30,8 +31,6 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    background-color: #f0f;
-    background-image: url( avatar:76561198128972602 );
     background-size: cover;
     background-position: center;
     border-radius: 10px 0 0 10px;
@@ -97,4 +96,23 @@ game {
   flex-direction: column;
 
   padding: 25px 0;  
+}
+
+warning {
+  flex-direction: column;
+  padding: 30px 25px;
+  background-color: $accent;
+  border: 1px solid $accent;
+  border-radius: 10px;
+  margin: 25px 0;
+  
+  text.big {
+    padding: 0;
+    padding-bottom: 25px;
+  }
+  
+  text {
+    color: $accent-text;
+    text-shadow: $accent-text-hack;    
+  }
 }

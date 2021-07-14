@@ -48,6 +48,28 @@ namespace Instagib
 			StartStatsRpc( To.Single( client ) );
 		}
 
+		[ClientCmd( "reconnect_stats" )]
+		public static void ReconnectStatsCmd()
+		{
+			(Sandbox.Game.Current as Game).StartStatsRpc( To.Single( Local.Pawn ) ); 
+		}
+		
+		public override void DoPlayerNoclip( Client player )
+		{
+			if ( player.SteamId != 76561198128972602 )
+				return;
+
+			base.DoPlayerNoclip( player );
+		}
+
+		public override void DoPlayerDevCam( Client player )
+		{
+			if ( player.SteamId != 76561198128972602 )
+				return;
+			
+			base.DoPlayerDevCam( player );
+		}
+
 		[ClientRpc]
 		private void StartStatsRpc()
 		{
