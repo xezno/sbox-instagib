@@ -25,7 +25,7 @@ namespace Instagib.Utils
 		public static Stats Instance { get; private set; }
 
 		private WebSocket socket;
-		private string socketHost = "localhost";
+		private string socketHost = "gib.gu3.me";
 		
 		private bool IsServer { get; set; }
 		
