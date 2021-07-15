@@ -4,6 +4,7 @@ using System.Linq;
 using Instagib.UI;
 using Sandbox.ScreenShake;
 using Instagib.Utils;
+using Event = Sandbox.Event;
 
 namespace Instagib
 {
@@ -32,6 +33,8 @@ namespace Instagib
 		
 		public override void Respawn()
 		{
+			Event.Run( "playerRespawn" );
+			
 			SetModel( "models/citizen/citizen.vmdl" );
 
 			Controller = new PlayerController();
