@@ -91,8 +91,21 @@ namespace Instagib
 		}
 
 		[ClientRpc]
+		public void PlayerDiedRpc( Player attacker )
+		{
+			// Attacker, victim
+			var attackerName = "suicide";
+			if ( attacker != null )
+				attackerName = attacker.GetClientOwner()?.SteamId.ToString();
+					
+			Event.Run( "playerDeath", attackerName, Local.Client.SteamId.ToString() );
+		}
+
+		[ClientRpc]
 		public void PlayerKilledRpc( Player attacker, Player victim, string[] medals )
 		{
+			// Attacker, victim
+			Event.Run( "playerKilled", attacker.GetClientOwner().SteamId.ToString(), victim.GetClientOwner().SteamId.ToString() );
 			InstagibHud.CurrentHud.OnKilledMessage( attacker, victim, medals );
 		}
 	}

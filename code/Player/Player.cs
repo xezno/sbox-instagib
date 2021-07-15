@@ -90,6 +90,16 @@ namespace Instagib
 		public override void OnKilled()
 		{
 			base.OnKilled();
+			
+			// Attacker, victim
+			if ( LastAttacker == null )
+			{
+				Event.Run( "playerKilled", GetClientOwner()?.SteamId.ToString(), GetClientOwner()?.SteamId.ToString() );
+			}
+			else
+			{
+				Event.Run( "playerKilled", LastAttacker?.GetClientOwner().SteamId.ToString(), GetClientOwner()?.SteamId.ToString() );
+			}
 
 			Velocity = Vector3.Zero;
 
