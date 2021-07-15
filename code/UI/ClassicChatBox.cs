@@ -12,8 +12,6 @@ public partial class ClassicChatBox : Panel
 	public Panel Canvas { get; protected set; }
 	public TextEntry Input { get; protected set; }
 
-	private VirtualScrollPanel<ClassicChatEntry> MessagePanel;
-
 	public ClassicChatBox()
 	{
 		Current = this;
@@ -24,8 +22,8 @@ public partial class ClassicChatBox : Panel
 		// Canvas.PreferScrollToBottom = true;
 
 		Input = Add.TextEntry( "" );
-		Input.AddEvent( "onsubmit", () => Submit() );
-		Input.AddEvent( "onblur", () => Close() );
+		Input.AddEventListener( "onsubmit", () => Submit() );
+		Input.AddEventListener( "onblur", () => Close() );
 		Input.AcceptsFocus = true;
 		Input.AllowEmojiReplace = true;
 
@@ -77,15 +75,12 @@ public partial class ClassicChatBox : Panel
 	public void AddEntry( string name, string message, string avatar )
 	{
 		var e = Canvas.AddChild<ClassicChatEntry>();
-		// e.Parent = scrollPanel;
 		e.Message.Text = message;
 		e.NameLabel.Text = name;
 		e.Avatar.SetTexture( avatar );
 
 		e.SetClass( "noname", string.IsNullOrEmpty( name ) );
 		e.SetClass( "noavatar", string.IsNullOrEmpty( avatar ) );
-
-		// scrollPanel.AddItem( e );
 	}
 
 	[ClientCmd( "chat_add", CanBeCalledFromServer = true )]

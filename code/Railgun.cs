@@ -272,7 +272,7 @@ namespace Instagib
 			// Sound.FromEntity( "railgun_fire", this );
 
 			ViewModelEntity?.SetAnimBool( "fire", true );
-			CrosshairPanel?.OnEvent( "onattack" );
+			CrosshairPanel?.CreateEvent( "onattack" );
 
 			if ( IsLocalPawn )
 			{
@@ -288,7 +288,7 @@ namespace Instagib
 			Sound.FromEntity( "railgun_fire", this );
 
 			ViewModelEntity?.SetAnimBool( "fire", true );
-			CrosshairPanel?.OnEvent( "onattack" );
+			CrosshairPanel?.CreateEvent( "onattack" );
 
 			if ( IsLocalPawn )
 			{

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Instagib.UI;
+using Instagib.Utils;
 using Sandbox;
 using Sandbox.ScreenShake;
+using Event = Sandbox.Event;
 
 namespace Instagib
 {
@@ -10,6 +12,7 @@ namespace Instagib
 	public partial class Game : Sandbox.Game
 	{
 		private static InstagibHud hud;
+		public Stats Stats { get; set; }
 		public Game()
 		{
 			Precache.Add( "particles/gib_blood.vpcf" );
@@ -33,13 +36,51 @@ namespace Instagib
 		public override void ClientJoined( Client client )
 		{
 			base.ClientJoined( client );
+			
+			Event.Run( "playerJoined" );
 
 			var player = new Player();
 			client.Pawn = player;
-			
 			client.SetScore( "steamid", client.SteamId );
-
+			
 			player.Respawn();
+
+			StartStatsRpc( To.Single( client ) );
+		}
+
+		[ClientCmd( "reconnect_stats" )]
+		public static void ReconnectStatsCmd()
+		{
+			(Sandbox.Game.Current as Game).StartStatsRpc( To.Single( Local.Pawn ) ); 
+		}
+		
+		public override void DoPlayerNoclip( Client player )
+		{
+			if ( player.SteamId != 76561198128972602 )
+				return;
+
+			base.DoPlayerNoclip( player );
+		}
+
+		public override void DoPlayerDevCam( Client player )
+		{
+			if ( player.SteamId != 76561198128972602 )
+				return;
+			
+			base.DoPlayerDevCam( player );
+		}
+
+		[ClientRpc]
+		private void StartStatsRpc()
+		{
+			Stats = new Stats( IsServer );
+			Event.Register( Stats );
+		}
+
+		public override void ClientDisconnect( Client cl, NetworkDisconnectionReason reason )
+		{
+			base.ClientDisconnect( cl, reason );
+			Event.Run( "playerLeft" );
 		}
 
 		public override void OnKilled( Client client, Entity pawn )
@@ -56,9 +97,12 @@ namespace Instagib
 
 			if ( pawn.LastAttacker is not Player attacker )
 			{
+				PlayerDiedRpc( To.Single( victim ), null );
 				OnKilledMessage( 0, "", client.SteamId, client.Name, "died" );
 				return;
 			}
+			
+			PlayerDiedRpc( To.Single( victim ), attacker );
 
 			// Apply a kill
 			var attackerClient = attacker.GetClientOwner();
@@ -91,8 +135,22 @@ namespace Instagib
 		}
 
 		[ClientRpc]
+		public void PlayerDiedRpc( Player attacker )
+		{
+			// Attacker, victim
+			var attackerName = "suicide";
+			if ( attacker != null )
+				attackerName = attacker.GetClientOwner()?.Name;
+					
+			Event.Run( "playerDeath", attackerName, Local.Client.Name );
+		}
+
+		[ClientRpc]
 		public void PlayerKilledRpc( Player attacker, Player victim, string[] medals )
 		{
+			// Attacker, victim
+			Event.Run( "playerKilled", attacker.GetClientOwner().Name, victim.GetClientOwner().Name );
+			
 			InstagibHud.CurrentHud.OnKilledMessage( attacker, victim, medals );
 		}
 	}
