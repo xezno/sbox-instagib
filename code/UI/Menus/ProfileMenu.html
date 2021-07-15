@@ -1,7 +1,7 @@
 ﻿<div>
     <div class="menu-inner">
         <text class="title">PROFILE</text>
-        <div class="menu-items">
+        <div class="menu-items" @ref="Scroll">
             
             <warning class="no-shrink">
                 <text class="big">WARNING</text>
@@ -23,8 +23,9 @@
                 </span>
             </div>
 
-            <text class="big">STATS</text>
+            <text class="big no-shrink">STATS</text>
 
+            <text class="medium no-shrink">BASIC STUFF</text>
             <stats class="no-shrink">
 
                 <stat style="width: 50%">
@@ -39,6 +40,7 @@
 
             </stats>
 
+            <text class="medium no-shrink">SWEATY STUFF</text>
             <stats class="no-shrink">
 
                 <stat style="width: 50%">
@@ -53,6 +55,7 @@
             </stats>
 
 
+            <text class="medium no-shrink">HOW MUCH TIME YOU'VE WASTED</text>
             <stats class="no-shrink">
 
                 <stat style="width: 50%">

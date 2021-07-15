@@ -7,9 +7,9 @@
 
   border-radius: 15px 10px 10px 15px; // Hack: prevents white from showing up below profile pic
   
-  background-image: url( /textures/ui/action-shots/action-shot-1.png );
+  background-image: url( /textures/ui/banners/default.jpg );
   background-size: cover;
-  background-position: center;
+  background-position: center -300%;
   
   .level-bar {
     height: 5px;
@@ -69,16 +69,19 @@ stats {
       padding: 5px 0;
     }
     
+    &:not(:last-child) {
+      border-right: 2px solid $gray-700;
+    }
+    
     text:not(.medium) {
-      font-size: 18px;
     }
   }
 }
 
 text.medium {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
-  font-family: Poppins-ExtraBoldItalic;  
+  font-family: Poppins-ExtraBoldItalic;
 }
 
 text.small {
