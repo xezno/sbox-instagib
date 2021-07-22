@@ -6,6 +6,9 @@ using Sandbox;
 
 namespace Instagib.Utils
 {
+	/// <summary>
+	/// Responds to events and then relays them to a remote websocket server.
+	/// </summary>
 	public class Stats
 	{
 		public enum PacketIds
@@ -39,7 +42,6 @@ namespace Instagib.Utils
 			socket.Connect( $"ws://{socketHost}:8142" );
 			socket.OnMessageReceived += message =>
 			{
-				// Log.Info( $"WS: received {message}" );
 				var asObject = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>( message );
 
 				if ( (PacketIds)asObject["packetId"].GetInt32() == PacketIds.Heartbeat )
@@ -70,13 +72,12 @@ namespace Instagib.Utils
 					{ "packetId", id },	
 					{ "data", data },
 					{ "date", DateTimeOffset.Now.ToUnixTimeSeconds() },
-					{ "steamid", Local.SteamId },
-					{ "name", Local.DisplayName },
+					{ "steamid", Local.SteamId.ToString() },
+					{ "name", Local.DisplayName.ToString() },
 					{ "isHost", IsServer }
 				}
 			);
 			socket.Send( asJson );
-			// Log.Info( $"WS: sent {asJson}" );
 		}
 
 		[Event.PlayerJoined]
