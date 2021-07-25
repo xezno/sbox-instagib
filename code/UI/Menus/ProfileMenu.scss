@@ -2,14 +2,14 @@
 
 .profile {
   width: 100%;
-  height: 150px;
+  height: 125px;
   padding: 25px 50px;
 
   border-radius: 15px 10px 10px 15px; // Hack: prevents white from showing up below profile pic
   
   background-image: url( /textures/ui/banners/default.jpg );
   background-size: cover;
-  background-position: center -300%;
+  background-position: center -375%;
   
   .level-bar {
     height: 5px;

@@ -26,6 +26,15 @@ namespace Instagib
 			SetModel( "weapons/railgun/models/wpn_qc_railgun.vmdl" ); // TODO: LOD
 		}
 
+		public override void ClientSpawn()
+		{
+			base.ClientSpawn();
+			
+			// TODO: Grant golden railguns through existing database
+			if ( Owner.GetClientOwner().SteamId == 76561198128972602 )
+				SetMaterialGroup( 2 );
+		}
+
 		public override void SimulateAnimator( PawnAnimator anim )
 		{
 			base.SimulateAnimator( anim );
@@ -308,6 +317,9 @@ namespace Instagib
 			ViewModelEntity.Owner = Owner;
 			ViewModelEntity.EnableViewmodelRendering = true;
 			ViewModelEntity.SetModel( ViewModelPath );
+			
+			if ( Owner.GetClientOwner().SteamId == 76561198128972602 )
+				ViewModelEntity.SetMaterialGroup( 2 );
 		}
 
 		public override void DestroyViewModel()

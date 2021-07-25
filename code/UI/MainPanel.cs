@@ -15,12 +15,15 @@ namespace Instagib.UI
 		public string PlayerHealthText => $"{Local.Client.Pawn.Health.CeilToInt()}";
 		public string PlayerSpeedText => $"{PlayerSpeed:N0}u/s (top: {topSpeed}u/s)";
 
+		public string GameStateText => (Game.Current as Game).CurrentStateName;
+		public string GameStateTime => (Game.Current as Game).CurrentStateTime;
+
 		private int topSpeed = 0;
 
 		public MainPanel()
 		{
-			SetTemplate( "/Code/UI/InstagibHud.html" );
-			StyleSheet.Load( "/Code/UI/InstagibHud.scss" ); // Loading in HTML doesn't work for whatever reason
+			SetTemplate( "/Code/UI/MainPanel.html" );
+			StyleSheet.Load( "/Code/UI/MainPanel.scss" ); // Loading in HTML doesn't work for whatever reason
 			SetClass( "mainpanel", true );
 		}
 

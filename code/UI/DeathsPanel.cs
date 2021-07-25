@@ -6,6 +6,7 @@ using Sandbox.UI.Construct;
 
 namespace Instagib.UI
 {
+
 	/*
 	<div class="frag">
 		<text>YOU FRAGGED </text>
@@ -13,52 +14,43 @@ namespace Instagib.UI
 	</div>
 	 */
 
-	public class FragsPanel : Panel
+	public class DeathsPanel : Panel
 	{
-		public static FragsPanel Instance { get; private set; }
-		public FragsPanel()
+		public static DeathsPanel Instance { get; private set; }
+		public DeathsPanel()
 		{
 			Instance = this;
 			
 			SetClass( "frag", true );
 		}
 
-		public void AddFragMessage( string weapon, string target, string[] medals )
+		public void AddDeathMessage( string weapon, string target )
 		{
-			foreach ( var child in Children?.Where( c => c is FragMessage ) )
+			foreach ( var child in Children?.Where( c => c is DeathMessage ) )
 			{
 				child?.Delete();
 			}
 			
-			var fragMessage = new FragMessage( weapon, target, medals );
-			fragMessage.Parent = this;
+			var deathMessage = new DeathMessage( weapon, target );
+			deathMessage.Parent = this;
 		}
 	}
 	
-	public class FragMessage : Panel
+	public class DeathMessage : Panel
 	{
 		private Label skullLabel;
 
-		public FragMessage( string weapon, string target, string[] medals )
+		public DeathMessage( string weapon, string target )
 		{
-			Log.Trace( "Frag message created"  );
-			
 			SetClass( "frag-message", true );
 			StyleSheet.Load( "/Code/UI/MainPanel.scss" );
 			
 			skullLabel = Add.Label( "💀", "frag-skull" );
 			var fragDetails = Add.Panel( "frag-details" );
 			
+			fragDetails.Add.Label( $"FRAGGED BY" );
 			fragDetails.Add.Label( $"{target}", "player" );
 			fragDetails.Add.Label( $"{weapon}", "weapon" );
-
-			//
-			// Medal display
-			//
-			var medalPanel = fragDetails.Add.Panel( "medals" );
-			
-			foreach ( string medal in medals )
-				medalPanel.AddChild<Label>().SetText( medal );
 			
 			//
 			// Timeout

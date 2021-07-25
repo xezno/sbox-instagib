@@ -13,9 +13,6 @@ namespace Instagib.UI.Menus
 		public Label PlayerName { get; set; }
 		
 		public Label PlayerTitle { get; set; }
-
-		public Label PlayerLevel { get; set; }
-		public Panel PlayerLevelBar { get; set; }
 		
 		private PlayerStats PlayerStats { get; set; }
 
@@ -35,13 +32,9 @@ namespace Instagib.UI.Menus
 			PlayerStats = Stats.Instance.RequestStats();
 			PlayerAvatar.Style.SetBackgroundImage( $"avatar:{Local.SteamId}" );
 			PlayerAvatar.Style.Dirty();
-			
-			PlayerLevelBar.Style.Width = Length.Percent( 25 );
-			PlayerLevelBar.Style.Dirty();
 
 			PlayerName.Text = Local.DisplayName;
 			PlayerTitle.Text = "Instagibsta";
-			PlayerLevel.Text = "Level 1";
 
 			DeathsLabel.Text = PlayerStats.Deaths.ToString();
 			KillsLabel.Text = PlayerStats.Kills.ToString();
@@ -56,22 +49,6 @@ namespace Instagib.UI.Menus
 
 			var scrollbar = AddChild<Scrollbar>();
 			scrollbar.Panel = Scroll;
-		}
-
-		public override void Tick()
-		{
-			PlayerLevelBar.Style.Width = 0;
-			//PlayerLevelBar.Style.Width = Length.Percent( (RealTime.Now * 10) % 100 );
-
-			if ( PlayerLevelBar.Style.Width.Value.Value <= 1 )
-			{
-				PlayerLevelBar.Style.Display = DisplayMode.None;
-			}
-			else
-			{
-				PlayerLevelBar.Style.Display = DisplayMode.Flex;
-			}
-			PlayerLevelBar.Style.Dirty();
 		}
 	}
 }

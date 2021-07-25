@@ -9,7 +9,7 @@ namespace Instagib.UI
 {
 	public partial class ScoreboardEntry : Panel
 	{
-		private PlayerScore.Entry entry;
+		public PlayerScore.Entry Entry { get; private set; }
 		
 		private Label playerName;
 		private Label kills;
@@ -35,7 +35,7 @@ namespace Instagib.UI
 
 		public virtual void UpdateFrom( PlayerScore.Entry entry )
 		{
-			this.entry = entry;
+			this.Entry = entry;
 
 			playerName.Text = entry.GetString( "name" );
 

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Instagib.UI;
 using Instagib.Utils;
 using Sandbox;
@@ -90,6 +92,16 @@ namespace Instagib
 			Log.Info( $"{client.Name} was killed" );
 			if ( pawn is not Player victim )
 				return;
+			
+			// HACK: Assign a respawn timer for this player
+			async Task RespawnTimer()
+			{
+				Log.Info( "Waiting" );
+				await Task.DelaySeconds( 3.0f );
+				Log.Info( "Waited" );
+				PlayerRespawnRpc( To.Single( victim ) );
+			}
+			RespawnTimer();
 
 			// Apply a death
 			var victimClient = victim.GetClientOwner();
@@ -126,6 +138,12 @@ namespace Instagib
 			OnKilledMessage( attackerClient.SteamId, attackerClient.Name, client.SteamId, client.Name, "Railgun" );
 		}
 
+		[ClientRpc]
+		public void PlayerRespawnRpc()
+		{
+			InstagibHud.CurrentHud?.OnRespawn();
+		}
+
 		[ServerCmd( "recreatehud", Help = "Recreate hud object" )]
 		public static void RecreateHud()
 		{
@@ -141,16 +159,18 @@ namespace Instagib
 			var attackerName = "suicide";
 			if ( attacker != null )
 				attackerName = attacker.GetClientOwner()?.SteamId.ToString();
-					
+			
 			Event.Run( "playerDeath", attackerName, Local.Client.SteamId.ToString() );
+			InstagibHud.CurrentHud.OnDeath( attacker?.GetClientOwner()?.Name ?? "Yourself" );
 		}
 
 		[ClientRpc]
 		public void PlayerKilledRpc( Player attacker, Player victim, string[] medals )
 		{
 			// Attacker, victim
-			Event.Run( "playerKilled", attacker.GetClientOwner().SteamId.ToString(), victim.GetClientOwner().SteamId.ToString() );
+			Log.Trace( "Player killed rpc " );
 			InstagibHud.CurrentHud.OnKilledMessage( attacker, victim, medals );
+			Event.Run( "playerKilled", attacker.GetClientOwner().SteamId.ToString(), victim.GetClientOwner().SteamId.ToString() );
 		}
 	}
 }

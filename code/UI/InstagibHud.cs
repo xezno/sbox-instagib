@@ -29,27 +29,48 @@ namespace Instagib.UI
 		{
 			currentMenu?.Delete();
 			currentMenu = null;
+			StaticHudPanel?.Delete();
+			TiltingHudPanel?.Delete();
 
 			if ( newMenu == null )
 			{
 				// Show standard hud
 				StaticHudPanel = RootPanel.Add.Panel( "staticpanel" );
-				StaticHudPanel.StyleSheet.Load( "/Code/UI/InstagibHud.scss" );
+				StaticHudPanel.StyleSheet.Load( "/Code/UI/MainPanel.scss" );
 				StaticHudPanel.AddChild<Scoreboard<ScoreboardEntry>>();
 				StaticHudPanel.AddChild<Crosshair>();
 				StaticHudPanel.AddChild<ClassicChatBox>();
 				StaticHudPanel.AddChild<Hitmarker>();
+				StaticHudPanel.AddChild<FragsPanel>();
 
 				TiltingHudPanel = RootPanel.AddChild<MainPanel>();
 			}
 			else
 			{
-				StaticHudPanel?.Delete();
-				TiltingHudPanel?.Delete();
-
 				newMenu.Parent = RootPanel;
 				currentMenu = newMenu;
 			}
+		}
+
+		public void OnDeath( string killer )
+		{
+			Host.AssertClient();
+			Log.Trace( "HUD: Death" );
+			
+			// We died
+			StaticHudPanel?.DeleteChildren();
+			TiltingHudPanel?.DeleteChildren();
+
+			StaticHudPanel.AddChild<DeathsPanel>();
+			DeathsPanel.Instance.AddDeathMessage( "Railgun", killer );
+		}
+
+		public void OnRespawn()
+		{
+			RootPanel.DeleteChildren();
+			Host.AssertClient();
+			Log.Trace( "HUD: Respawn" );
+			SetCurrentMenu( null );
 		}
 
 		public void OnKilledMessage( Player attacker, Player victim, string[] medals )
@@ -57,8 +78,10 @@ namespace Instagib.UI
 			if ( attacker.GetClientOwner().SteamId != (Local.Client?.SteamId) )
 				return;
 
-			var fragMessage = new FragMessage( victim.GetClientOwner().Name, medals );
-			fragMessage.Parent = RootPanel;
+			Log.Trace( "Killed someone" );
+			
+			// We killed someone
+			FragsPanel.Instance.AddFragMessage( "Railgun", victim.GetClientOwner().Name, medals );
 		}
 
 		[Event.Tick.Client]

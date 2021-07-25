@@ -10,6 +10,7 @@ namespace Instagib.UI
 	public partial class Scoreboard<T> : Panel where T : ScoreboardEntry, new()
 	{
 		public Panel Canvas { get; protected set; }
+		public Panel EntryContainer { get; protected set; }
 		Dictionary<int, T> Entries = new ();
 
 		public Panel Header { get; protected set; }
@@ -21,8 +22,10 @@ namespace Instagib.UI
 
 			Canvas = Add.Panel( "canvas" );
 			Canvas.Add.Label( "SCORE", "title" );
-			
+
 			AddHeader();
+			
+			EntryContainer = Canvas.Add.Panel( "entry-container" );
 
 			PlayerScore.OnPlayerAdded += AddPlayer;
 			PlayerScore.OnPlayerUpdated += UpdatePlayer;
@@ -32,6 +35,8 @@ namespace Instagib.UI
 			{
 				AddPlayer( player );
 			}
+			
+			Sort();
 		}
 
 		public override void Tick()
@@ -53,12 +58,35 @@ namespace Instagib.UI
 			Header.Add.Label( "Hit %", "accuracy" );
 		}
 
+		private void Sort()
+		{			
+			EntryContainer.SortChildren( ( panel1, panel2 ) =>
+			{
+				if ( panel1 is ScoreboardEntry a && panel2 is ScoreboardEntry b )
+				{
+					var aKills = a.Entry.Get( "kills", 0 );
+					var bKills = b.Entry.Get( "kills", 0 );
+
+					if ( bKills > aKills )
+						return 1;
+					if ( aKills > bKills )
+						return -1;
+
+					return 0;
+				}
+
+				return 1;
+			} );
+		}
+
 		protected virtual void AddPlayer( PlayerScore.Entry entry )
 		{
-			var p = Canvas.AddChild<T>();
+			var p = EntryContainer.AddChild<T>();
 			p.UpdateFrom( entry );
 
 			Entries[entry.Id] = p;
+
+			Sort();
 		}
 
 		protected virtual void UpdatePlayer( PlayerScore.Entry entry )
@@ -67,6 +95,8 @@ namespace Instagib.UI
 			{
 				panel.UpdateFrom( entry );
 			}
+			
+			Sort();
 		}
 
 		protected virtual void RemovePlayer( PlayerScore.Entry entry )
@@ -76,6 +106,8 @@ namespace Instagib.UI
 				panel.Delete();
 				Entries.Remove( entry.Id );
 			}
+			
+			Sort();
 		}
 	}
 }

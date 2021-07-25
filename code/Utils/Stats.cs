@@ -53,6 +53,11 @@ namespace Instagib.Utils
 					SendPacket( PacketIds.Heartbeat );
 				}
 			};
+			socket.OnDisconnected += ( status, reason ) =>
+			{
+				Log.Trace( $"Stats server disconnected us with status {status} and reason {reason}." );
+				Sandbox.Event.Unregister( this );
+			};
 			
 			SendPacket( PacketIds.Handshake, Local.SteamId.ToString() );
 
