@@ -78,7 +78,7 @@ namespace Instagib.Utils
 					{ "data", data },
 					{ "date", DateTimeOffset.Now.ToUnixTimeSeconds() },
 					{ "steamid", Local.SteamId.ToString() },
-					{ "name", Local.DisplayName.ToString() },
+					{ "name", Local.DisplayName },
 					{ "isHost", IsServer }
 				}
 			);

@@ -12,7 +12,7 @@ namespace Instagib
 		public static bool ViewmodelFlip { get; set; } = false;
 
 		public static bool CrosshairVisible { get; set; } = true;
-		public static string CrosshairGlyph { get; set; } = "a";
+		public static string CrosshairGlyph { get; set; } = "t";
 		public static int CrosshairSize { get; set; } = 24;
 
 		public static Color EnemyOutlineColor { get; set; } = Color.Red;

@@ -35,7 +35,7 @@ namespace Instagib
 				(Current as Game).CurrentState = newState;
 			}
 
-			protected int GetPlayerCount() => All.Where( t => t is Player ).Count();
+			protected int GetPlayerCount() => Client.All.Count();
 		}
 
 		private class WaitingForPlayersState : BaseGameState
@@ -69,17 +69,16 @@ namespace Instagib
 			public WarmupState() : base()
 			{
 				// Respawn players
-				var entitiesCopy = Entity.All.ToArray();
-				foreach ( var entity in entitiesCopy.Where( e => e is Player ) )
+				foreach ( var client in Client.All )
 				{
-					var player = entity as Player;
+					var player = client.Pawn as Player;
 					player?.Respawn();
 
 					// Reset scores
-					entity.GetClientOwner().SetScore( "kills", 0 );
-					entity.GetClientOwner().SetScore( "deaths", 0 );
-					entity.GetClientOwner().SetScore( "totalShots", 0 );
-					entity.GetClientOwner().SetScore( "totalHits", 0 );
+					client.SetScore( "kills", 0 );
+					client.SetScore( "deaths", 0 );
+					client.SetScore( "totalShots", 0 );
+					client.SetScore( "totalHits", 0 );
 				}
 
 				stateEnds = 15;
@@ -93,6 +92,8 @@ namespace Instagib
 				return $"{minutes:D2}:{seconds:D2}";
 			}
 
+			private bool playedCountdown = false;
+
 			public override void Tick()
 			{
 				base.Tick();
@@ -100,6 +101,12 @@ namespace Instagib
 				if ( GetPlayerCount() <= 1 )
 				{
 					SetState( new WaitingForPlayersState() );
+				}
+
+				if ( stateEnds <= 4 && !playedCountdown )
+				{
+					playedCountdown = true;
+					Sound.FromScreen( "countdown" );
 				}
 
 				if ( stateEnds < 0 )
@@ -118,21 +125,19 @@ namespace Instagib
 			public MainGameState() : base()
 			{
 				// Respawn players
-				var entitiesCopy = Entity.All.ToArray();
-				foreach ( var entity in entitiesCopy.Where( e => e is Player ) )
+				foreach ( var entity in Client.All )
 				{
-					var player = entity as Player;
+					var player = entity.Pawn as Player;
 					player?.Respawn();
 
 					// Reset scores
-					entity.GetClientOwner().SetScore( "kills", 0 );
-					entity.GetClientOwner().SetScore( "deaths", 0 );
-					entity.GetClientOwner().SetScore( "totalShots", 0 );
-					entity.GetClientOwner().SetScore( "totalHits", 0 );
+					entity.SetScore( "kills", 0 );
+					entity.SetScore( "deaths", 0 );
+					entity.SetScore( "totalShots", 0 );
+					entity.SetScore( "totalHits", 0 );
 				}
 
-				stateEnds = 2 * 60; // 2 minutes
-				//stateEnds = 5;
+				stateEnds = 5 * 60;
 			}
 
 			public override string StateTime()
@@ -169,12 +174,12 @@ namespace Instagib
 			{
 				// Determine winner
 				var entitiesCopy = All.Where( t => t is Player ).ToArray();
-				var orderedEntities = new List<Entity>( entitiesCopy );
+				var orderedEntities = new List<Client>( Client.All );
 				var orderedEnumerable =
-					orderedEntities.OrderByDescending( p => p.GetClientOwner().GetScore( "kills", 0 ) );
+					orderedEntities.OrderByDescending( p => p.GetScore( "kills", 0 ) );
 
 				ClassicChatBox.AddInformation( To.Everyone,
-					$"{orderedEnumerable.First().GetClientOwner().Name} wins!" );
+					$"{orderedEnumerable.First().Name} wins!" );
 				
 				stateEnds = 15;
 			}

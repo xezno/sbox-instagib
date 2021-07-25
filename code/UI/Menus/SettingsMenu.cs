@@ -12,7 +12,7 @@ namespace Instagib.UI.Menus
 		public Checkbox ViewmodelToggle { get; set; }
 		public Checkbox ViewmodelFlip { get; set; }
 		public Checkbox CrosshairToggle { get; set; }
-		public TextEntry CrosshairGlyph { get; set; }
+		// public TextEntry CrosshairGlyph { get; set; }
 		public Slider CrosshairSlider { get; set; }
 		public ColorPicker EnemyOutlineColor { get; set; }
 
@@ -49,7 +49,7 @@ namespace Instagib.UI.Menus
 			ViewmodelFlip.AddEventListener( "onchange", e => PlayerSettings.ViewmodelFlip = (bool)e.Value );
 			
 			CrosshairSlider.OnValueChange += b => PlayerSettings.CrosshairSize = b;
-			CrosshairGlyph.AddEventListener("onchange", () => PlayerSettings.CrosshairGlyph = CrosshairGlyph.Text );
+			// CrosshairGlyph.AddEventListener("onchange", () => PlayerSettings.CrosshairGlyph = CrosshairGlyph.Text );
 			EnemyOutlineColor.OnValueChange += c => PlayerSettings.EnemyOutlineColor = c;
 
 			// Set values to existing settings
@@ -60,7 +60,7 @@ namespace Instagib.UI.Menus
 			ViewmodelToggle.Checked = PlayerSettings.ViewmodelVisible;
 			CrosshairToggle.Checked = PlayerSettings.CrosshairVisible;
 			ViewmodelFlip.Checked = PlayerSettings.ViewmodelFlip;
-			CrosshairGlyph.Text = PlayerSettings.CrosshairGlyph;
+			// CrosshairGlyph.Text = PlayerSettings.CrosshairGlyph;
 			CrosshairSlider.Value = ((float)PlayerSettings.CrosshairSize).LerpInverse( crosshairRange.Item1, crosshairRange.Item2 );
 
 			// Add scrollbar
