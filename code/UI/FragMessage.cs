@@ -41,7 +41,7 @@ namespace Instagib.UI
 
 		public FragMessage( string weapon, string target, string[] medals )
 		{
-			Log.Trace( "Frag message created"  );
+			// Log.Trace( "Frag message created"  );
 			
 			SetClass( "frag-message", true );
 			StyleSheet.Load( "/Code/UI/MainPanel.scss" );

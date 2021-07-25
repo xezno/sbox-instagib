@@ -158,14 +158,14 @@ namespace Instagib
 			if ( target is not Player )
 			{
 				// Fail silently - player probably missed their shot?
-				Log.Trace( "Target wasn't a player" );
+				// Log.Trace( "Target wasn't a player" );
 				return;
 			}
 			
 			if ( owner is not Player )
 			{
 				// This should never happen 
-				Log.Trace( "Owner wasn't a player" );
+				// Log.Trace( "Owner wasn't a player" );
 				return;
 			}
 

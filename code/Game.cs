@@ -168,7 +168,7 @@ namespace Instagib
 		public void PlayerKilledRpc( Player attacker, Player victim, string[] medals )
 		{
 			// Attacker, victim
-			Log.Trace( "Player killed rpc " );
+			// Log.Trace( "Player killed rpc" );
 			InstagibHud.CurrentHud.OnKilledMessage( attacker, victim, medals );
 			Event.Run( "playerKilled", attacker.GetClientOwner().SteamId.ToString(), victim.GetClientOwner().SteamId.ToString() );
 		}

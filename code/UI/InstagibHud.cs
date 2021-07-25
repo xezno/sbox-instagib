@@ -55,7 +55,7 @@ namespace Instagib.UI
 		public void OnDeath( string killer )
 		{
 			Host.AssertClient();
-			Log.Trace( "HUD: Death" );
+			// Log.Trace( "HUD: Death" );
 			
 			// We died
 			StaticHudPanel?.DeleteChildren();
@@ -69,7 +69,7 @@ namespace Instagib.UI
 		{
 			RootPanel.DeleteChildren();
 			Host.AssertClient();
-			Log.Trace( "HUD: Respawn" );
+			// Log.Trace( "HUD: Respawn" );
 			SetCurrentMenu( null );
 		}
 
@@ -78,7 +78,7 @@ namespace Instagib.UI
 			if ( attacker.GetClientOwner().SteamId != (Local.Client?.SteamId) )
 				return;
 
-			Log.Trace( "Killed someone" );
+			// Log.Trace( "Killed someone" );
 			
 			// We killed someone
 			FragsPanel.Instance.AddFragMessage( "Railgun", victim.GetClientOwner().Name, medals );
@@ -89,7 +89,7 @@ namespace Instagib.UI
 		{
 			if ( Input.Pressed( InputButton.Menu ) )
 			{
-				Log.Trace( "Toggling menu" );
+				// Log.Trace( "Toggling menu" );
 				if ( currentMenu is MainMenu )
 					SetCurrentMenu( null );
 				else if ( Local.Pawn.Velocity.Cross( Vector3.Up ).Length < 30f )

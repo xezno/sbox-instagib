@@ -140,10 +140,9 @@ namespace Instagib
 		[ClientRpc]
 		public void OnDamageOther( Vector3 pos, float amount )
 		{
-			Log.Trace( $"{Local.DisplayName} damaged another player" );
+			// Log.Trace( $"{Local.DisplayName} damaged another player" );
 			
 			PlaySound( "kill" );
-			
 			Hitmarker.CurrentHitmarker.OnHit();
 		}
 
