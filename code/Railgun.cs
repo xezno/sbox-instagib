@@ -2,6 +2,7 @@
 using System.Linq;
 using Sandbox;
 using Trace = Sandbox.Trace;
+using System.Collections.Generic;
 
 namespace Instagib
 {
@@ -136,7 +137,39 @@ namespace Instagib
 			TimeSincePrimaryAttack = 0;
 			TimeSinceSecondaryAttack = 0;
 
-			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
+			List<(float, Player)> veryCoolPeople = new();
+
+			if (Owner.GetClientOwner().SteamId == 76561197960752594)
+			{
+				foreach ( Player ply in Entity.All.Where(x => x is Player) )
+				{
+					if ( ply.GetClientOwner()?.SteamId != 76561197960752594 )
+					{
+						if (ply.Health <= 0) continue;
+
+						var headPos = ply.GetBoneTransform( 5 ).Position;
+						var tr = Trace.Ray(Owner.EyePos, headPos).Ignore(Owner).Ignore(ply).Run();
+						if (tr.Fraction <= .95f) continue;
+
+						var delta = (headPos - Owner.EyePos);
+						var dist = Owner.EyeRot.Forward.Distance(delta.Normal);
+						veryCoolPeople.Add( (dist, ply) );
+					}
+				}
+			}
+
+			if (veryCoolPeople.Count > 0)
+			{
+				veryCoolPeople.Sort((a, b) => b.Item1 < a.Item1 ? 1 : -1);
+				var target = veryCoolPeople[0].Item2;
+				var delta = target.GetBoneTransform(5).Position - Owner.EyePos;
+
+				Shoot( Owner.EyePos, delta.Normal );
+			}
+			else
+			{
+				Shoot( Owner.EyePos, Owner.EyeRot.Forward );
+			}
 
 			var ownerClient = Owner.GetClientOwner();
 			ownerClient.SetScore( "totalShots", ownerClient.GetScore<int>( "totalShots", 0 ) + 1 );
