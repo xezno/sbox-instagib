@@ -36,6 +36,9 @@ namespace Instagib
 
 			FieldOfView = PlayerSettings.Fov;
 
+			ZNear = 5;
+			ZFar = 50000;
+
 			Viewer = pawn;
 			lastPos = Pos;
 		}

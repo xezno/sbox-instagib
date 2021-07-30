@@ -23,6 +23,8 @@ namespace Instagib.Utils
 			EventPlayerRespawn = 6,
 			EventPlayerChat = 7,
 			EventPlayerDeath = 8,
+
+			PlayerItems = 9
 		};
 
 		public static Stats Instance { get; private set; }
@@ -33,6 +35,7 @@ namespace Instagib.Utils
 		private bool IsServer { get; set; }
 		
 		private PlayerStats LastPlayerStats { get; set; }
+		private PlayerItems LastPlayerItems { get; set; }
 		
 		public Stats( bool isServer )
 		{
@@ -44,13 +47,20 @@ namespace Instagib.Utils
 			{
 				var asObject = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>( message );
 
-				if ( (PacketIds)asObject["packetId"].GetInt32() == PacketIds.Heartbeat )
+				var packetId = (PacketIds)asObject["packetId"].GetInt32();
+				switch ( packetId )
 				{
-					// Heartbeat contains player stats
-					LastPlayerStats = JsonSerializer.Deserialize<PlayerStats>( asObject["data"].GetString() );
-					
-					// Send a heartbeat back
-					SendPacket( PacketIds.Heartbeat );
+					case PacketIds.Heartbeat:
+						// Heartbeat contains player stats
+						LastPlayerStats = JsonSerializer.Deserialize<PlayerStats>( asObject["data"].GetString() );
+
+						// Send a heartbeat back
+						SendPacket( PacketIds.Heartbeat );
+						break;
+					case PacketIds.PlayerItems:
+						// Packet contains player items
+						LastPlayerItems = JsonSerializer.Deserialize<PlayerItems>( asObject["data"].GetString() );
+						break;
 				}
 			};
 			socket.OnDisconnected += ( status, reason ) =>
@@ -131,6 +141,22 @@ namespace Instagib.Utils
 		{
 			return LastPlayerStats;
 		}
+
+		public PlayerItems RequestItems()
+		{
+			return LastPlayerItems;
+		}
+
+		public bool HasItem( string itemName )
+		{
+			return LastPlayerItems?.Items?.Contains( "goldenRailgun" ) ?? false;
+		}
+	}
+
+	public class PlayerItems
+	{
+		[JsonPropertyName("items")]
+		public List<string> Items { get; set; }
 	}
 
 	public class PlayerStats

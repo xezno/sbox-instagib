@@ -42,6 +42,8 @@ namespace Instagib.UI
 				StaticHudPanel.AddChild<ClassicChatBox>();
 				StaticHudPanel.AddChild<Hitmarker>();
 				StaticHudPanel.AddChild<FragsPanel>();
+				StaticHudPanel.AddChild<NameTags>();
+				StaticHudPanel.AddChild<KillFeed>();
 
 				TiltingHudPanel = RootPanel.AddChild<MainPanel>();
 			}
@@ -58,7 +60,7 @@ namespace Instagib.UI
 			// Log.Trace( "HUD: Death" );
 			
 			// We died
-			StaticHudPanel?.DeleteChildren();
+			// StaticHudPanel?.DeleteChildren();
 			TiltingHudPanel?.DeleteChildren();
 
 			StaticHudPanel.AddChild<DeathsPanel>();
@@ -67,10 +69,9 @@ namespace Instagib.UI
 
 		public void OnRespawn()
 		{
-			RootPanel.DeleteChildren();
 			Host.AssertClient();
+			TiltingHudPanel = RootPanel.AddChild<MainPanel>();
 			// Log.Trace( "HUD: Respawn" );
-			SetCurrentMenu( null );
 		}
 
 		public void OnKilledMessage( Player attacker, Player victim, string[] medals )

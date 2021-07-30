@@ -4,7 +4,7 @@ using Sandbox;
 namespace Instagib
 {
 	[Library]
-	public class PlayerController : BasePlayerController
+	public partial class PlayerController : BasePlayerController
 	{
 		public Duck Duck;
 
@@ -40,10 +40,12 @@ namespace Instagib
 		public float BodyHeight => 72.0f;
 		public float EyeHeight => 64.0f;
 		public float Gravity => 800.0f;
-		public bool AutoJump => false;
+		public bool AutoJump => true;
 		public float JumpMultiplier => 0.9f;
 		public float AirSpeedLimit => 800f;
 		public float SpeedLimit => 800f; // Hard limit (excludes Z)
+
+		[Net, Predicted] public bool CanMove { get; set; } = true;
 
 		/// <summary>
 		///     This is temporary, get the hull size for the player's collision
@@ -136,6 +138,7 @@ namespace Instagib
 			}
 
 			// Work out wish velocity.. just take input, rotate it to view, clamp to -1, 1
+
 			WishVelocity = new Vector3( Input.Forward, Input.Left, 0 );
 			var inSpeed = WishVelocity.Length.Clamp( 0, 1 );
 			WishVelocity *= Input.Rotation;
@@ -147,6 +150,11 @@ namespace Instagib
 
 			WishVelocity = WishVelocity.Normal * inSpeed;
 			WishVelocity *= GetWishSpeed();
+
+			if ( !CanMove )
+			{
+				WishVelocity = Vector3.Zero;	
+			}
 
 			Duck.PreTick();
 
@@ -440,6 +448,9 @@ namespace Instagib
 		public virtual void CheckJumpButton()
 		{
 			if ( GroundEntity == null )
+				return;
+
+			if ( !CanMove )
 				return;
 
 			ClearGroundEntity();

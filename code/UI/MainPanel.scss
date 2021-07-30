@@ -304,3 +304,13 @@ deathpanel {
 		margin-left: 4px;	
 	}
 }
+
+.controls {
+	backdrop-filter: blur( 20px );
+	background-color: rgba( black, 0.4 );
+	position: absolute;
+	bottom: 10%;
+	right: 100px;
+	border-radius: 10px;
+	padding: 10px 25px;
+}

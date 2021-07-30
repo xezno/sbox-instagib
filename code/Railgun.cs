@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Instagib.Utils;
 using Sandbox;
 using Trace = Sandbox.Trace;
 
@@ -29,9 +30,8 @@ namespace Instagib
 		public override void ClientSpawn()
 		{
 			base.ClientSpawn();
-			
-			// TODO: Grant golden railguns through existing database
-			if ( Owner.GetClientOwner().SteamId == 76561198128972602 )
+
+			if ( Stats.Instance.HasItem( "goldenRailgun" ) )
 				SetMaterialGroup( 2 );
 		}
 
@@ -156,55 +156,19 @@ namespace Instagib
 			// verify stuff
 			//	
 			if ( target is not Player )
-			{
-				// Fail silently - player probably missed their shot?
-				// Log.Trace( "Target wasn't a player" );
 				return;
-			}
 			
 			if ( owner is not Player )
-			{
-				// This should never happen 
-				// Log.Trace( "Owner wasn't a player" );
 				return;
-			}
 
 			var ownerClient = owner.GetClientOwner();
 			ownerClient.SetScore( "totalHits", ownerClient.GetScore<int>( "totalHits", 0 ) + 1 );
 
 			if ( tick - Time.Tick > maxHitTolerance )
 			{
+				// Too much time passed - player's lagging too much for us to do any proper checks
 				Log.Trace( $"Too much time passed: {tick - Time.Tick}" );
-				return; // Too much time passed - player's lagging too much for us to do any proper checks
-			}
-			
-			// Do a (large) raycast in the direction specified to make sure they're not bullshitting
-			if ( false )
-			{
-				var tr = Trace.Ray( startPos, startPos + forward * 100000 )
-						.UseHitboxes()
-						.Ignore( owner )
-						.Size( 20f ) // This determines the tolerance of the cast
-						.EntitiesOnly()
-						.Run();
-			
-				if ( !tr.Hit )
-				{
-					Log.Trace( "Didn't hit" );
-					return;
-				}
-			
-				if ( !tr.Entity.IsValid() )
-				{
-					Log.Trace( "Entity invalid" );
-					return;
-				}
-			
-				if ( tr.Entity.NetworkIdent != targetIdent )
-				{
-					Log.Trace( "Idents didnt match" );
-					return;
-				}
+				return;
 			}
 
 			//
@@ -241,7 +205,8 @@ namespace Instagib
 				if ( !tr.Entity.IsValid() ) continue;
 
 				// This is the only way to do client->server RPCs :(
-				CmdShoot( tr.Entity.NetworkIdent, Owner.NetworkIdent, pos, tr.EndPos, dir, Time.Tick );
+				if ( IsClient )
+					CmdShoot( tr.Entity.NetworkIdent, Owner.NetworkIdent, pos, tr.EndPos, dir, Time.Tick );
 			}
 
 			ShootEffects();
@@ -252,6 +217,7 @@ namespace Instagib
 			base.Simulate( owner );
 
 			isZooming = Input.Down( InputButton.Run ); // TODO: We should probably show inputs to the user on-screen
+			GrappleSimulate( owner );
 		}
 
 		public override void PostCameraSetup( ref CameraSetup camSetup )
@@ -268,7 +234,7 @@ namespace Instagib
 		{
 			if ( isZooming )
 			{
-				// Half input sensitivity
+				// Set input sensitivity
 				owner.ViewAngles = Angles.Lerp( owner.OriginalViewAngles, owner.ViewAngles, zoomFov / 90f );
 			}
 		}
@@ -277,8 +243,6 @@ namespace Instagib
 		public virtual void RocketEffects()
 		{
 			Host.AssertClient();
-
-			// Sound.FromEntity( "railgun_fire", this );
 
 			ViewModelEntity?.SetAnimBool( "fire", true );
 			CrosshairPanel?.CreateEvent( "onattack" );
@@ -318,7 +282,7 @@ namespace Instagib
 			ViewModelEntity.EnableViewmodelRendering = true;
 			ViewModelEntity.SetModel( ViewModelPath );
 			
-			if ( Owner.GetClientOwner().SteamId == 76561198128972602 )
+			if ( Stats.Instance.HasItem( "goldenRailgun" ) )
 				ViewModelEntity.SetMaterialGroup( 2 );
 		}
 
@@ -326,6 +290,12 @@ namespace Instagib
 		{
 			ViewModelEntity?.Delete();
 			ViewModelEntity = null;
+		}
+
+		public override void ActiveEnd( Entity ent, bool dropped )
+		{
+			base.ActiveEnd( ent, dropped );
+			RemoveGrapple();
 		}
 	}
 }

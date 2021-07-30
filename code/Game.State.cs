@@ -181,6 +181,13 @@ namespace Instagib
 				ClassicChatBox.AddInformation( To.Everyone,
 					$"{orderedEnumerable.First().Name} wins!" );
 				
+				// Pause player movement
+				foreach ( var client in Client.All )
+				{
+					((client.Pawn as Player).Controller as PlayerController).CanMove = false;
+					(client.Pawn as Player).Inventory.DeleteContents();
+				}
+				
 				stateEnds = 15;
 			}
 
