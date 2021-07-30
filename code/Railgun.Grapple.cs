@@ -24,7 +24,7 @@ namespace Instagib
 			else if ( !Input.Down( InputButton.Use ) && isGrappling )
 				RemoveGrapple();
 
-			if ( grappleHookEntity != null )
+			if ( isGrappling )
 			{
 				if ( Owner is Player { Controller: PlayerController controller } player )
 				{
