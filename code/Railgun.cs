@@ -31,7 +31,7 @@ namespace Instagib
 		{
 			base.ClientSpawn();
 
-			if ( Stats.Instance.HasItem( "goldenRailgun" ) )
+			if ( Stats.Instance?.HasItem( "goldenRailgun" ) ?? false )
 				SetMaterialGroup( 2 );
 		}
 
@@ -282,7 +282,7 @@ namespace Instagib
 			ViewModelEntity.EnableViewmodelRendering = true;
 			ViewModelEntity.SetModel( ViewModelPath );
 			
-			if ( Stats.Instance.HasItem( "goldenRailgun" ) )
+			if ( Stats.Instance?.HasItem( "goldenRailgun" ) ?? false )
 				ViewModelEntity.SetMaterialGroup( 2 );
 		}
 
