@@ -8,18 +8,21 @@ namespace Instagib
 
 		[Net, Predicted] public bool isGrappling { get; set; }
 		[Net] public GrappleHookEntity grappleHookEntity { get; set; }
+		[Net, Predicted] private TimeSince TimeSinceLastGrapple { get; set; }
 
-		private Particles grappleParticle;
+		private Particles grappleParticles;
 
-		private float hookSpeed => 5f;
-		private float pullStrength => 20f;
-		private float boostStrength => 4f;
-		private float antiVelocityScale => 1f;
-		private float maxDistance => 2500f;
+		private float GrappleCooldown => 3f;
+		private float HookSpeed => 5f;
+		private float PullStrength => 20f;
+		private float BoostStrength => 4f;
+		private float AntiVelocityScale => 1f;
+		private float MaxDistance => 2500f;
+
 
 		public void GrappleSimulate( Client owner )
 		{
-			if ( Input.Pressed( InputButton.Use ) && !isGrappling )
+			if ( Input.Pressed( InputButton.Use ) && !isGrappling && TimeSinceLastGrapple > GrappleCooldown )
 				DeployGrapple();
 			else if ( !Input.Down( InputButton.Use ) && isGrappling )
 				RemoveGrapple();
@@ -34,16 +37,16 @@ namespace Instagib
 
 				Vector3 playerVel = Owner.Velocity;
 				Vector3 playerLookDir = Owner.EyeRot.Forward;
-				Owner.Velocity += playerLookDir * boostStrength;
+				Owner.Velocity += playerLookDir * BoostStrength;
 
 				Vector3 playerLatchDir = (Owner.Position - grappleHookEntity.Position).Normal;
-				Owner.Velocity -= playerLatchDir * pullStrength;
+				Owner.Velocity -= playerLatchDir * PullStrength;
 
 				float projLength = playerVel.Dot( playerLatchDir );
 				if ( projLength > 0 )
 				{
 					Vector3 projVector = projLength * playerLatchDir;
-					Owner.Velocity -= antiVelocityScale * projVector;
+					Owner.Velocity -= AntiVelocityScale * projVector;
 				}
 			}
 		}
@@ -52,7 +55,7 @@ namespace Instagib
 		{
 			if ( Host.IsServer )
 			{
-				var tr = Trace.Ray( Owner.EyePos, Owner.EyePos + Owner.EyeRot.Forward * maxDistance )
+				var tr = Trace.Ray( Owner.EyePos, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
 					.Ignore( this )
 					.WorldOnly()
 					.Run();
@@ -79,7 +82,7 @@ namespace Instagib
 						{
 							Position = tr.StartPos,
 							Target = tr.EndPos,
-							HookSpeed = hookSpeed,
+							HookSpeed = HookSpeed,
 							WorldAng = Owner.EyeRot.Angles(),
 							Parent = tr.Entity,
 							Owner = Owner
@@ -90,7 +93,7 @@ namespace Instagib
 						rope.SetEntity( 0, grappleHookEntity, Vector3.Backward * 32 );
 						rope.SetEntity( 1, Owner, Vector3.Up * 32 );
 
-						grappleParticle = rope;
+						grappleParticles = rope;
 					}
 				}
 				else
@@ -104,6 +107,7 @@ namespace Instagib
 		protected virtual void RemoveGrapple()
 		{
 			isGrappling = false;
+			TimeSinceLastGrapple = 0;
 
 			if ( IsServer )
 			{
@@ -113,6 +117,9 @@ namespace Instagib
 
 		protected virtual void DeleteHook()
 		{
+			if ( !IsServer )
+				return;
+
 			if ( grappleHookEntity != null && grappleHookEntity.IsValid() )
 			{
 				grappleHookEntity.Delete();
@@ -120,7 +127,7 @@ namespace Instagib
 
 			grappleHookEntity = null;
 
-			grappleParticle?.Destroy( true );
+			grappleParticles?.Destroy( true );
 		}
 
 		protected override void OnDestroy()
