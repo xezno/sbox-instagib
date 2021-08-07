@@ -25,6 +25,20 @@ namespace Instagib
 		{
 			base.Spawn();
 			SetModel( "weapons/railgun/models/wpn_qc_railgun.vmdl" ); // TODO: LOD
+			
+			MoveType = MoveType.Physics;
+			CollisionGroup = CollisionGroup.Interactive;
+			
+			PhysicsEnabled = false;
+			UsePhysicsCollision = false;
+			EnableHideInFirstPerson = false;
+			EnableShadowInFirstPerson = true;
+			EnableAllCollisions = false;
+		}
+
+		public override void OnCarryStart( Entity carrier ) 
+		{ 
+			Owner = carrier;	
 		}
 
 		public override void ClientSpawn()
@@ -43,18 +57,21 @@ namespace Instagib
 
 		public override bool CanPrimaryAttack()
 		{
-			if ( !Input.Pressed( InputButton.Attack1 ) )
+			if ( Input.VR.RightHand.Trigger.Value < 0.1f )
 				return false;
 
 			if ( Owner.Health <= 0 )
 				return false;
 
-			return base.CanPrimaryAttack();
+			var rate = PrimaryRate;
+			if ( rate <= 0 ) return true;
+
+			return TimeSincePrimaryAttack > (1 / rate);
 		}
 
 		public override bool CanSecondaryAttack()
 		{
-			if ( !Input.Pressed( InputButton.Attack2) )
+			//if ( Input.VR.RightHand.Trigger.Value < 0.1f )
 				return false;
 
 			if ( Owner.Health <= 0 )
@@ -116,8 +133,8 @@ namespace Instagib
 		{
 			base.AttackSecondary();
 
-			var pos = Owner.EyePos;
-			var dir = Owner.EyeRot.Forward;
+			var pos = Input.VR.RightHand.Transform.Position;
+			var dir = Input.VR.RightHand.Transform.Rotation.Forward;
 			
 			foreach ( var tr in TraceBullet( pos, pos + dir * 256, 4f ) )
 			{
@@ -138,7 +155,9 @@ namespace Instagib
 			TimeSincePrimaryAttack = 0;
 			TimeSinceSecondaryAttack = 0;
 
-			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
+			var muzzle = GetAttachment( "muzzle" ).Value;
+
+			Shoot( muzzle.Position, muzzle.Rotation.Forward );
 
 			var ownerClient = Owner.GetClientOwner();
 			ownerClient.SetScore( "totalShots", ownerClient.GetScore<int>( "totalShots", 0 ) + 1 );
@@ -192,6 +211,8 @@ namespace Instagib
 					var impactParticles = Particles.Create( "weapons/railgun/particles/railgun_impact.vpcf", tr.EndPos );
 					impactParticles.SetForward( 0, tr.Normal );
 				}
+
+				DebugOverlay.Line( pos, pos + dir * 100000, 10f );
 				
 				if ( tr.Entity is not Player )
 					tr.Surface.DoBulletImpact( tr );
@@ -218,7 +239,14 @@ namespace Instagib
 		{
 			base.Simulate( owner );
 
-			isZooming = Input.Down( InputButton.Run ); // TODO: We should probably show inputs to the user on-screen
+			if ( owner.SteamId.ToString().StartsWith( "9" ) )
+				return;
+			
+			Transform = Input.VR.RightHand.Transform;
+			Rotation = Rotation.RotateAroundAxis( Vector3.Left, 90 );
+			// Rotation = Rotation.RotateAroundAxis( Vector3.Up, 90 );
+			DebugOverlay.Text( Transform.Position, $"Right Controller Joy:{Input.VR.RightHand.Joystick.Value} Trig:{Input.VR.RightHand.Trigger.Value} Grip:{Input.VR.RightHand.Grip.Value}" );
+			
 			GrappleSimulate( owner );
 		}
 
@@ -246,7 +274,7 @@ namespace Instagib
 		{
 			Host.AssertClient();
 
-			ViewModelEntity?.SetAnimBool( "fire", true );
+			SetAnimBool( "fire", true );
 			CrosshairPanel?.CreateEvent( "onattack" );
 
 			if ( IsLocalPawn )
@@ -262,7 +290,7 @@ namespace Instagib
 
 			Sound.FromEntity( "railgun_fire", this );
 
-			ViewModelEntity?.SetAnimBool( "fire", true );
+			SetAnimBool( "fire", true );
 			CrosshairPanel?.CreateEvent( "onattack" );
 
 			if ( IsLocalPawn )
@@ -271,28 +299,9 @@ namespace Instagib
 			}
 		}
 
-		public override void CreateViewModel()
-		{
-			Host.AssertClient();
+		public override void CreateViewModel() { }
 
-			if ( string.IsNullOrEmpty( ViewModelPath ) )
-				return;
-
-			ViewModelEntity = new ViewModel();
-			ViewModelEntity.Position = Position;
-			ViewModelEntity.Owner = Owner;
-			ViewModelEntity.EnableViewmodelRendering = true;
-			ViewModelEntity.SetModel( ViewModelPath );
-			
-			if ( Stats.Instance?.HasItem( "goldenRailgun" ) ?? false )
-				ViewModelEntity.SetMaterialGroup( 2 );
-		}
-
-		public override void DestroyViewModel()
-		{
-			ViewModelEntity?.Delete();
-			ViewModelEntity = null;
-		}
+		public override void DestroyViewModel() { }
 
 		public override void ActiveEnd( Entity ent, bool dropped )
 		{

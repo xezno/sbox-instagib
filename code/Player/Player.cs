@@ -11,6 +11,10 @@ namespace Instagib
 {
 	public partial class Player : Sandbox.Player
 	{
+		private VRControllerLeft left;
+		private VRControllerRight right;
+		private VRHead head;
+		
 		private DamageInfo lastDamageInfo;
 		
 		//
@@ -75,6 +79,8 @@ namespace Instagib
 			base.Respawn();
 		}
 
+		private TimeSince timeSinceLastRotate = 0;
+
 		public override void Simulate( Client cl )
 		{
 			base.Simulate( cl );
@@ -90,6 +96,12 @@ namespace Instagib
 			GlowState = GlowStates.GlowStateOn;
 			GlowDistanceStart = -32;
 			GlowDistanceEnd = 4096;
+
+			if ( !IsClient && timeSinceLastRotate > 0.25f )
+			{
+				Rotation *= Rotation.FromYaw( -Input.VR.RightHand.Joystick.Value.x * 45 );
+				timeSinceLastRotate = 0;
+			}
 		}
 
 		[Event.Tick.Client]
@@ -107,6 +119,23 @@ namespace Instagib
 		}
 		
 		private void PlayDPR() => Sound.FromScreen( "dpr" );
+
+		public override void ClientSpawn()
+		{
+			right = new VRControllerRight();
+			left = new VRControllerLeft();
+			head = new VRHead();
+		}
+
+
+		public override void FrameSimulate( Client cl )
+		{
+			base.FrameSimulate( cl );
+			head.FrameSimulate( cl );
+			left.FrameSimulate( cl );
+			right.FrameSimulate( cl );
+			ActiveChild.FrameSimulate( cl );
+		}
 
 		public override void OnKilled()
 		{

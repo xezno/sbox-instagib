@@ -80,12 +80,11 @@ namespace Instagib
 			SetBBox( mins, maxs );
 		}
 
-
 		public override void FrameSimulate()
 		{
 			base.FrameSimulate();
 
-			EyeRot = Input.Rotation;
+			EyeRot = Input.VR.Head.Rotation;
 		}
 
 		public override void Simulate()
@@ -94,13 +93,13 @@ namespace Instagib
 			UpdateBBox();
 
 			EyePosLocal += TraceOffset;
-			EyeRot = Input.Rotation;
+			EyeRot = Input.VR.Head.Rotation;
 
 			if ( Unstuck.TestAndFix() )
 			{
 				return;
 			}
-
+			
 			CheckLadder();
 
 			//
@@ -114,7 +113,7 @@ namespace Instagib
 				BaseVelocity = BaseVelocity.WithZ( 0 );
 			}
 
-			if ( AutoJump ? Input.Down( InputButton.Jump ) : Input.Pressed( InputButton.Jump ) )
+			if ( AutoJump ? Input.VR.RightHand.ButtonA.IsPressed : Input.VR.RightHand.ButtonA.WasPressed )
 			{
 				CheckJumpButton();
 			}
@@ -134,9 +133,9 @@ namespace Instagib
 
 			// Work out wish velocity.. just take input, rotate it to view, clamp to -1, 1
 
-			WishVelocity = new Vector3( Input.Forward, Input.Left, 0 );
+			WishVelocity = new Vector3( Input.VR.LeftHand.Joystick.Value.x, Input.VR.LeftHand.Joystick.Value.y, 0 );
 			var inSpeed = WishVelocity.Length.Clamp( 0, 1 );
-			WishVelocity *= Input.Rotation;
+			WishVelocity *= EyeRot.Forward.WithZ( 0 ).Normal;
 
 			if ( !IsTouchingLadder )
 			{

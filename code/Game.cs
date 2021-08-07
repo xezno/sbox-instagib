@@ -34,7 +34,7 @@ namespace Instagib
 				hud = new InstagibHud();
 			}
 		}
-
+		
 		public override void ClientJoined( Client client )
 		{
 			base.ClientJoined( client );

@@ -24,9 +24,9 @@ namespace Instagib
 
 		public void GrappleSimulate( Client owner )
 		{
-			if ( Input.Pressed( InputButton.Duck ) && !isGrappling && TimeSinceLastGrapple > GrappleCooldown )
+			if ( Input.VR.LeftHand.Grip.Value > 0.1f && !isGrappling && TimeSinceLastGrapple > GrappleCooldown )
 				DeployGrapple();
-			else if ( !Input.Down( InputButton.Duck ) && isGrappling )
+			else if ( Input.VR.LeftHand.Grip.Value < 0.1f && isGrappling )
 				RemoveGrapple();
 
 			if ( isGrappling )
@@ -87,7 +87,12 @@ namespace Instagib
 
 		private TraceResult GrappleTrace( out Vector3 calcEndPos, out bool isExtendedRay )
 		{
-			var tr = Trace.Ray( Owner.EyePos + Owner.EyeRot.Forward * GrappleTraceRadius, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
+			var startPos = Input.VR.LeftHand.Transform.Position +
+			               Input.VR.LeftHand.Transform.Rotation.Forward;
+			var endPos = Input.VR.LeftHand.Transform.Position + Input.VR.LeftHand.Transform.Rotation.Forward * MaxDistance;
+
+			DebugOverlay.Line( startPos, endPos );
+			var tr = Trace.Ray( startPos, endPos )
 				.Ignore( this )
 				.Ignore( Owner )
 				.WorldAndEntities()
@@ -110,7 +115,7 @@ namespace Instagib
 			// if ( trExtended.Hit && trExtended.Entity is not Player )
 			// 	return trExtended;
 
-			calcEndPos = Owner.EyePos + Owner.EyeRot.Forward * MaxDistance;
+			calcEndPos = Input.VR.LeftHand.Transform.Position + Input.VR.LeftHand.Transform.Rotation.Forward * MaxDistance;
 			return new TraceResult() { Hit = false, EndPos = calcEndPos };
 		}
 
@@ -143,7 +148,7 @@ namespace Instagib
 							Position = tr.StartPos,
 							Target = calcEndPos,
 							HookSpeed = HookSpeed,
-							WorldAng = Owner.EyeRot.Angles(),
+							WorldAng = Input.VR.LeftHand.Transform.Rotation.Angles(),
 							Parent = tr.Entity,
 							Owner = Owner
 						};
@@ -151,7 +156,7 @@ namespace Instagib
 
 						var rope = Particles.Create( "particles/grapple_beam.vpcf" );
 						rope.SetEntity( 0, grappleHookEntity, Vector3.Backward * 32 );
-						rope.SetEntity( 1, Owner, Vector3.Up * 32 );
+						rope.SetPosition( 1, Input.VR.LeftHand.Transform.Position );
 
 						grappleParticles = rope;
 					}
