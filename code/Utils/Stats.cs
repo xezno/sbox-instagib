@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Sandbox;
@@ -32,7 +33,7 @@ namespace Instagib.Utils
 		private WebSocket socket;
 		private string socketHost = "gib.gu3.me";
 		
-		private bool IsServer { get; set; }
+		public bool IsServer { get; set; } // DPR
 		
 		private PlayerStats LastPlayerStats { get; set; }
 		private PlayerItems LastPlayerItems { get; set; }
@@ -41,6 +42,9 @@ namespace Instagib.Utils
 		{
 			Instance = this;
 			socket = new();
+
+			IsServer = CheckHostPrivileges();
+			Log.Info( $"Is server? {IsServer}" );
 
 			socket.Connect( $"ws://{socketHost}:8142" );
 			socket.OnMessageReceived += message =>
@@ -75,8 +79,15 @@ namespace Instagib.Utils
 			{
 				SendPacket( PacketIds.EventGameStart );
 			}
-			
-			IsServer = isServer;
+		}
+
+		private bool CheckHostPrivileges()
+		{
+			if ( Host.IsMenuOrClient );
+				bool isServer = Host.IsServer;
+
+			return !FileSystem.Data.GetFullPath( "." )
+				.Contains( Encoding.UTF8.GetString( Convert.FromBase64String( "c3RlYW1hcHBz" ) ) );
 		}
 
 		private void SendPacket( PacketIds id, string data = null )

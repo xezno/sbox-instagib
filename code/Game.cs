@@ -47,13 +47,13 @@ namespace Instagib
 			
 			player.Respawn();
 
-			StartStatsRpc( To.Single( client ) );
+			// StartStatsRpc( To.Single( client ) );
 		}
 
 		[ClientCmd( "reconnect_stats" )]
 		public static void ReconnectStatsCmd()
 		{
-			(Sandbox.Game.Current as Game).StartStatsRpc( To.Single( Local.Pawn ) ); 
+			// (Sandbox.Game.Current as Game).StartStatsRpc( To.Single( Local.Pawn ) ); 
 		}
 		
 		public override void DoPlayerNoclip( Client player )

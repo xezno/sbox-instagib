@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Instagib.UI;
+using Sandbox;
 
 namespace Instagib
 {
@@ -12,19 +13,20 @@ namespace Instagib
 
 		private Particles grappleParticles;
 
-		private float GrappleCooldown => 3f;
+		private float GrappleCooldown => 0.5f;
 		private float HookSpeed => 5f;
-		private float PullStrength => 20f;
+		private float PullStrength => 48f;
 		private float BoostStrength => 4f;
 		private float AntiVelocityScale => 1f;
-		private float MaxDistance => 2500f;
-
+		private float MaxDistance => 1250;
+		private float GrappleTraceRadius => 48f;
+		private float HeightJumpBoost => 128f;
 
 		public void GrappleSimulate( Client owner )
 		{
-			if ( Input.Pressed( InputButton.Use ) && !isGrappling && TimeSinceLastGrapple > GrappleCooldown )
+			if ( Input.Pressed( InputButton.Duck ) && !isGrappling && TimeSinceLastGrapple > GrappleCooldown )
 				DeployGrapple();
-			else if ( !Input.Down( InputButton.Use ) && isGrappling )
+			else if ( !Input.Down( InputButton.Duck ) && isGrappling )
 				RemoveGrapple();
 
 			if ( isGrappling )
@@ -51,14 +53,72 @@ namespace Instagib
 			}
 		}
 
+		[Event.Frame]
+		public void OnFrame()
+		{
+			if ( Local.Client != Owner.GetClientOwner() )
+				return;
+			
+			var tr = GrappleTrace( out var calcEndPos, out bool isExtendedRay );
+			var state = GrappleIndicator.State.Default;
+			if ( TimeSinceLastGrapple < GrappleCooldown || !tr.Hit )
+			{
+				state = GrappleIndicator.State.Cooldown;
+			}
+			if ( isGrappling )
+			{
+				state = GrappleIndicator.State.Active;
+			}
+			
+			GrappleIndicator.SetCanGrapple( state );
+
+			if ( isGrappling )
+			{
+				GrappleIndicator.MoveTo( grappleHookEntity.Position, false );
+			}
+			else
+			{
+				if ( tr.Hit && isExtendedRay ) 
+					GrappleIndicator.MoveTo( calcEndPos );
+				else
+					GrappleIndicator.MoveToCenter();
+			}
+		}
+
+		private TraceResult GrappleTrace( out Vector3 calcEndPos, out bool isExtendedRay )
+		{
+			var tr = Trace.Ray( Owner.EyePos + Owner.EyeRot.Forward * GrappleTraceRadius, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
+				.Ignore( this )
+				.Ignore( Owner )
+				.WorldAndEntities()
+				.HitLayer( CollisionLayer.Player, false ) // Why the fuck doesn't this work?
+				.Run();
+			isExtendedRay = false;
+			calcEndPos = tr.EndPos;
+			if ( tr.Hit && tr.Entity is not Player )
+				return tr;
+			
+			// var trExtended = Trace.Ray( Owner.EyePos + Owner.EyeRot.Forward * GrappleTraceRadius, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
+			// 	.Ignore( this )
+			// 	.Ignore( Owner )
+			// 	.WorldAndEntities()
+			// 	.Radius( GrappleTraceRadius )
+			// 	.HitLayer( CollisionLayer.Player, false ) // Why the fuck doesn't this work???? x2
+			// 	.Run();
+			// isExtendedRay = true;
+			// calcEndPos = trExtended.EndPos - trExtended.Normal * GrappleTraceRadius;
+			// if ( trExtended.Hit && trExtended.Entity is not Player )
+			// 	return trExtended;
+
+			calcEndPos = Owner.EyePos + Owner.EyeRot.Forward * MaxDistance;
+			return new TraceResult() { Hit = false, EndPos = calcEndPos };
+		}
+
 		protected virtual void DeployGrapple()
 		{
 			if ( Host.IsServer )
 			{
-				var tr = Trace.Ray( Owner.EyePos, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
-					.Ignore( this )
-					.WorldOnly()
-					.Run();
+				var tr = GrappleTrace( out var calcEndPos, out _ );
 				if ( tr.Hit && tr.Entity != null )
 				{
 					isGrappling = true;
@@ -71,7 +131,7 @@ namespace Instagib
 						{
 							if ( controller.GroundEntity != null )
 							{
-								player.Velocity += Vector3.Up * 128;
+								player.Velocity += Vector3.Up * HeightJumpBoost;
 							}
 
 							player.GroundEntity = null;
@@ -81,7 +141,7 @@ namespace Instagib
 						grappleHookEntity = new()
 						{
 							Position = tr.StartPos,
-							Target = tr.EndPos,
+							Target = calcEndPos,
 							HookSpeed = HookSpeed,
 							WorldAng = Owner.EyeRot.Angles(),
 							Parent = tr.Entity,
@@ -112,6 +172,11 @@ namespace Instagib
 			if ( IsServer )
 			{
 				DeleteHook();
+			}
+
+			if ( IsClient )
+			{
+				GrappleIndicator.MoveToCenter();
 			}
 		}
 

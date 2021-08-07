@@ -17,7 +17,7 @@ namespace Instagib.UI
 			
 			SetText( PlayerSettings.CrosshairGlyph );
 			
-			StyleSheet.Parse( $"crosshair {{ font-size: {PlayerSettings.CrosshairSize}px; }}" );
+			StyleSheet.Parse( $"crosshair {{ width: {PlayerSettings.CrosshairSize}px; height: {PlayerSettings.CrosshairSize}px; font-size: {PlayerSettings.CrosshairSize}px; }}" );
 		}
 	}
 }

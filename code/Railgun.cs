@@ -13,7 +13,7 @@ namespace Instagib
 		public override float PrimaryRate => 1 / 1.5f;
 		public override float SecondaryRate => 2f;
 
-		private const float maxHitTolerance = (90f / 1000f) * 500; // (tickrate / 1000ms) * desired_ms, number of ticks tolerance given to a hit. 
+		private static float MaxHitTolerance => (Global.TickRate / 1000f) * 500; // (tickrate / 1000ms) * desired_ms, number of ticks tolerance given to a hit. 
 		private float zoomFov = 60f;
 
 		private Particles beamParticles;
@@ -76,8 +76,10 @@ namespace Instagib
 	        
 	        if ( debug )
 				DebugOverlay.Sphere( pos, radius, Color.Yellow, true, 5f );
-		    
-		    foreach ( var overlap in overlaps )
+	        
+	        // Grapple reset
+	        TimeSinceLastGrapple = 100;
+	        foreach ( var overlap in overlaps )
 		    {
 			    if ( overlap is not ModelEntity ent || !ent.IsValid() ) continue;
 			    if ( ent.LifeState != LifeState.Alive && !ent.PhysicsBody.IsValid() && ent.IsWorld ) continue;
@@ -143,7 +145,7 @@ namespace Instagib
 		}
 
 		[ServerCmd]
-		private static void CmdShoot( int targetIdent, int ownerIdent, Vector3 startPos, Vector3 endPos, Vector3 forward, int tick )
+		private static void CmdShoot( int targetIdent, int ownerIdent, Vector3 startPos, Vector3 endPos, Vector3 forward, int tick, int hitbox )
 		{
 			Host.AssertServer();
 
@@ -164,7 +166,7 @@ namespace Instagib
 			var ownerClient = owner.GetClientOwner();
 			ownerClient.SetScore( "totalHits", ownerClient.GetScore<int>( "totalHits", 0 ) + 1 );
 
-			if ( tick - Time.Tick > maxHitTolerance )
+			if ( tick - Time.Tick > MaxHitTolerance )
 			{
 				// Too much time passed - player's lagging too much for us to do any proper checks
 				Log.Trace( $"Too much time passed: {tick - Time.Tick}" );
@@ -175,7 +177,7 @@ namespace Instagib
 			// Damage
 			//
 			var damage = DamageInfo.FromBullet( endPos, forward.Normal * 20, 1000 )
-				.WithAttacker( owner );
+				.WithAttacker( owner ).WithHitbox( hitbox );
 
 			target.TakeDamage( damage );
 		}
@@ -206,7 +208,7 @@ namespace Instagib
 
 				// This is the only way to do client->server RPCs :(
 				if ( IsClient )
-					CmdShoot( tr.Entity.NetworkIdent, Owner.NetworkIdent, pos, tr.EndPos, dir, Time.Tick );
+					CmdShoot( tr.Entity.NetworkIdent, Owner.NetworkIdent, pos, tr.EndPos, dir, Time.Tick, tr.HitboxIndex );
 			}
 
 			ShootEffects();

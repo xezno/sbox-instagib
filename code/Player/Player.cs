@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 using System;
 using System.Linq;
+using System.Text;
 using Instagib.UI;
 using Sandbox.ScreenShake;
 using Instagib.Utils;
@@ -18,6 +19,22 @@ namespace Instagib
 		public int CurrentStreak { get; set; }
 		public float TotalDamageDealt { get; set; }
 		public float CurrentDamageDealt { get; set; }
+		
+		public enum HitboxGroup
+		{
+			None = -1,
+			Generic = 0,
+			Head = 1,
+			Chest = 2,
+			Stomach = 3,
+			LeftArm = 4,
+			RightArm = 5,
+			LeftLeg = 6,
+			RightLeg = 7,
+			Gear = 10,
+			Special = 11,
+		}
+		[Net] public HitboxGroup LastHitboxDamaged { get; set; }
 		
 		//
 		// Dynamic hud / camera
@@ -62,7 +79,7 @@ namespace Instagib
 		{
 			base.Simulate( cl );
 			SimulateActiveChild( cl, ActiveChild );
-
+			
 			if ( cl == Local.Client )
 			{
 				GlowActive = false;
@@ -88,6 +105,8 @@ namespace Instagib
 			hsvColor.Value = 1.0f;
 			GlowColor = hsvColor.ToColor();
 		}
+		
+		private void PlayDPR() => Sound.FromScreen( "dpr" );
 
 		public override void OnKilled()
 		{
@@ -150,8 +169,12 @@ namespace Instagib
 
 		public override void TakeDamage( DamageInfo info )
 		{
-			base.TakeDamage( info );
+			var hitboxGroup = (HitboxGroup)GetHitboxGroup( info.HitboxIndex );
+			
 			lastDamageInfo = info;
+			LastHitboxDamaged = hitboxGroup;
+			
+			base.TakeDamage( info );
 
 			if ( info.Attacker is Player attacker )
 			{

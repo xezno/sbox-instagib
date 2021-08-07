@@ -6,8 +6,6 @@ namespace Instagib
 	[Library]
 	public partial class PlayerController : BasePlayerController
 	{
-		public Duck Duck;
-
 		private bool IsTouchingLadder;
 		private Vector3 LadderNormal;
 		
@@ -22,14 +20,13 @@ namespace Instagib
 
 		public PlayerController()
 		{
-			Duck = new Duck( this );
 			Unstuck = new Unstuck( this );
 		}
 
 		public float Speed => 310.0f;
-		public float AirSpeed => 310.0f;
+		public float AirSpeed => 240.0f;
 		public float Acceleration => 10.0f;
-		public float AirAcceleration => 16.0f;
+		public float AirAcceleration => 14.0f;
 		public float GroundFriction => 4.0f;
 		public float StopSpeed => 100.0f;
 		public float DistEpsilon => 0.03125f;
@@ -79,8 +76,6 @@ namespace Instagib
 
 			var mins = new Vector3( -girth, -girth, 0 ) * Pawn.Scale;
 			var maxs = new Vector3( +girth, +girth, BodyHeight ) * Pawn.Scale;
-
-			Duck.UpdateBBox( ref mins, ref maxs );
 
 			SetBBox( mins, maxs );
 		}
@@ -156,8 +151,6 @@ namespace Instagib
 				WishVelocity = Vector3.Zero;	
 			}
 
-			Duck.PreTick();
-
 			var stayOnGround = false;
 
 			if ( IsTouchingLadder )
@@ -211,7 +204,7 @@ namespace Instagib
 
 		public virtual void LimitSpeed()
 		{
-			float lerpRate = 10f;
+			float lerpRate = 5f;
 			if ( GroundEntity != null )
 			{
 				if ( Velocity.WithZ( 0 ).Length > SpeedLimit )
@@ -230,12 +223,6 @@ namespace Instagib
 
 		public virtual float GetWishSpeed()
 		{
-			var ws = Duck.GetWishSpeed();
-			if ( ws >= 0 )
-			{
-				return ws;
-			}
-
 			if ( GroundEntity == null )
 				return AirSpeed;
 
@@ -457,11 +444,6 @@ namespace Instagib
 
 			var flMul = 268.3281572999747f * ( Gravity / 600f ) * JumpMultiplier;
 			var startz = Velocity.z;
-
-			if ( Duck.IsActive )
-			{
-				flMul *= 0.8f;
-			}
 
 			Velocity = Velocity.WithZ( startz + flMul );
 			Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;

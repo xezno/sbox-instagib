@@ -55,6 +55,14 @@ namespace Instagib
 				"Get 30 frags without dying",
 				( attacker, _ ) => attacker.CurrentStreak == 30,
 				10 ),
+			new Medal( "Headshot",
+				"Shoot someone in the head",
+				( attacker, victim) => victim.LastHitboxDamaged == Player.HitboxGroup.Head,
+				50 ),
+			new Medal( "Nutshot",
+				"Shoot someone in the goolies",
+				( attacker, victim) => victim.LastHitboxDamaged == Player.HitboxGroup.Stomach,
+				10 ),
 			
 			// TODO: All of below
 			new Medal( "Excellent", "Frag 2 enemies in 3 seconds or less", (_, _) => false, 10 ),

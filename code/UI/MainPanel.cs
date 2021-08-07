@@ -13,7 +13,7 @@ namespace Instagib.UI
 		                                * 2.23694f; // mph
 		
 		public string PlayerHealthText => $"{Local.Client.Pawn.Health.CeilToInt()}";
-		public string PlayerSpeedText => $"{PlayerSpeed:N0}u/s (top: {topSpeed}u/s)";
+		public string PlayerSpeedText => $"{PlayerSpeed:N0}u/s";
 
 		public string GameStateText => (Game.Current as Game).CurrentStateName;
 		public string GameStateTime => (Game.Current as Game).CurrentStateTime;

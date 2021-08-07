@@ -1,3 +1,5 @@
+@import "Colors";
+
 text,label,input,textentry,icon,iconpanel
 {
 	font-family: Poppins;
@@ -86,8 +88,7 @@ text.menu-prompt {
 	flex-direction: row;
 
 	.frag-message {
-		backdrop-filter: blur( 20px );
-		background-color: rgba( black, 0.4 );
+		backdrop-filter: blur( 20px ) brightness( 0.5 );
 		flex-direction: row;
 		text-align: center;
 		border-radius: 10px;
@@ -226,28 +227,18 @@ iconpanel, icon {
 
 .health,.speed,.ammo {
 	border-radius: 10px;
-	backdrop-filter: blur( 20px );
-	background-color: rgba( black, 0.4 );
+	backdrop-filter: blur( 20px ) brightness( 0.5 );
 }
 
 .crosshair {
 	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	top: 50%;
+	left: 50%;
 
 	font-family: Crosshairs;
 	color: white;
 
-	text-align: center;
-	align-items: center;
-	justify-content: center;
-
-	padding: 5px;
-
-	margin-left: -6px;
-	margin-top: 1px;
+	transform: translateX( -50% ) translateY( -50% );
 }
 
 deathpanel {
@@ -291,8 +282,7 @@ deathpanel {
 	
 	div {
 		border-radius: 10px;
-		backdrop-filter: blur( 20px );
-		background-color: rgba( black, 0.4 );
+		backdrop-filter: blur( 20px ) brightness( 0.5 );
 		padding: 15px 25px;
 	}
 	
@@ -306,11 +296,28 @@ deathpanel {
 }
 
 .controls {
-	backdrop-filter: blur( 20px );
-	background-color: rgba( black, 0.4 );
+	backdrop-filter: blur( 20px ) brightness( 0.5 );
 	position: absolute;
 	bottom: 10%;
 	right: 100px;
 	border-radius: 10px;
 	padding: 10px 25px;
+}
+
+grappleindicator {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	border-radius: 1000px;
+	border: 2px solid white;
+	transform: translateX( -49% ) translateY( -50% );
+	pixel-snap: 0;
+	
+	&.active {
+		border-color: $accent;		
+	}
+	
+	&.cooldown {
+		border-color: rgba( white, 0.2 );
+	}
 }

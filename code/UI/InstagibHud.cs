@@ -39,6 +39,7 @@ namespace Instagib.UI
 				StaticHudPanel.StyleSheet.Load( "/Code/UI/MainPanel.scss" );
 				StaticHudPanel.AddChild<Scoreboard<ScoreboardEntry>>();
 				StaticHudPanel.AddChild<Crosshair>();
+				StaticHudPanel.AddChild<GrappleIndicator>();
 				StaticHudPanel.AddChild<ClassicChatBox>();
 				StaticHudPanel.AddChild<Hitmarker>();
 				StaticHudPanel.AddChild<FragsPanel>();

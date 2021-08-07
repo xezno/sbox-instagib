@@ -29,11 +29,6 @@ namespace Instagib.UI.Menus
 			InstagibHud.CurrentHud.SetCurrentMenu( new CustomizeMenu() );
 		}
 
-		public void ShowProfile()
-		{
-			InstagibHud.CurrentHud.SetCurrentMenu( new ProfileMenu() );
-		}
-
 		public void ShowShop()
 		{
 			InstagibHud.CurrentHud.SetCurrentMenu( new ShopMenu() );
