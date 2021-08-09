@@ -24,9 +24,9 @@ namespace Instagib
 
 		public void GrappleSimulate( Client owner )
 		{
-			if ( Input.VR.LeftHand.Grip.Value > 0.1f && !isGrappling && TimeSinceLastGrapple > GrappleCooldown )
+			if ( Input.VR.LeftHand.Trigger.Value > 0.1f && !isGrappling && TimeSinceLastGrapple > GrappleCooldown )
 				DeployGrapple();
-			else if ( Input.VR.LeftHand.Grip.Value < 0.1f && isGrappling )
+			else if ( Input.VR.LeftHand.Trigger.Value < 0.1f && isGrappling )
 				RemoveGrapple();
 
 			if ( isGrappling )

@@ -96,12 +96,6 @@ namespace Instagib
 			GlowState = GlowStates.GlowStateOn;
 			GlowDistanceStart = -32;
 			GlowDistanceEnd = 4096;
-
-			if ( !IsClient && timeSinceLastRotate > 0.25f )
-			{
-				Rotation *= Rotation.FromYaw( -Input.VR.RightHand.Joystick.Value.x * 45 );
-				timeSinceLastRotate = 0;
-			}
 		}
 
 		[Event.Tick.Client]
@@ -287,5 +281,15 @@ namespace Instagib
 			lastCameraPos = setup.Position;
 		}
 
+		public override void BuildInput( InputBuilder input )
+		{
+			base.BuildInput( input );
+
+			if ( !IsClient && timeSinceLastRotate > 0.25f )
+			{
+				Input.VR.Head.Rotation.RotateAroundAxis( Vector3.Up, -Input.VR.RightHand.Joystick.Value.x * 45 );
+				timeSinceLastRotate = 0;
+			}
+		}
 	}
 }
