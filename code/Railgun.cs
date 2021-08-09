@@ -83,10 +83,12 @@ namespace Instagib
 		    {
 			    if ( overlap is not ModelEntity ent || !ent.IsValid() ) continue;
 			    if ( ent.LifeState != LifeState.Alive && !ent.PhysicsBody.IsValid() && ent.IsWorld ) continue;
-			    if ( ent is not Player player ) continue;
+			    if ( ent.PhysicsBody == null ) continue;
+			    if ( ent.IsWorld ) continue;
 
-			    var targetPos = player.PhysicsBody.MassCenter;
-			    var dist = Vector3.DistanceBetween( sourcePos, targetPos );
+			    var targetPos = ent.PhysicsBody.MassCenter;
+			    var dir = (targetPos - sourcePos).Normal;
+			    var dist = dir.Length;
 
 			    if ( dist > radius ) continue;
 			    
@@ -94,18 +96,22 @@ namespace Instagib
 					DebugOverlay.Line( sourcePos, targetPos, 5 );
 			    
 			    var distanceFactor = 1.0f - Math.Clamp( dist / radius, 0.25f, 0.75f );
-			    var force = 0.75f * distanceFactor * player.PhysicsBody.Mass;
+			    var force = 0.75f * distanceFactor * ent.PhysicsBody.Mass;
 			    var forceDir = ( targetPos - sourcePos ).Normal;
 
-			    if ( player.GroundEntity != null )
+			    if ( ent.GroundEntity != null )
 			    {
-				    ( player.Controller as PlayerController )?.ClearGroundEntity();
-				    
-				    forceDir = Vector3.Lerp( forceDir, Vector3.Up * 3.5f, 0.5f );
+				    if ( ent is Player player )
+				    {
+						( player.Controller as PlayerController )?.ClearGroundEntity();
+						forceDir = Vector3.Lerp( forceDir, Vector3.Up * 3.5f, 0.5f );
+				    }
 			    }
 
-			    forceDir = forceDir.Normal;
+			    if ( ent is not Player )
+				    force *= 10;
 
+			    forceDir = forceDir.Normal;
 			    ent.Velocity += force * Vector3.Lerp( normal, forceDir, 0.5f );
 		    }
 
@@ -157,26 +163,26 @@ namespace Instagib
 			// In order to prevent people from just typing stuff like "shoot Alex", we'll do some light checking to
 			// verify stuff
 			//	
-			if ( target is not Player )
-				return;
-			
+			if ( target is Player )
+			{
+				var ownerClient = owner.GetClientOwner();
+				ownerClient.SetScore( "totalHits", ownerClient.GetScore<int>( "totalHits", 0 ) + 1 );
+
+				if ( tick - Time.Tick > MaxHitTolerance )
+				{
+					// Too much time passed - player's lagging too much for us to do any proper checks
+					Log.Trace( $"Too much time passed: {tick - Time.Tick}" );
+					return;
+				}				
+			}
+
 			if ( owner is not Player )
 				return;
-
-			var ownerClient = owner.GetClientOwner();
-			ownerClient.SetScore( "totalHits", ownerClient.GetScore<int>( "totalHits", 0 ) + 1 );
-
-			if ( tick - Time.Tick > MaxHitTolerance )
-			{
-				// Too much time passed - player's lagging too much for us to do any proper checks
-				Log.Trace( $"Too much time passed: {tick - Time.Tick}" );
-				return;
-			}
 
 			//
 			// Damage
 			//
-			var damage = DamageInfo.FromBullet( endPos, forward.Normal * 20, 1000 )
+			var damage = DamageInfo.FromBullet( endPos, forward.Normal * 100 * 1000, 1000 )
 				.WithAttacker( owner ).WithHitbox( hitbox );
 
 			target.TakeDamage( damage );

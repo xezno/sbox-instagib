@@ -65,7 +65,7 @@ namespace Instagib
 
 			Tags.Add( "player" );
 
-			Dress();
+			Dress( this );
 
 			Inventory.Add( new Railgun(), true );
 
@@ -158,8 +158,6 @@ namespace Instagib
 		[ClientRpc]
 		public void OnDamageOther( Vector3 pos, float amount )
 		{
-			// Log.Trace( $"{Local.DisplayName} damaged another player" );
-
 			using ( Prediction.Off() )
 			{
 				PlaySound( "kill" );
@@ -170,6 +168,9 @@ namespace Instagib
 		public override void TakeDamage( DamageInfo info )
 		{
 			var hitboxGroup = (HitboxGroup)GetHitboxGroup( info.HitboxIndex );
+
+			if ( info.Flags.HasFlag( DamageFlags.PhysicsImpact ) )
+				return;
 			
 			lastDamageInfo = info;
 			LastHitboxDamaged = hitboxGroup;
