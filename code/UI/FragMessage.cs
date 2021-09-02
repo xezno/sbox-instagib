@@ -6,13 +6,6 @@ using Sandbox.UI.Construct;
 
 namespace Instagib.UI
 {
-	/*
-	<div class="frag">
-		<text>YOU FRAGGED </text>
-		<text class="highlight">Austin</text>
-	</div>
-	 */
-
 	public class FragsPanel : Panel
 	{
 		public static FragsPanel Instance { get; private set; }

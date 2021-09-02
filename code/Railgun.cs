@@ -9,30 +9,21 @@ namespace Instagib
 	[Library( "railgun" )]
 	partial class Railgun : BaseWeapon
 	{
-		public override string ViewModelPath => "weapons/railgun/models/wpn_qc_railgun.vmdl";
+		public override string ViewModelPath => "weapons/railgun/models/railgun.vmdl";
 		public override float PrimaryRate => 1 / 1.5f;
 		public override float SecondaryRate => 2f;
 
-		private static float MaxHitTolerance => (Global.TickRate / 1000f) * 500; // (tickrate / 1000ms) * desired_ms, number of ticks tolerance given to a hit. 
-		private float zoomFov = 60f;
+		private static float MaxHitTolerance => (Global.TickRate / 1000f) * 500; // (tickrate / 1000ms) * desired_ms, number of ticks tolerance given to a hit.
 
 		private Particles beamParticles;
-		private bool isZooming;
+		public bool IsZooming { get; private set; }
 
 		public override void Reload() { } // No reload
 
 		public override void Spawn()
 		{
 			base.Spawn();
-			SetModel( "weapons/railgun/models/wpn_qc_railgun.vmdl" ); // TODO: LOD
-		}
-
-		public override void ClientSpawn()
-		{
-			base.ClientSpawn();
-
-			if ( Stats.Instance?.HasItem( "goldenRailgun" ) ?? false )
-				SetMaterialGroup( 2 );
+			SetModel( "weapons/railgun/models/railgun.vmdl" ); // TODO: LOD
 		}
 
 		public override void SimulateAnimator( PawnAnimator anim )
@@ -67,6 +58,10 @@ namespace Instagib
 		{
 			bool debug = false;
 			
+			// Grapple reset
+			(ViewModelEntity as ViewModel)?.OnFire();
+			TimeSinceLastGrapple = 100;
+			
 			if ( !IsServer )
 				return;
 			
@@ -77,8 +72,6 @@ namespace Instagib
 	        if ( debug )
 				DebugOverlay.Sphere( pos, radius, Color.Yellow, true, 5f );
 	        
-	        // Grapple reset
-	        TimeSinceLastGrapple = 100;
 	        foreach ( var overlap in overlaps )
 		    {
 			    if ( overlap is not ModelEntity ent || !ent.IsValid() ) continue;
@@ -115,13 +108,16 @@ namespace Instagib
 			    ent.Velocity += force * Vector3.Lerp( normal, forceDir, 0.5f );
 		    }
 
-		    Particles.Create( "particles/explosion.vpcf", pos );
+	        using ( Prediction.Off() )
+	        {
+				Particles.Create( "particles/explosion.vpcf", pos );
+	        }
 		}
 
 		public override void AttackSecondary()
 		{
 			base.AttackSecondary();
-
+			
 			var pos = Owner.EyePos;
 			var dir = Owner.EyeRot.Forward;
 			
@@ -130,10 +126,7 @@ namespace Instagib
 				if ( !tr.Hit )
 					return;
 
-				using ( Prediction.Off() )
-				{
-					RocketJump( tr.EndPos, tr.Normal );
-				}
+				RocketJump( tr.EndPos, tr.Normal );
 			}
 
 			RocketEffects();
@@ -141,6 +134,8 @@ namespace Instagib
 
 		public override void AttackPrimary()
 		{
+			(ViewModelEntity as ViewModel)?.OnFire();
+			
 			TimeSincePrimaryAttack = 0;
 			TimeSinceSecondaryAttack = 0;
 
@@ -224,26 +219,16 @@ namespace Instagib
 		{
 			base.Simulate( owner );
 
-			isZooming = Input.Down( InputButton.Run ); // TODO: We should probably show inputs to the user on-screen
+			IsZooming = Input.Down( InputButton.Run );
 			GrappleSimulate( owner );
-		}
-
-		public override void PostCameraSetup( ref CameraSetup camSetup )
-		{
-			base.PostCameraSetup( ref camSetup );
-
-			if ( isZooming )
-			{
-				camSetup.FieldOfView = zoomFov; // TODO: Lerp
-			}
 		}
 		
 		public override void BuildInput( InputBuilder owner ) 
 		{
-			if ( isZooming )
+			if ( IsZooming )
 			{
 				// Set input sensitivity
-				owner.ViewAngles = Angles.Lerp( owner.OriginalViewAngles, owner.ViewAngles, zoomFov / 90f );
+				owner.ViewAngles = Angles.Lerp( owner.OriginalViewAngles, owner.ViewAngles, PlayerSettings.ZoomedFov / PlayerSettings.Fov );
 			}
 		}
 
@@ -289,9 +274,6 @@ namespace Instagib
 			ViewModelEntity.Owner = Owner;
 			ViewModelEntity.EnableViewmodelRendering = true;
 			ViewModelEntity.SetModel( ViewModelPath );
-			
-			if ( Stats.Instance?.HasItem( "goldenRailgun" ) ?? false )
-				ViewModelEntity.SetMaterialGroup( 2 );
 		}
 
 		public override void DestroyViewModel()

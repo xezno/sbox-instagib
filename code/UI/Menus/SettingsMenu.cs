@@ -1,4 +1,5 @@
-﻿using Instagib.UI.Menus;
+﻿using System;
+using Instagib.UI.Menus;
 using Instagib.UI.Elements;
 using Sandbox;
 using Sandbox.UI;
@@ -12,16 +13,31 @@ namespace Instagib.UI.Menus
 		public Checkbox ViewmodelToggle { get; set; }
 		public Checkbox ViewmodelFlip { get; set; }
 		public Checkbox CrosshairToggle { get; set; }
-		// public TextEntry CrosshairGlyph { get; set; }
 		public Slider CrosshairSlider { get; set; }
 		public ColorPicker EnemyOutlineColor { get; set; }
 
 		public Panel Scroll { get; set; }
 
-		// TODO: Range struct
-		private (float, float) fovRange = (70f, 130f);
-		private (float, float) viewmodelRange = (0f, 10f);
-		private (float, float) crosshairRange = (16f, 64f);
+		struct Range
+		{
+			public float Min { get; set; }
+			public float Max { get; set; }
+
+			public Range( float min, float max )
+			{
+				Min = min;
+				Max = max;
+			}
+
+			public static implicit operator Range( ValueTuple<float, float> a )
+			{
+				return new( a.Item1, a.Item2 );
+			}
+		}
+
+		private Range fovRange = (70f, 130f);
+		private Range viewmodelRange = (0f, 10f);
+		private Range crosshairRange = (16f, 64f);
 
 		public SettingsMenu()
 		{
@@ -29,16 +45,16 @@ namespace Instagib.UI.Menus
 			StyleSheet.Load( "/Code/UI/Menus/SettingsMenu.scss" ); // Loading in HTML doesn't work for whatever reason
 
 			FovSlider.SnapRate = 5;
-			FovSlider.ValueCalcFunc = value => fovRange.Item1.LerpTo( fovRange.Item2, value ).CeilToInt();
+			FovSlider.ValueCalcFunc = value => fovRange.Min.LerpTo( fovRange.Max, value ).CeilToInt();
 			FovSlider.Value = 110f;
 
 			ViewmodelSlider.SnapRate = 1;
 			ViewmodelSlider.ValueCalcFunc =
-				value => viewmodelRange.Item1.LerpTo( viewmodelRange.Item2, value ).CeilToInt();
+				value => viewmodelRange.Min.LerpTo( viewmodelRange.Max, value ).CeilToInt();
 			
 			CrosshairSlider.SnapRate = 2;
 			CrosshairSlider.ValueCalcFunc =
-				value => crosshairRange.Item1.LerpTo( crosshairRange.Item2, value ).CeilToInt();
+				value => crosshairRange.Min.LerpTo( crosshairRange.Max, value ).CeilToInt();
 			
 			// Make it so that we can preview the settings live
 			FovSlider.OnValueChange += v => PlayerSettings.Fov = v;
@@ -49,19 +65,17 @@ namespace Instagib.UI.Menus
 			ViewmodelFlip.AddEventListener( "onchange", e => PlayerSettings.ViewmodelFlip = (bool)e.Value );
 			
 			CrosshairSlider.OnValueChange += b => PlayerSettings.CrosshairSize = b;
-			// CrosshairGlyph.AddEventListener("onchange", () => PlayerSettings.CrosshairGlyph = CrosshairGlyph.Text );
 			EnemyOutlineColor.OnValueChange += c => PlayerSettings.EnemyOutlineColor = c;
 
 			// Set values to existing settings
 			PlayerSettings.Load();
 			
-			FovSlider.Value = PlayerSettings.Fov.LerpInverse( fovRange.Item1, fovRange.Item2 );
-			ViewmodelSlider.Value = PlayerSettings.ViewmodelOffset.LerpInverse( viewmodelRange.Item1, viewmodelRange.Item2 );
+			FovSlider.Value = PlayerSettings.Fov.LerpInverse( fovRange.Min, fovRange.Max );
+			ViewmodelSlider.Value = PlayerSettings.ViewmodelOffset.LerpInverse( viewmodelRange.Min, viewmodelRange.Max );
 			ViewmodelToggle.Checked = PlayerSettings.ViewmodelVisible;
 			CrosshairToggle.Checked = PlayerSettings.CrosshairVisible;
 			ViewmodelFlip.Checked = PlayerSettings.ViewmodelFlip;
-			// CrosshairGlyph.Text = PlayerSettings.CrosshairGlyph;
-			CrosshairSlider.Value = ((float)PlayerSettings.CrosshairSize).LerpInverse( crosshairRange.Item1, crosshairRange.Item2 );
+			CrosshairSlider.Value = ((float)PlayerSettings.CrosshairSize).LerpInverse( crosshairRange.Min, crosshairRange.Max );
 
 			// Add scrollbar
 			var scrollbar = AddChild<Scrollbar>();

@@ -5,8 +5,6 @@ namespace Instagib
 {
 	partial class Railgun
 	{
-		public TimeSince TimeSinceDischarge { get; set; }
-
 		[Net, Predicted] public bool isGrappling { get; set; }
 		[Net] public GrappleHookEntity grappleHookEntity { get; set; }
 		[Net, Predicted] private TimeSince TimeSinceLastGrapple { get; set; }
@@ -19,7 +17,7 @@ namespace Instagib
 		private float BoostStrength => 4f;
 		private float AntiVelocityScale => 1f;
 		private float MaxDistance => 1250;
-		private float GrappleTraceRadius => 48f;
+		private float GrappleTraceRadius => 64f;
 		private float HeightJumpBoost => 128f;
 
 		public void GrappleSimulate( Client owner )
@@ -29,7 +27,7 @@ namespace Instagib
 			else if ( !Input.Down( InputButton.Duck ) && isGrappling )
 				RemoveGrapple();
 
-			if ( isGrappling )
+			if ( isGrappling && grappleHookEntity.IsValid() )
 			{
 				if ( Owner is Player { Controller: PlayerController controller } player )
 				{
@@ -43,6 +41,8 @@ namespace Instagib
 
 				Vector3 playerLatchDir = (Owner.Position - grappleHookEntity.Position).Normal;
 				Owner.Velocity -= playerLatchDir * PullStrength;
+
+				grappleHookEntity.Rotation = Rotation.LookAt( playerLatchDir );
 
 				float projLength = playerVel.Dot( playerLatchDir );
 				if ( projLength > 0 )
@@ -72,7 +72,7 @@ namespace Instagib
 			
 			GrappleIndicator.SetCanGrapple( state );
 
-			if ( isGrappling )
+			if ( isGrappling && grappleHookEntity.IsValid() )
 			{
 				GrappleIndicator.MoveTo( grappleHookEntity.Position, false );
 			}
@@ -98,17 +98,17 @@ namespace Instagib
 			if ( tr.Hit && tr.Entity is not Player )
 				return tr;
 			
-			// var trExtended = Trace.Ray( Owner.EyePos + Owner.EyeRot.Forward * GrappleTraceRadius, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
-			// 	.Ignore( this )
-			// 	.Ignore( Owner )
-			// 	.WorldAndEntities()
-			// 	.Radius( GrappleTraceRadius )
-			// 	.HitLayer( CollisionLayer.Player, false ) // Why the fuck doesn't this work???? x2
-			// 	.Run();
-			// isExtendedRay = true;
-			// calcEndPos = trExtended.EndPos - trExtended.Normal * GrappleTraceRadius;
-			// if ( trExtended.Hit && trExtended.Entity is not Player )
-			// 	return trExtended;
+			var trExtended = Trace.Ray( Owner.EyePos + Owner.EyeRot.Forward * GrappleTraceRadius, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
+				.Ignore( this )
+				.Ignore( Owner )
+				.WorldAndEntities()
+				.Radius( GrappleTraceRadius )
+				.HitLayer( CollisionLayer.Player, false ) // Why the fuck doesn't this work???? x2
+				.Run();
+			isExtendedRay = true;
+			calcEndPos = trExtended.EndPos - trExtended.Normal * GrappleTraceRadius;
+			if ( trExtended.Hit && trExtended.Entity is not Player && ( trExtended.EndPos - Owner.EyePos ).Length > 96f )
+				return trExtended;
 
 			calcEndPos = Owner.EyePos + Owner.EyeRot.Forward * MaxDistance;
 			return new TraceResult() { Hit = false, EndPos = calcEndPos };
@@ -116,28 +116,28 @@ namespace Instagib
 
 		protected virtual void DeployGrapple()
 		{
-			if ( Host.IsServer )
+			var tr = GrappleTrace( out var calcEndPos, out _ );
+			if ( tr.Hit && tr.Entity != null )
 			{
-				var tr = GrappleTrace( out var calcEndPos, out _ );
-				if ( tr.Hit && tr.Entity != null )
+				isGrappling = true;
+
+				using ( Prediction.Off() )
 				{
-					isGrappling = true;
+					// PlaySound( "grapple" );
 
-					using ( Prediction.Off() )
+					if ( Owner is Player { Controller: PlayerController controller } player )
 					{
-						// PlaySound( "grapple" );
-
-						if ( Owner is Player { Controller: PlayerController controller } player )
+						if ( controller.GroundEntity != null )
 						{
-							if ( controller.GroundEntity != null )
-							{
-								player.Velocity += Vector3.Up * HeightJumpBoost;
-							}
-
-							player.GroundEntity = null;
-							controller.ClearGroundEntity();
+							player.Velocity += Vector3.Up * HeightJumpBoost;
 						}
 
+						player.GroundEntity = null;
+						controller.ClearGroundEntity();
+					}
+
+					if ( Host.IsServer )
+					{
 						grappleHookEntity = new()
 						{
 							Position = tr.StartPos,
@@ -156,11 +156,11 @@ namespace Instagib
 						grappleParticles = rope;
 					}
 				}
-				else
-				{
-					using ( Prediction.Off() )
-						PlaySound( "player_use_fail" );
-				}
+			}
+			else
+			{
+				using ( Prediction.Off() )
+					PlaySound( "player_use_fail" );
 			}
 		}
 

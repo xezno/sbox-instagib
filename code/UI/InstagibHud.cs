@@ -11,8 +11,6 @@ namespace Instagib.UI
 		private SettingsMenu settingsMenu;
 		
 		public static InstagibHud CurrentHud;
-
-		private bool menuVisible = false;
 		
 		public InstagibHud()
 		{
@@ -58,10 +56,8 @@ namespace Instagib.UI
 		public void OnDeath( string killer )
 		{
 			Host.AssertClient();
-			// Log.Trace( "HUD: Death" );
 			
 			// We died
-			// StaticHudPanel?.DeleteChildren();
 			TiltingHudPanel?.DeleteChildren();
 
 			StaticHudPanel.AddChild<DeathsPanel>();
@@ -72,15 +68,12 @@ namespace Instagib.UI
 		{
 			Host.AssertClient();
 			TiltingHudPanel = RootPanel.AddChild<MainPanel>();
-			// Log.Trace( "HUD: Respawn" );
 		}
 
 		public void OnKilledMessage( Player attacker, Player victim, string[] medals )
 		{
 			if ( attacker.GetClientOwner().SteamId != (Local.Client?.SteamId) )
 				return;
-
-			// Log.Trace( "Killed someone" );
 			
 			// We killed someone
 			FragsPanel.Instance.AddFragMessage( "Railgun", victim.GetClientOwner().Name, medals );
@@ -91,11 +84,9 @@ namespace Instagib.UI
 		{
 			if ( Input.Pressed( InputButton.Menu ) )
 			{
-				// Log.Trace( "Toggling menu" );
 				if ( currentMenu is MainMenu )
-					SetCurrentMenu( null );
+					SetCurrentMenu();
 				else if ( Local.Pawn.Velocity.Cross( Vector3.Up ).Length < 30f )
-					// Prevent people from accidentally opening the menu
 					SetCurrentMenu( new MainMenu() );
 			}
 		}

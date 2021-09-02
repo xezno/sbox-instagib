@@ -95,7 +95,6 @@ namespace Instagib.UI.Elements
 			set
 			{
 				this.value = value;
-				valueDirty = true;
 
 				lastValue = CalcValue;
 			}
@@ -127,8 +126,6 @@ namespace Instagib.UI.Elements
 		/// </summary>
 		public SliderChangeEvent OnValueChange;
 
-		private bool valueDirty = false;
-
 		public Slider()
 		{
 			StyleSheet.Load( "/Code/UI/Elements/Slider.scss" );
@@ -158,12 +155,7 @@ namespace Instagib.UI.Elements
 			lastValue = userValue ?? 0;
 			text.Text = userValue.ToString();
 			
-			if ( valueDirty )
-			{
-				needle.SetValue( Value );
-				// TODO: Fix this crap!
-				// valueDirty = false;
-			}
+			needle.SetValue( Value );
 		}
 
 		protected override void OnMouseDown( MousePanelEvent e )

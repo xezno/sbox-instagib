@@ -17,7 +17,15 @@ namespace Instagib
 
 		private bool activated;
 		
-		private Vector3 ViewmodelOffset => new( -25f, 10f, 10f );
+		private Vector3 ViewmodelOffset => new( -30f, 10f, 10f );
+		
+		private Vector3 ShootOffset { get; set; }
+
+		public void OnFire()
+		{
+			using ( Prediction.Off() )
+				ShootOffset -= Vector3.Backward * 35;
+		}
 
 		public override void PostCameraSetup( ref CameraSetup camSetup )
 		{
@@ -63,7 +71,7 @@ namespace Instagib
 			var offset = CalcSwingOffset( pitchDelta, yawDelta );
 			offset += CalcBobbingOffset( playerVelocity );
 
-			offset -= ViewmodelOffset;
+			offset -= ViewmodelOffset + ShootOffset;
 			offset = offset.WithY( offset.y + PlayerSettings.ViewmodelOffset );
 			
 			if ( PlayerSettings.ViewmodelFlip )
@@ -73,6 +81,8 @@ namespace Instagib
 
 			lastPitch = newPitch;
 			lastYaw = newYaw;
+
+			ShootOffset = ShootOffset.LerpTo( Vector3.Zero, 5 * Time.Delta );
 		}
 
 		protected Vector3 CalcSwingOffset( float pitchDelta, float yawDelta )

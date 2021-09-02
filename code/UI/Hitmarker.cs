@@ -20,7 +20,7 @@ namespace Instagib.UI
 			public HitmarkerInstance( Panel parent )
 			{
 				Parent = parent;
-				KillAfterTime();
+				_ = KillAfterTime();
 			}
 
 			async Task KillAfterTime()

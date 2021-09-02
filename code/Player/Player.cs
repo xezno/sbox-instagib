@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Instagib.UI;
 using Sandbox.ScreenShake;
 using Instagib.Utils;
@@ -11,14 +12,17 @@ namespace Instagib
 {
 	public partial class Player : Sandbox.Player
 	{
+		private Particles speedLines;
+		
 		private DamageInfo lastDamageInfo;
 		
 		//
 		// Stats used for medals
 		//
 		public int CurrentStreak { get; set; }
-		public float TotalDamageDealt { get; set; }
 		public float CurrentDamageDealt { get; set; }
+		
+		[Net, Local] public bool IsSpawnProtected { get; set; }
 		
 		public enum HitboxGroup
 		{
@@ -71,8 +75,24 @@ namespace Instagib
 
 			CurrentStreak = 0;
 			CurrentDamageDealt = 0;
+
+			IsSpawnProtected = true;
+
+			if ( IsServer )
+			{
+				_ = ApplySpawnProtection();
+			}
 			
 			base.Respawn();
+		}
+
+		private async Task ApplySpawnProtection()
+		{
+			Host.AssertServer();
+			
+			IsSpawnProtected = true;
+			await Task.DelaySeconds( 3.0f );
+			IsSpawnProtected = false;
 		}
 
 		public override void Simulate( Client cl )
@@ -83,6 +103,20 @@ namespace Instagib
 			if ( cl == Local.Client )
 			{
 				GlowActive = false;
+				
+				//
+				// Speed lines
+				//
+				if ( IsClient && Velocity.Length > 600 )
+				{
+					speedLines ??= Particles.Create( "particles/speed_lines.vpcf" );
+				}
+				else if ( IsClient && Velocity.Length < 600 && speedLines != null )
+				{
+					speedLines?.Destroy();
+					speedLines = null;
+				}
+				
 				return;
 			}
 
@@ -169,7 +203,7 @@ namespace Instagib
 		{
 			var hitboxGroup = (HitboxGroup)GetHitboxGroup( info.HitboxIndex );
 
-			if ( info.Flags.HasFlag( DamageFlags.PhysicsImpact ) )
+			if ( IsSpawnProtected || info.Flags.HasFlag( DamageFlags.PhysicsImpact ) )
 				return;
 			
 			lastDamageInfo = info;

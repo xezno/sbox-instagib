@@ -6,14 +6,6 @@ namespace Instagib
 {
 	partial class Player
 	{
-		[ServerCmd]
-		public static void DressPlayer()
-		{
-			var caller = ConsoleSystem.Caller.Pawn as Player;
-			Undress( caller );
-			Dress( caller, false );
-		}
-
 		public static void Undress( ModelEntity entity )
 		{
 			foreach ( var ent in entity.Children.Where( e => e.Tags.Has( "clothes" ) ) )
@@ -27,6 +19,8 @@ namespace Instagib
 			var dressed = entity.Children.Any( e => e.Tags.Has( "clothes" ) );
 			if ( dressed )
 				Undress( entity );
+
+			entity.SetMaterialGroup(Rand.Int(0, 3));
 
 			var lowerModel = Rand.FromArray( new[]
 			{
@@ -73,11 +67,6 @@ namespace Instagib
 			} );
 
 			var hat = CreateClothesEntity( hatModel, entity );
-			
-			// foreach ( var ent in entity.Children.Where( e => e.Tags.Has( "clothes" ) ) )
-			// {
-			// 	Log.Info( ( ent as ModelEntity ).GetModelName() );
-			// }
 		}
 
 		private static ModelEntity CreateClothesEntity( string clothesModel, Entity entity )

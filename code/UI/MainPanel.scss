@@ -1,5 +1,9 @@
 @import "Colors";
 
+.main {
+	// opacity: 0.75;
+}
+
 text,label,input,textentry,icon,iconpanel
 {
 	font-family: Poppins;
@@ -19,7 +23,6 @@ text.alert, text.menu-prompt {
 	padding: 75px 100px;
 	text-align: center;
 	opacity: 0.2;
-	font-family: Poppins-ExtraBoldItalic;
 }
 
 text.menu-prompt {
@@ -43,7 +46,7 @@ text.menu-prompt {
 	
 	font-size: 32px;
 	
-	align-items: center;
+	align-items: flex-end;
 	justify-content: space-between;
 
 	.health, .ammo {
@@ -89,6 +92,7 @@ text.menu-prompt {
 
 	.frag-message {
 		backdrop-filter: blur( 20px ) brightness( 0.5 );
+		border: 2px solid rgba( black, 0.4 );
 		flex-direction: row;
 		text-align: center;
 		border-radius: 10px;
@@ -116,7 +120,7 @@ text.menu-prompt {
 	}
 
 	.frag-details {
-		padding: 10px 25px;
+		padding: 10px 20px;
 		text-align: right;
 		margin-left: 10px;
 		justify-content: left;
@@ -135,7 +139,6 @@ text.menu-prompt {
 		align-items: center;
 
 		background-color: rgba( white, 0.05 );
-		background: url( textures/ui/dot.png );
 		background-image-tint: rgba( white, 0.5 );
 		border-radius: 11px 0px 0px 11px; // 11px is the sweet spot despite the parent being 10px. don't ask why
 	}
@@ -210,7 +213,7 @@ iconpanel, icon {
 }
 
 .ammo {
-	padding-right: 20px;
+	padding-right: 15px;
 	icon {
 		color: #338DFF;
 		margin-left: -8px;
@@ -218,7 +221,7 @@ iconpanel, icon {
 }
 
 .health {
-	padding-left: 20px;
+	padding-left: 15px;
 	icon {
 		color: #D3FF19;
 		margin-right: -8px;
@@ -302,12 +305,12 @@ deathpanel {
 
 .controls {
 	backdrop-filter: blur( 20px ) brightness( 0.5 );
+	border: 2px solid rgba( black, 0.4 );
 	position: absolute;
 	bottom: 10%;
 	right: 100px;
 	border-radius: 10px;
-	padding: 10px 25px;
-	border: 2px solid rgba( black, 0.4 );
+	padding: 0 20px;
 }
 
 grappleindicator {
@@ -315,7 +318,7 @@ grappleindicator {
 	top: 50%;
 	left: 50%;
 	border-radius: 1000px;
-	border: 2px solid white;
+	border: 2px solid rgba( white, 0.4 );
 	transform: translateX( -49% ) translateY( -50% );
 	pixel-snap: 0;
 	
@@ -324,6 +327,6 @@ grappleindicator {
 	}
 	
 	&.cooldown {
-		border-color: rgba( white, 0.2 );
+		border-color: rgba( white, 0.05 );
 	}
 }

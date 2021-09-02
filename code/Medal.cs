@@ -63,17 +63,6 @@ namespace Instagib
 				"Shoot someone in the goolies",
 				( attacker, victim) => victim.LastHitboxDamaged == Player.HitboxGroup.Stomach,
 				10 ),
-			
-			// TODO: All of below
-			new Medal( "Excellent", "Frag 2 enemies in 3 seconds or less", (_, _) => false, 10 ),
-			new Medal( "Triple Kill", "Frag 3 enemies with 3 seconds or less between each frag", (_, _) => false, 10 ),
-			new Medal( "Buzzkill", "Frag a player on a streak", (_, victim) => victim.CurrentStreak > 3, 10 ),
-			new Medal( "Fighter", "Frag 5 enemies with 5 seconds or less between each frag", (_, _) => false, 10 ),
-			new Medal( "Avatar of Death", "Get 10 frags with 3 seconds or less between each frag", (_, _) => false, 1000 ),
-			
-			new Medal( "From the Grave", "Get a frag after you're dead", (_, _) => false, 10 ),
-			new Medal( "Impressive", "Get two consecutive hits with the Railgun", (_, _) => false, 10 ),
-			new Medal( "Kamikaze", "Kill yourself, but take an enemy with you", (_, _) => false, 0 ),
 		};
 	}
 }

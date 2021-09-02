@@ -10,6 +10,7 @@ classicchatbox {
     font-family: Poppins;
     font-size: 13px;
     border-radius: 5px;
+    border: 2px solid rgba( black, 0 );
 
     label, textentry {
         font-family: Inter;
@@ -39,6 +40,7 @@ classicchatbox {
     &.open {
         pointer-events: all;
         backdrop-filter: blur( 20px ) brightness( 0.5 );
+        border: 2px solid rgba( black, 0.4 );
 
         textentry {
             opacity: 1;

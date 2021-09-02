@@ -14,10 +14,10 @@ namespace Instagib
 	public partial class Game : Sandbox.Game
 	{
 		private static InstagibHud hud;
-		public Stats Stats { get; set; }
 		public Game()
 		{
 			Precache.Add( "particles/gib_blood.vpcf" );
+			Precache.Add( "particles/speed_lines.vpcf" );
 			Precache.Add( "sounds/jump.vsnd" );
 			
 			Precache.Add( "weapons/railgun/particles/railgun_beam.vpcf" );
@@ -72,13 +72,6 @@ namespace Instagib
 			base.DoPlayerDevCam( player );
 		}
 
-		[ClientRpc]
-		private void StartStatsRpc()
-		{
-			Stats = new Stats( IsServer );
-			Event.Register( Stats );
-		}
-
 		public override void ClientDisconnect( Client cl, NetworkDisconnectionReason reason )
 		{
 			base.ClientDisconnect( cl, reason );
@@ -90,18 +83,17 @@ namespace Instagib
 			Host.AssertServer();
 
 			Log.Info( $"{client.Name} was killed" );
+			
 			if ( pawn is not Player victim )
 				return;
 			
 			// HACK: Assign a respawn timer for this player
 			async Task RespawnTimer()
 			{
-				Log.Info( "Waiting" );
 				await Task.DelaySeconds( 3.0f );
-				Log.Info( "Waited" );
 				PlayerRespawnRpc( To.Single( victim ) );
 			}
-			RespawnTimer();
+			_ = RespawnTimer();
 
 			// Apply a death
 			var victimClient = victim.GetClientOwner();

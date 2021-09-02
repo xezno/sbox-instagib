@@ -46,7 +46,6 @@ namespace Instagib.UI
 			SetClass( "open", Input.Down( InputButton.Score ) );
 		}
 
-
 		protected virtual void AddHeader() 
 		{
 			Header = Canvas.Add.Panel( "header" );

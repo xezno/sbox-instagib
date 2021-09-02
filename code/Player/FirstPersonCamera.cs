@@ -6,6 +6,8 @@ namespace Instagib
 	{
 		Vector3 lastPos;
 
+		private float lastFov;
+
 		public override void Activated()
 		{
 			var pawn = Local.Pawn;
@@ -35,9 +37,16 @@ namespace Instagib
 			Rot = pawn.EyeRot;
 
 			FieldOfView = PlayerSettings.Fov;
+			if ( pawn.ActiveChild is Railgun { IsZooming: true } )
+			{
+				FieldOfView = PlayerSettings.ZoomedFov;
+			}
 
-			ZNear = 5;
-			ZFar = 50000;
+			FieldOfView = lastFov.LerpTo( FieldOfView, 20 * Time.Delta );
+			lastFov = FieldOfView;
+
+			ZNear = 3;
+			ZFar = 15000;
 
 			Viewer = pawn;
 			lastPos = Pos;

@@ -5,6 +5,7 @@ namespace Instagib
 {
 	public static class PlayerSettings
 	{
+		public static float ZoomedFov { get; set; } = 60;
 		public static float Fov { get; set; } = 90;
 
 		public static float ViewmodelOffset { get; set; } = 0;
