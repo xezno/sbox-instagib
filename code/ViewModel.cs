@@ -17,7 +17,7 @@ namespace Instagib
 
 		private bool activated;
 		
-		private Vector3 ViewmodelOffset => new( -30f, 10f, 10f );
+		private Vector3 ViewmodelOffset => new( -15f, 10f, 10f );
 		
 		private Vector3 ShootOffset { get; set; }
 
@@ -54,7 +54,7 @@ namespace Instagib
 			Position = camSetup.Position;
 			Rotation = camSetup.Rotation;
 
-			camSetup.ViewModel.FieldOfView = 45;
+			camSetup.ViewModel.FieldOfView = 65;
 
 			var newPitch = Rotation.Pitch();
 			var newYaw = Rotation.Yaw();

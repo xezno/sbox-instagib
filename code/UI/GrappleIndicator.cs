@@ -21,7 +21,7 @@ namespace Instagib.UI
 		public GrappleIndicator()
 		{
 			Instance = this;
-			StyleSheet.Parse( $"grappleindicator {{ width: {PlayerSettings.CrosshairSize * 1.5f}px; height: {PlayerSettings.CrosshairSize * 1.5f}px; }}" );
+			StyleSheet.Parse( $"grappleindicator {{ width: 4px; aspect-ratio: 1; }}" );
 		}
 
 		public static void SetCanGrapple( State state )
