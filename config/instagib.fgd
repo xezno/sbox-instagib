@@ -1,5 +1,5 @@
 // 
-// Instagib.Game : Sandbox.Game 
+// Instagib.Game
 // 
 @PointClass = instagib : ""
 [
@@ -9,7 +9,7 @@
 ]
 
 // 
-// Instagib.Railgun : Sandbox.BaseWeapon 
+// Instagib.Railgun
 // 
 @PointClass = railgun : ""
 [

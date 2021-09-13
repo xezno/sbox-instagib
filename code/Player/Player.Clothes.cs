@@ -8,7 +8,9 @@ namespace Instagib
 	{
 		public static void Undress( ModelEntity entity )
 		{
-			foreach ( var ent in entity.Children.Where( e => e.Tags.Has( "clothes" ) ) )
+			var children = entity.Children.ToArray();
+
+			foreach ( var ent in children.Where( e => e.Tags.Has( "clothes" ) ) )
 			{
 				ent.Delete();
 			}

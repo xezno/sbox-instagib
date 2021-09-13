@@ -6,7 +6,7 @@ namespace Instagib.UI.Menus
 {
 	public class RailgunRender : Panel
 	{
-		private Scene scene;
+		private ScenePanel scene;
 		Angles CamAngles;
 
 		private Vector2 renderSize = new( 800, 600 );
@@ -31,7 +31,7 @@ namespace Instagib.UI.Menus
 				Light.Point( Vector3.Right * lightDist, lightRadius, Color.White * lightStrength );
 				Light.Point( Vector3.Down * lightDist, lightRadius, Color.White * lightStrength );
 
-				scene = Add.Scene( SceneWorld.Current, Vector3.Up * 10 + CamAngles.Direction * -50, CamAngles, 45 );
+				scene = Add.ScenePanel( SceneWorld.Current, Vector3.Up * 10 + CamAngles.Direction * -50, CamAngles.ToRotation(), 45 );
 				scene.Style.Width = Length.Percent( 100 );
 				scene.Style.Height = Length.Percent( 100 );
 			}
@@ -73,8 +73,8 @@ namespace Instagib.UI.Menus
 			CamAngles.yaw %= 360f;
 			CamAngles.pitch = CamAngles.pitch.Clamp( -90f, 90f );
 
-			scene.Position = CamAngles.Direction * -75;
-			scene.Angles = CamAngles;
+			scene.CameraPosition = CamAngles.Direction * -75;
+			scene.CameraRotation = CamAngles.ToRotation();
 		}
 	}
 }
