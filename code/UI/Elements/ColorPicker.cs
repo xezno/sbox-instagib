@@ -33,7 +33,6 @@ namespace Instagib.UI.Elements
 		private int stride = 4;
 
 		private Slider valueSlider;
-		private HexInput input;
 		private Image image;
 		private PickedColor pickedColor;
 

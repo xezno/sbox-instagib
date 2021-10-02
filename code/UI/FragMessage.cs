@@ -56,7 +56,7 @@ namespace Instagib.UI
 			//
 			// Timeout
 			//
-			KillAfterTime();
+			_ = KillAfterTime();
 		}
 
 		async Task KillAfterTime()

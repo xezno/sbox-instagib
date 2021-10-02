@@ -40,16 +40,12 @@ namespace Instagib
 
 		private class WaitingForPlayersState : BaseGameState
 		{
-			private bool isCountingDown;
-
 			public override string StateName() => "Waiting for players";
 			public override string StateTime() => $"{GetPlayerCount()} / 2";
 
 			public override void Tick()
 			{
 				base.Tick();
-
-				if ( isCountingDown ) return;
 
 				// Check player count
 				if ( GetPlayerCount() > 1 )
@@ -75,10 +71,10 @@ namespace Instagib
 					player?.Respawn();
 
 					// Reset scores
-					client.SetScore( "kills", 0 );
-					client.SetScore( "deaths", 0 );
-					client.SetScore( "totalShots", 0 );
-					client.SetScore( "totalHits", 0 );
+					client.SetInt( "kills", 0 );
+					client.SetInt( "deaths", 0 );
+					client.SetInt( "totalShots", 0 );
+					client.SetInt( "totalHits", 0 );
 				}
 
 				stateEnds = 15;
@@ -131,10 +127,10 @@ namespace Instagib
 					player?.Respawn();
 
 					// Reset scores
-					entity.SetScore( "kills", 0 );
-					entity.SetScore( "deaths", 0 );
-					entity.SetScore( "totalShots", 0 );
-					entity.SetScore( "totalHits", 0 );
+					entity.SetInt( "kills", 0 );
+					entity.SetInt( "deaths", 0 );
+					entity.SetInt( "totalShots", 0 );
+					entity.SetInt( "totalHits", 0 );
 				}
 
 				stateEnds = 5 * 60;
@@ -176,7 +172,7 @@ namespace Instagib
 				var entitiesCopy = All.Where( t => t is Player ).ToArray();
 				var orderedEntities = new List<Client>( Client.All );
 				var orderedEnumerable =
-					orderedEntities.OrderByDescending( p => p.GetScore( "kills", 0 ) );
+					orderedEntities.OrderByDescending( p => p.GetInt( "kills", 0 ) );
 
 				ClassicChatBox.AddInformation( To.Everyone,
 					$"{orderedEnumerable.First().Name} wins!" );

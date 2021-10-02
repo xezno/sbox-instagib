@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Instagib.UI;
-using Instagib.Utils;
 using Sandbox;
-using Sandbox.ScreenShake;
 using Event = Sandbox.Event;
 
 namespace Instagib
 {
-	[Library( "instagib", Title = "Instagib")]
 	public partial class Game : Sandbox.Game
 	{
 		private static InstagibHud hud;
@@ -43,7 +39,6 @@ namespace Instagib
 
 			var player = new Player();
 			client.Pawn = player;
-			client.SetScore( "steamid", client.SteamId );
 			
 			player.Respawn();
 
@@ -95,10 +90,6 @@ namespace Instagib
 			}
 			_ = RespawnTimer();
 
-			// Apply a death
-			var victimClient = victim.GetClientOwner();
-			victimClient.SetScore( "deaths", victimClient.GetScore<int>( "deaths" ) + 1 );
-
 			if ( pawn.LastAttacker is not Player attacker )
 			{
 				PlayerDiedRpc( To.Single( victim ), null );
@@ -107,10 +98,6 @@ namespace Instagib
 			}
 			
 			PlayerDiedRpc( To.Single( victim ), attacker );
-
-			// Apply a kill
-			var attackerClient = attacker.GetClientOwner();
-			attackerClient.SetScore( "kills", attackerClient.GetScore<int>( "kills" ) + 1 );
 
 			// Killstreak tracking
 			attacker.CurrentStreak++;
@@ -127,6 +114,7 @@ namespace Instagib
 			// Display "YOU FRAGGED" message
 			PlayerKilledRpc( To.Single( attacker ), attacker, victim, medalArr );
 
+			var attackerClient = attacker.GetClientOwner();
 			OnKilledMessage( attackerClient.SteamId, attackerClient.Name, client.SteamId, client.Name, "Railgun" );
 		}
 

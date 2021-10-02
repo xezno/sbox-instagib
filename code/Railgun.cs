@@ -146,7 +146,7 @@ namespace Instagib
 			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
 
 			var ownerClient = Owner.GetClientOwner();
-			ownerClient.SetScore( "totalShots", ownerClient.GetScore<int>( "totalShots", 0 ) + 1 );
+			ownerClient.AddInt( "totalShots" );
 		}
 
 		[ServerCmd]
@@ -166,7 +166,7 @@ namespace Instagib
 			if ( target is Player )
 			{
 				var ownerClient = owner.GetClientOwner();
-				ownerClient.SetScore( "totalHits", ownerClient.GetScore<int>( "totalHits", 0 ) + 1 );
+				ownerClient.AddInt( "totalHits" );
 
 				if ( tick - Time.Tick > MaxHitTolerance )
 				{

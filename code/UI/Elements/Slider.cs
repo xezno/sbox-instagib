@@ -89,7 +89,7 @@ namespace Instagib.UI.Elements
 		/// <summary>
 		/// The current slider value from 0 to 1.
 		/// </summary>
-		public new float Value
+		public float Value
 		{
 			get => this.value;
 			set

@@ -1,16 +1,13 @@
 ﻿using Sandbox;
-using Sandbox.Hooks;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
-using System;
-using System.Collections.Generic;
 
 namespace Instagib.UI
 {
 	public partial class ScoreboardEntry : Panel
 	{
-		public PlayerScore.Entry Entry { get; private set; }
-		
+		public Client Client;
+
 		private Label playerName;
 		private Label kills;
 		private Label deaths;
@@ -33,37 +30,69 @@ namespace Instagib.UI
 			accuracy = Add.Label( "%hit", "accuracy" );
 		}
 
-		public virtual void UpdateFrom( PlayerScore.Entry entry )
+		RealTimeSince TimeSinceUpdate = 0;
+
+		public override void Tick()
 		{
-			this.Entry = entry;
+			base.Tick();
 
-			playerName.Text = entry.GetString( "name" );
+			if ( !IsVisible )
+				return;
 
-			var killVal = entry.Get<int>( "kills", 0 );
-			var deathVal = entry.Get<int>( "deaths", 0 );
-			
-			kills.Text = killVal.ToString();
-			deaths.Text = deathVal.ToString();
+			if ( !Client.IsValid() )
+				return;
 
-			var ratioVal = (killVal / (float)deathVal);
-			if ( deathVal == 0 )
-				ratioVal = killVal;
-			
-			ratio.Text = ratioVal.ToString("N1");
+			if ( TimeSinceUpdate < 0.1f )
+				return;
 
-			ping.Text = entry.Get<int>( "ping", -1 ).ToString();
+			TimeSinceUpdate = 0;
+			UpdateData();
+		}
 
-			var totalShotsVal = entry.Get<int>( "totalShots", 0 );
-			var totalHitsVal = entry.Get<int>( "totalHits", 0 );
-			var accuracyVal = ((float)totalHitsVal / totalShotsVal) * 100f;
+		public virtual void UpdateData()
+		{
+			playerName.Text = Client.Name;
 
-			if ( totalHitsVal == 0 )
-				accuracyVal = 0f;
+			//
+			// Kills/Deaths
+			//
+			{
+				var killVal = Client.GetInt( "kills", 0 );
+				var deathVal = Client.GetInt( "deaths", 0 );
 
-			accuracy.Text = accuracyVal.ToString( "N1" ) + "%";
+				kills.Text = killVal.ToString();
+				deaths.Text = deathVal.ToString();
 
-			avatar.SetTexture( $"avatar:{entry.Get<ulong>( "steamid", 0 )}" );
-			SetClass( "me", Local.Client != null && entry.Get<ulong>( "steamid", 0 ) == Local.Client.SteamId );
+				var ratioVal = (killVal / (float)deathVal);
+				if ( deathVal == 0 )
+					ratioVal = killVal;
+
+				ratio.Text = ratioVal.ToString( "N1" );
+			}
+
+			//
+			// Accuracy
+			//
+			{
+				var totalShotsVal = Client.GetInt( "totalShots", 0 );
+				var totalHitsVal = Client.GetInt( "totalHits", 0 );
+				var accuracyVal = ((float)totalHitsVal / totalShotsVal) * 100f;
+
+				if ( totalHitsVal == 0 )
+					accuracyVal = 0f;
+
+				accuracy.Text = accuracyVal.ToString( "N1" ) + "%";
+			}
+
+			avatar.SetTexture( $"avatar:{Client.SteamId}" );
+			ping.Text = Client.Ping.ToString();
+			SetClass( "me", Client == Local.Client );
+		}
+
+		public virtual void UpdateFrom( Client client )
+		{
+			Client = client;
+			UpdateData();
 		}
 	}
 }

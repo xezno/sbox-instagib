@@ -8,7 +8,6 @@ namespace Instagib.UI
 	{
 		public static Panel TiltingHudPanel;
 		public static Panel StaticHudPanel;
-		private SettingsMenu settingsMenu;
 		
 		public static InstagibHud CurrentHud;
 		

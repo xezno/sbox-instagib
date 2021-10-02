@@ -1,9 +1,8 @@
 ﻿using Sandbox;
-using Sandbox.Hooks;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Instagib.UI
 {
@@ -11,7 +10,7 @@ namespace Instagib.UI
 	{
 		public Panel Canvas { get; protected set; }
 		public Panel EntryContainer { get; protected set; }
-		Dictionary<int, T> Entries = new ();
+		Dictionary<Client, T> Rows = new();
 
 		public Panel Header { get; protected set; }
 
@@ -24,18 +23,9 @@ namespace Instagib.UI
 			Canvas.Add.Label( "SCORE", "title" );
 
 			AddHeader();
-			
+
 			EntryContainer = Canvas.Add.Panel( "entry-container" );
 
-			PlayerScore.OnPlayerAdded += AddPlayer;
-			PlayerScore.OnPlayerUpdated += UpdatePlayer;
-			PlayerScore.OnPlayerRemoved += RemovePlayer;
-
-			foreach ( var player in PlayerScore.All )
-			{
-				AddPlayer( player );
-			}
-			
 			Sort();
 		}
 
@@ -44,9 +34,29 @@ namespace Instagib.UI
 			base.Tick();
 
 			SetClass( "open", Input.Down( InputButton.Score ) );
+			if ( !IsVisible )
+				return;
+
+			//
+			// Clients that were added
+			//
+			foreach ( var client in Client.All.Except( Rows.Keys ) )
+			{
+				var entry = AddClient( client );
+				Rows[client] = entry;
+			}
+
+			foreach ( var client in Rows.Keys.Except( Client.All ) )
+			{
+				if ( Rows.TryGetValue( client, out var row ) )
+				{
+					row?.Delete();
+					Rows.Remove( client );
+				}
+			}
 		}
 
-		protected virtual void AddHeader() 
+		protected virtual void AddHeader()
 		{
 			Header = Canvas.Add.Panel( "header" );
 			Header.Add.Label( "Name", "name" );
@@ -58,13 +68,13 @@ namespace Instagib.UI
 		}
 
 		private void Sort()
-		{			
+		{
 			EntryContainer.SortChildren( ( panel1, panel2 ) =>
 			{
 				if ( panel1 is ScoreboardEntry a && panel2 is ScoreboardEntry b )
 				{
-					var aKills = a.Entry.Get( "kills", 0 );
-					var bKills = b.Entry.Get( "kills", 0 );
+					var aKills = a.Client.GetInt( "kills", 0 );
+					var bKills = b.Client.GetInt( "kills", 0 );
 
 					if ( bKills > aKills )
 						return 1;
@@ -78,35 +88,11 @@ namespace Instagib.UI
 			} );
 		}
 
-		protected virtual void AddPlayer( PlayerScore.Entry entry )
+		protected virtual T AddClient( Client entry )
 		{
-			var p = EntryContainer.AddChild<T>();
-			p.UpdateFrom( entry );
-
-			Entries[entry.Id] = p;
-
-			Sort();
-		}
-
-		protected virtual void UpdatePlayer( PlayerScore.Entry entry )
-		{
-			if ( Entries.TryGetValue( entry.Id, out var panel ) )
-			{
-				panel.UpdateFrom( entry );
-			}
-			
-			Sort();
-		}
-
-		protected virtual void RemovePlayer( PlayerScore.Entry entry )
-		{
-			if ( Entries.TryGetValue( entry.Id, out var panel ) )
-			{
-				panel.Delete();
-				Entries.Remove( entry.Id );
-			}
-			
-			Sort();
+			var p = Canvas.AddChild<T>();
+			p.Client = entry;
+			return p;
 		}
 	}
 }

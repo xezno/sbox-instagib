@@ -143,7 +143,7 @@ namespace Instagib
 							Position = tr.StartPos,
 							Target = calcEndPos,
 							HookSpeed = HookSpeed,
-							WorldAng = Owner.EyeRot.Angles(),
+							Rotation = Owner.EyeRot,
 							Parent = tr.Entity,
 							Owner = Owner
 						};
