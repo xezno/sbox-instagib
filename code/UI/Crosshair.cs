@@ -1,23 +1,20 @@
-﻿using Sandbox.UI;
+﻿using Sandbox;
+using Sandbox.UI;
 
 namespace Instagib.UI
 {
 	public class Crosshair : Label
 	{
-		private static Crosshair Instance { get; set; }
-		
+		int fireCounter;
+
 		public Crosshair()
 		{
 			StyleSheet.Load( "/Code/UI/MainPanel.scss" );
-			Instance = this;
-			
-			AddClass( "crosshair" );
-			if ( PlayerSettings.CrosshairVisible )
-				AddClass( "visible" );
-			
-			SetText( PlayerSettings.CrosshairGlyph );
-			
-			StyleSheet.Parse( $"crosshair {{ width: {PlayerSettings.CrosshairSize}px; height: {PlayerSettings.CrosshairSize}px; font-size: {PlayerSettings.CrosshairSize}px; }}" );
+			for ( int i = 0; i < 5; i++ )
+			{
+				var p = Add.Panel( "element" );
+				p.AddClass( $"el{i}" );
+			}
 		}
 	}
 }

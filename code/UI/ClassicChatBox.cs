@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.Hooks;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
-using Sandbox.UI.Tests;
 
 public partial class ClassicChatBox : Panel
 {

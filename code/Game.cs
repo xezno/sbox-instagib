@@ -37,7 +37,7 @@ namespace Instagib
 			
 			Event.Run( "playerJoined" );
 
-			var player = new Player();
+			var player = new Player( client );
 			client.Pawn = player;
 			
 			player.Respawn();
@@ -53,7 +53,7 @@ namespace Instagib
 		
 		public override void DoPlayerNoclip( Client player )
 		{
-			if ( player.SteamId != 76561198128972602 )
+			if ( player.SteamId != InstagibGlobal.AlexSteamId )
 				return;
 
 			base.DoPlayerNoclip( player );
@@ -61,7 +61,7 @@ namespace Instagib
 
 		public override void DoPlayerDevCam( Client player )
 		{
-			if ( player.SteamId != 76561198128972602 )
+			if ( player.SteamId != InstagibGlobal.AlexSteamId )
 				return;
 			
 			base.DoPlayerDevCam( player );
@@ -114,7 +114,7 @@ namespace Instagib
 			// Display "YOU FRAGGED" message
 			PlayerKilledRpc( To.Single( attacker ), attacker, victim, medalArr );
 
-			var attackerClient = attacker.GetClientOwner();
+			var attackerClient = attacker.Client;
 			OnKilledMessage( attackerClient.SteamId, attackerClient.Name, client.SteamId, client.Name, "Railgun" );
 		}
 
@@ -138,10 +138,10 @@ namespace Instagib
 			// Attacker, victim
 			var attackerName = "suicide";
 			if ( attacker != null )
-				attackerName = attacker.GetClientOwner()?.SteamId.ToString();
+				attackerName = attacker.Client?.SteamId.ToString();
 			
 			Event.Run( "playerDeath", attackerName, Local.Client.SteamId.ToString() );
-			InstagibHud.CurrentHud.OnDeath( attacker?.GetClientOwner()?.Name ?? "Yourself" );
+			InstagibHud.CurrentHud.OnDeath( attacker?.Client?.Name ?? "Yourself" );
 		}
 
 		[ClientRpc]
@@ -150,7 +150,7 @@ namespace Instagib
 			// Attacker, victim
 			// Log.Trace( "Player killed rpc" );
 			InstagibHud.CurrentHud.OnKilledMessage( attacker, victim, medals );
-			Event.Run( "playerKilled", attacker.GetClientOwner().SteamId.ToString(), victim.GetClientOwner().SteamId.ToString() );
+			Event.Run( "playerKilled", attacker.Client.SteamId.ToString(), victim.Client.SteamId.ToString() );
 		}
 	}
 }

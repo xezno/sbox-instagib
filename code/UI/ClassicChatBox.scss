@@ -2,14 +2,14 @@
 
 classicchatbox {
     position: absolute;
-    bottom: 200px;
-    left: 100px;
+    bottom: 50px;
+    left: 50px;
     z-index: 100;
     flex-direction: column;
     width: 500px;
     font-family: Poppins;
     font-size: 13px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 2px solid rgba( black, 0 );
 
     label, textentry {

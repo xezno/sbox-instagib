@@ -20,7 +20,7 @@ namespace Instagib.UI
 			AddClass( "scoreboard" );
 
 			Canvas = Add.Panel( "canvas" );
-			Canvas.Add.Label( "SCORE", "title" );
+			Canvas.Add.Label( "SCOREBOARD", "title" );
 
 			AddHeader();
 

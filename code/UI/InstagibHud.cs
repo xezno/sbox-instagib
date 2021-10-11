@@ -36,12 +36,12 @@ namespace Instagib.UI
 				StaticHudPanel.StyleSheet.Load( "/Code/UI/MainPanel.scss" );
 				StaticHudPanel.AddChild<Scoreboard<ScoreboardEntry>>();
 				StaticHudPanel.AddChild<Crosshair>();
-				StaticHudPanel.AddChild<GrappleIndicator>();
 				StaticHudPanel.AddChild<ClassicChatBox>();
 				StaticHudPanel.AddChild<Hitmarker>();
 				StaticHudPanel.AddChild<FragsPanel>();
 				StaticHudPanel.AddChild<NameTags>();
 				StaticHudPanel.AddChild<KillFeed>();
+				// StaticHudPanel.AddChild<WinnerScreen>();
 
 				TiltingHudPanel = RootPanel.AddChild<MainPanel>();
 			}
@@ -71,11 +71,11 @@ namespace Instagib.UI
 
 		public void OnKilledMessage( Player attacker, Player victim, string[] medals )
 		{
-			if ( attacker.GetClientOwner().SteamId != (Local.Client?.SteamId) )
+			if ( attacker.Client.SteamId != (Local.Client?.SteamId) )
 				return;
 			
 			// We killed someone
-			FragsPanel.Instance.AddFragMessage( "Railgun", victim.GetClientOwner().Name, medals );
+			FragsPanel.Instance.AddFragMessage( "Railgun", victim.Client.Name, medals );
 		}
 
 		[Event.Tick.Client]

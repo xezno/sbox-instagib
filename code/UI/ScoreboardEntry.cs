@@ -15,6 +15,8 @@ namespace Instagib.UI
 		private Label ping;
 		private Label accuracy;
 
+		private IconPanel vip;
+
 		private Image avatar;
 
 		public ScoreboardEntry()
@@ -22,7 +24,9 @@ namespace Instagib.UI
 			AddClass( "entry" );
 
 			avatar = Add.Image( null, "avatar" );
+			vip = Add.Icon( "star", "vip" );
 			playerName = Add.Label( "PlayerName", "name" );
+
 			kills = Add.Label( "k", "kills" );
 			deaths = Add.Label( "d", "deaths" );
 			ratio = Add.Label( "r", "ratio" );
@@ -87,6 +91,7 @@ namespace Instagib.UI
 			avatar.SetTexture( $"avatar:{Client.SteamId}" );
 			ping.Text = Client.Ping.ToString();
 			SetClass( "me", Client == Local.Client );
+			vip.SetClass( "visible", Client.SteamId == InstagibGlobal.AlexSteamId );
 		}
 
 		public virtual void UpdateFrom( Client client )

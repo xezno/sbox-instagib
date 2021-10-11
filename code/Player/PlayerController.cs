@@ -8,7 +8,7 @@ namespace Instagib
 	{
 		private bool IsTouchingLadder;
 		private Vector3 LadderNormal;
-		
+
 		// Duck body height 32
 		// Eye Height 64
 		// Duck Eye Height 28
@@ -25,8 +25,8 @@ namespace Instagib
 
 		public float Speed => 310.0f;
 		public float AirSpeed => 240.0f;
-		public float Acceleration => 10.0f;
-		public float AirAcceleration => 14.0f;
+		public float Acceleration => 8.0f;
+		public float AirAcceleration => 8.0f;
 		public float GroundFriction => 4.0f;
 		public float StopSpeed => 100.0f;
 		public float DistEpsilon => 0.03125f;
@@ -40,7 +40,7 @@ namespace Instagib
 		public bool AutoJump => true;
 		public float JumpMultiplier => 0.9f;
 		public float AirSpeedLimit => 800f;
-		public float SpeedLimit => 800f; // Hard limit (excludes Z)
+		public float SpeedLimit => 600f;
 
 		[Net, Predicted] public bool CanMove { get; set; } = true;
 
@@ -148,7 +148,7 @@ namespace Instagib
 
 			if ( !CanMove )
 			{
-				WishVelocity = Vector3.Zero;	
+				WishVelocity = Vector3.Zero;
 			}
 
 			var stayOnGround = false;
@@ -442,7 +442,7 @@ namespace Instagib
 
 			ClearGroundEntity();
 
-			var flMul = 268.3281572999747f * ( Gravity / 600f ) * JumpMultiplier;
+			var flMul = 268.3281572999747f * (Gravity / 600f) * JumpMultiplier;
 			var startz = Velocity.z;
 
 			Velocity = Velocity.WithZ( startz + flMul );
@@ -458,7 +458,7 @@ namespace Instagib
 			var wishdir = (Input.Rotation.Forward * Input.Forward) + (Input.Rotation.Left * Input.Left);
 			wishdir = Vector3.Lerp( wishdir, WishVelocity.Normal, 0.5f );
 			wishdir = wishdir.WithZ( 0 );
-			
+
 			var wishspeed = WishVelocity.Length;
 
 			AirAccelerate( wishdir, wishspeed, AirAcceleration );
@@ -618,10 +618,10 @@ namespace Instagib
 
 			// Clear on the pawn
 			Pawn.GroundEntity = null;
-			
+
 			// Clear on the controller
 			GroundEntity = null;
-			
+
 			GroundNormal = Vector3.Up;
 			SurfaceFriction = 1.0f;
 		}

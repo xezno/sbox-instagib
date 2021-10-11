@@ -145,7 +145,7 @@ namespace Instagib
 
 			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
 
-			var ownerClient = Owner.GetClientOwner();
+			var ownerClient = Owner.Client;
 			ownerClient.AddInt( "totalShots" );
 		}
 
@@ -165,7 +165,7 @@ namespace Instagib
 			//	
 			if ( target is Player )
 			{
-				var ownerClient = owner.GetClientOwner();
+				var ownerClient = owner.Client;
 				ownerClient.AddInt( "totalHits" );
 
 				if ( tick - Time.Tick > MaxHitTolerance )
@@ -294,7 +294,7 @@ namespace Instagib
 
 			if ( IsLocalPawn )
 			{
-				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 4.0f );
+				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 2.0f, 2.0f );
 			}
 		}
 

@@ -23,15 +23,5 @@ namespace Instagib.UI.Menus
 		{
 			InstagibHud.CurrentHud.SetCurrentMenu( null );
 		}
-
-		public void ShowCustomize()
-		{
-			InstagibHud.CurrentHud.SetCurrentMenu( new CustomizeMenu() );
-		}
-
-		public void ShowShop()
-		{
-			InstagibHud.CurrentHud.SetCurrentMenu( new ShopMenu() );
-		}
 	}
 }

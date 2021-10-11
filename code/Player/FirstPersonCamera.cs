@@ -46,7 +46,7 @@ namespace Instagib
 			lastFov = FieldOfView;
 
 			ZNear = 3;
-			ZFar = 15000;
+			ZFar = 20000;
 
 			Viewer = pawn;
 			lastPos = Pos;

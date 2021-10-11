@@ -98,8 +98,6 @@ button {
 
         label {
             color: $accent-text;
-            // Terrible hack to improve font rendering here
-            text-shadow: $accent-text-hack;
         }
 
         iconpanel {
