@@ -113,6 +113,7 @@ namespace Instagib
 			using ( Prediction.Off() )
 			{
 				Particles.Create( "particles/explosion.vpcf", pos );
+				PlaySound( "rocket_jump" );
 			}
 		}
 

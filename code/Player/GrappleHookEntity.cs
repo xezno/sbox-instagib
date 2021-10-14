@@ -30,7 +30,6 @@ namespace Instagib
 				if ( t >= 1 )
 				{
 					Attached = true;
-					PlaySound( "grapple" );
 				}
 			}
 		}
