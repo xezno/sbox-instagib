@@ -1,5 +1,4 @@
-﻿using Instagib.UI;
-using Sandbox;
+﻿using Sandbox;
 
 namespace Instagib
 {
@@ -12,8 +11,7 @@ namespace Instagib
 		private Particles grappleParticles;
 
 		private float GrappleCooldown => 0.5f;
-		private float HookSpeed => 5f;
-		private float PullStrength => 24f;
+		private float PullStrength => 32f;
 		private float BoostStrength => 4f;
 		private float AntiVelocityScale => 1f;
 		private float MaxDistance => 1250;
@@ -26,7 +24,7 @@ namespace Instagib
 			else if ( !Input.Down( InputButton.Duck ) && isGrappling )
 				RemoveGrapple();
 
-			if ( isGrappling && grappleHookEntity.IsValid() && grappleHookEntity.Attached )
+			if ( isGrappling && grappleHookEntity.IsValid() )
 			{
 				if ( Owner is Player { Controller: PlayerController controller } player )
 				{
@@ -104,7 +102,6 @@ namespace Instagib
 						{
 							Position = tr.StartPos,
 							Target = calcEndPos,
-							HookSpeed = HookSpeed,
 							Rotation = Owner.EyeRot,
 							Parent = tr.Entity,
 							Owner = Owner

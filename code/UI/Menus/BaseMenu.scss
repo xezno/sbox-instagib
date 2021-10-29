@@ -13,15 +13,13 @@ iconpanel, icon {
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba( $gray-900, 0.7 );
     pointer-events: all;
     opacity: 1;
     left: 0;
     transition: all 150ms ease;
+    z-index: 1000;
 
-    backdrop-filter: blur( 10px );
-
-    &:intro, &:outro {
+    &:not(.open) {
         opacity: 0;
         left: -50px;
     }

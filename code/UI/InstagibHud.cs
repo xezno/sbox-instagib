@@ -10,26 +10,12 @@ namespace Instagib.UI
 		public static Panel StaticHudPanel;
 		
 		public static InstagibHud CurrentHud;
+
+		private static BaseMenu currentMenu;
 		
 		public InstagibHud()
 		{
 			if ( IsClient )
-			{
-				SetCurrentMenu( null );
-
-				CurrentHud = this;
-			}
-		}
-
-		private BaseMenu currentMenu;
-		public void SetCurrentMenu( BaseMenu newMenu = null )
-		{
-			currentMenu?.Delete();
-			currentMenu = null;
-			StaticHudPanel?.Delete();
-			TiltingHudPanel?.Delete();
-
-			if ( newMenu == null )
 			{
 				// Show standard hud
 				StaticHudPanel = RootPanel.Add.Panel( "staticpanel" );
@@ -43,13 +29,18 @@ namespace Instagib.UI
 				StaticHudPanel.AddChild<KillFeed>();
 				// StaticHudPanel.AddChild<WinnerScreen>();
 
+				SetCurrentMenu( new MainMenu() );
+
 				TiltingHudPanel = RootPanel.AddChild<MainPanel>();
+				CurrentHud = this;
 			}
-			else
-			{
-				newMenu.Parent = RootPanel;
-				currentMenu = newMenu;
-			}
+		}
+
+		public void SetCurrentMenu( BaseMenu menu )
+		{
+			currentMenu?.Delete();
+			currentMenu = menu;
+			menu.Parent = StaticHudPanel;
 		}
 
 		public void OnDeath( string killer )
@@ -76,18 +67,6 @@ namespace Instagib.UI
 			
 			// We killed someone
 			FragsPanel.Instance.AddFragMessage( "Railgun", victim.Client.Name, medals );
-		}
-
-		[Event.Tick.Client]
-		public void OnTick()
-		{
-			if ( Input.Pressed( InputButton.Menu ) )
-			{
-				if ( currentMenu is MainMenu )
-					SetCurrentMenu();
-				else if ( Local.Pawn.Velocity.Cross( Vector3.Up ).Length < 30f )
-					SetCurrentMenu( new MainMenu() );
-			}
 		}
 	}
 }

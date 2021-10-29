@@ -64,7 +64,6 @@ namespace Instagib.UI
 			Header.Add.Label( "Deaths", "deaths" );
 			Header.Add.Label( "Ratio", "ratio" );
 			Header.Add.Label( "Ping", "ping" );
-			Header.Add.Label( "Hit %", "accuracy" );
 		}
 
 		private void Sort()

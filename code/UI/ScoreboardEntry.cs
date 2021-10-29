@@ -13,7 +13,6 @@ namespace Instagib.UI
 		private Label deaths;
 		private Label ratio;
 		private Label ping;
-		private Label accuracy;
 
 		private IconPanel vip;
 
@@ -31,7 +30,6 @@ namespace Instagib.UI
 			deaths = Add.Label( "d", "deaths" );
 			ratio = Add.Label( "r", "ratio" );
 			ping = Add.Label( "ping", "ping" );
-			accuracy = Add.Label( "%hit", "accuracy" );
 		}
 
 		RealTimeSince TimeSinceUpdate = 0;
@@ -72,20 +70,6 @@ namespace Instagib.UI
 					ratioVal = killVal;
 
 				ratio.Text = ratioVal.ToString( "N1" );
-			}
-
-			//
-			// Accuracy
-			//
-			{
-				var totalShotsVal = Client.GetInt( "totalShots", 0 );
-				var totalHitsVal = Client.GetInt( "totalHits", 0 );
-				var accuracyVal = ((float)totalHitsVal / totalShotsVal) * 100f;
-
-				if ( totalHitsVal == 0 )
-					accuracyVal = 0f;
-
-				accuracy.Text = accuracyVal.ToString( "N1" ) + "%";
 			}
 
 			avatar.SetTexture( $"avatar:{Client.SteamId}" );

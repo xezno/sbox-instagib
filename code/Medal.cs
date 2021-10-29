@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sandbox;
+using System;
 
 namespace Instagib
 {
@@ -25,7 +26,7 @@ namespace Instagib
 
 	public static class Medals
 	{
-		public static Medal[] KillMedals = new Medal[]
+		public static Medal[] KillMedals => new Medal[]
 		{
 			new Medal( "Airborne",
 				( attacker, victim ) =>
@@ -33,16 +34,32 @@ namespace Instagib
 					return (victim.GroundEntity == null);
 				}),
 
-			new Medal( "Killing Spree",
+			new Medal( "Longshot",
+				( attacker, victim ) =>
+				{
+					var distance = attacker.Position.Distance( victim.Position );
+					Log.Trace( distance );
+					return ( distance > 2048 );
+				}),
+
+			new Medal( "Up Close",
+				( attacker, victim ) =>
+				{
+					var distance = attacker.Position.Distance( victim.Position );
+					Log.Trace( distance );
+					return ( distance < 128 );
+				}),
+
+			new Medal( "Killing Spree (5 💀)",
 				( attacker, _ ) => attacker.CurrentStreak == 5),
 
-			new Medal( "Rage",
+			new Medal( "Frenzy (10 💀)",
 				( attacker, _ ) => attacker.CurrentStreak == 10),
 
-			new Medal( "Frenzy",
+			new Medal( "Rampage (20 💀)",
 				( attacker, _ ) => attacker.CurrentStreak == 20),
 
-			new Medal( "Rampage",
+			new Medal( "Unstoppable (30 💀)",
 				( attacker, _ ) => attacker.CurrentStreak == 30),
 
 			new Medal( "Buzzkill",

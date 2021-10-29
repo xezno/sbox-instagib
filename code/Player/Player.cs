@@ -208,6 +208,7 @@ namespace Instagib
 		{
 			using ( Prediction.Off() )
 			{
+				Log.Trace( "Playing kill sound" );
 				PlaySound( "kill" );
 				Hitmarker.CurrentHitmarker.OnHit();
 			}
