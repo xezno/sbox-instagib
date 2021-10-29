@@ -1,0 +1,81 @@
+﻿@import "Colors";
+
+:not() { // why
+    flex-shrink: 0;
+}
+
+.menu-items {
+    height: 100%;
+    justify-content: center;
+
+    button {
+        padding: 25px 50px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    position: relative;
+
+    span {
+        height: 75px;
+        top: -75px;
+        left: -50px;
+    }
+}
+
+.modifier-list {
+    width: 100%;
+    overflow: scroll;
+    flex-wrap: wrap;
+    height: 700px;
+    justify-content: space-between;
+}
+
+modifierelement {
+    flex-basis: 150px;
+    padding: 20px;
+    width: 48%;
+    aspect-ratio: 1.0;
+    background-color: $gray-800;
+    flex-direction: column;
+    transition: all 100ms ease;
+    box-shadow: 0 0 20px rgba( black, 0.5 );
+    margin-bottom: 16px;
+    border-radius: 10px;
+    overflow: hidden;
+
+    .description {
+        margin-bottom: 10px;
+    }
+
+    .info {
+        position: absolute;
+        left: 20px;
+        bottom: 50px;
+        font-size: 12px;
+    }
+
+    label.name {
+        font-size: 24px;
+        font-weight: 700;
+        height: 45px;
+        margin-bottom: 10px;
+        color: white;
+        border-bottom: 5px solid $accent;
+        font-family: Poppins-ExtraBoldItalic;
+    }
+
+    label.author {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        font-size: 12px;
+    }
+
+    cursor: pointer;
+
+    &:hover {
+        z-index: 10;
+        transform: scale( 1.05 );
+    }
+}

@@ -13,17 +13,17 @@ namespace Instagib
 	public partial class Player : Sandbox.Player
 	{
 		private Particles speedLines;
-		
+
 		private DamageInfo lastDamageInfo;
-		
+
 		//
 		// Stats used for medals
 		//
 		public int CurrentStreak { get; set; }
 		public float CurrentDamageDealt { get; set; }
-		
+
 		[Net, Local] public bool IsSpawnProtected { get; set; }
-		
+
 		public enum HitboxGroup
 		{
 			None = -1,
@@ -39,7 +39,7 @@ namespace Instagib
 			Special = 11,
 		}
 		[Net] public HitboxGroup LastHitboxDamaged { get; set; }
-		
+
 		//
 		// Dynamic hud / camera
 		//
@@ -47,15 +47,22 @@ namespace Instagib
 		private Rotation lastCameraRot = Rotation.Identity;
 		private float lastHudOffset;
 
+		public Clothing.Container Clothing = new();
+
 		public Player()
 		{
 			Inventory = new BaseInventory( this );
 		}
-		
+
+		public Player( Client cl ) : this()
+		{
+			Clothing.LoadFromClient( cl );
+		}
+
 		public override void Respawn()
 		{
 			Event.Run( "playerRespawn" );
-			
+
 			SetModel( "models/citizen/citizen.vmdl" );
 
 			Controller = new PlayerController();
@@ -69,7 +76,7 @@ namespace Instagib
 
 			Tags.Add( "player" );
 
-			Dress( this );
+			Clothing.DressEntity( this );
 
 			Inventory.Add( new Railgun(), true );
 
@@ -82,14 +89,14 @@ namespace Instagib
 			{
 				_ = ApplySpawnProtection();
 			}
-			
+
 			base.Respawn();
 		}
 
 		private async Task ApplySpawnProtection()
 		{
 			Host.AssertServer();
-			
+
 			IsSpawnProtected = true;
 			await Task.DelaySeconds( 3.0f );
 			IsSpawnProtected = false;
@@ -99,15 +106,15 @@ namespace Instagib
 		{
 			base.Simulate( cl );
 			SimulateActiveChild( cl, ActiveChild );
-			
+
 			if ( cl == Local.Client )
 			{
 				GlowActive = false;
-				
+
 				//
 				// Speed lines
 				//
-				if ( IsClient && Velocity.Length > 600 )
+				if ( IsClient && Velocity.Length > 500 )
 				{
 					speedLines ??= Particles.Create( "particles/speed_lines.vpcf" );
 				}
@@ -116,7 +123,7 @@ namespace Instagib
 					speedLines?.Destroy();
 					speedLines = null;
 				}
-				
+
 				return;
 			}
 
@@ -139,21 +146,19 @@ namespace Instagib
 			hsvColor.Value = 1.0f;
 			GlowColor = hsvColor.ToColor();
 		}
-		
-		private void PlayDPR() => Sound.FromScreen( "dpr" );
 
 		public override void OnKilled()
 		{
 			base.OnKilled();
-			
+
 			// Attacker, victim
 			if ( LastAttacker == null )
 			{
-				Event.Run( "playerKilled", GetClientOwner()?.SteamId.ToString(), GetClientOwner()?.SteamId.ToString() );
+				Event.Run( "playerKilled", Client?.SteamId.ToString(), Client?.SteamId.ToString() );
 			}
 			else
 			{
-				Event.Run( "playerKilled", LastAttacker?.GetClientOwner().SteamId.ToString(), GetClientOwner()?.SteamId.ToString() );
+				Event.Run( "playerKilled", LastAttacker?.Client.SteamId.ToString(), Client?.SteamId.ToString() );
 			}
 
 			Velocity = Vector3.Zero;
@@ -163,17 +168,26 @@ namespace Instagib
 			(Camera as LookAtCamera).Origin = EyePos;
 			(Camera as LookAtCamera).Rot = EyeRot;
 			(Camera as LookAtCamera).TargetOffset = Vector3.Up * 64f;
-			
+
 			Inventory.DeleteContents();
 
 			EnableDrawing = false;
 			EnableAllCollisions = false;
-			
+
 			_ = Particles.Create( "particles/gib_blood.vpcf", Position + (Vector3.Up * (8)) );
-			
+
 			ShakeScreen( To.Everyone, Position );
-			
+
 			Sound.FromWorld( "gibbing", Position );
+
+			var childrenCopy = Children.ToList();
+			foreach ( var child in childrenCopy )
+			{
+				if ( !child.Tags.Has( "clothes" ) ) continue;
+				if ( child is not ModelEntity e ) continue;
+
+				e.Delete();
+			}
 		}
 
 		[ClientRpc]
@@ -181,11 +195,11 @@ namespace Instagib
 		{
 			float strengthMul = 10f;
 			float strengthDist = 512f;
-			
+
 			float strength = strengthDist - Local.Pawn.Position.Distance( position ).Clamp( 0, strengthDist );
 			strength /= strengthDist;
 			strength *= strengthMul;
-			
+
 			_ = new Sandbox.ScreenShake.Perlin( 1f, 0.75f, strength );
 		}
 
@@ -194,6 +208,7 @@ namespace Instagib
 		{
 			using ( Prediction.Off() )
 			{
+				Log.Trace( "Playing kill sound" );
 				PlaySound( "kill" );
 				Hitmarker.CurrentHitmarker.OnHit();
 			}
@@ -205,10 +220,10 @@ namespace Instagib
 
 			if ( IsSpawnProtected || info.Flags.HasFlag( DamageFlags.PhysicsImpact ) )
 				return;
-			
+
 			lastDamageInfo = info;
 			LastHitboxDamaged = hitboxGroup;
-			
+
 			base.TakeDamage( info );
 
 			if ( info.Attacker is Player attacker )
@@ -259,7 +274,7 @@ namespace Instagib
 			var leanMax = 0.015f;
 			var leanMul = 0.005f;
 			var leanSmooth = 15.0f;
-			
+
 			lean = lean.LerpTo( Velocity.Dot( setup.Rotation.Right ) * leanMul, Time.Delta * leanSmooth );
 			lean.Clamp( -leanMax, leanMax );
 
@@ -274,7 +289,7 @@ namespace Instagib
 			setup.FieldOfView += fov;
 
 			var panelTransform = new Sandbox.UI.PanelTransform();
-			panelTransform.AddRotation( 0, 0, lean * -0.2f ); 
+			panelTransform.AddRotation( 0, 0, lean * -0.2f );
 
 			var zOffset = (lastCameraPos - setup.Position).z * 4f;
 			zOffset = zOffset.Clamp( -16f, 16f );

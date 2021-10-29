@@ -1,6 +1,6 @@
 <div class="main">
 	<text class="menu-prompt" @text="MenuPromptText" @ref="MenuPrompt"></text>
-	
+
 	<div class="game-state">
 		<div>
 			<text @text="GameStateText" class="game-state-text">Warmup</text>
@@ -8,28 +8,10 @@
 		</div>
 	</div>
 
-	<text class="controls">
-[CTRL] Grapple
-[Mouse1] Fire
-[Mouse2] Rocket Jump
-
-[Q] Menu
-	</text>
-		
 	<div class="bottom">
-		<div class="health">
-			<Icon>add_circle</Icon>
-			<text @text="PlayerHealthText">69</text>
-		</div>
-
-		<span class="speed">
+		<div class="speed">
 			<Icon>speed</Icon>
 			<text @text="PlayerSpeedText"></text>
-		</span>
-
-		<div class="ammo">
-			<text>∞</text>
-			<Icon>offline_bolt</Icon>
 		</div>
 	</div>
 </div> 

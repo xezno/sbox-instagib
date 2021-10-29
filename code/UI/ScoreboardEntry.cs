@@ -13,7 +13,8 @@ namespace Instagib.UI
 		private Label deaths;
 		private Label ratio;
 		private Label ping;
-		private Label accuracy;
+
+		private IconPanel vip;
 
 		private Image avatar;
 
@@ -22,12 +23,13 @@ namespace Instagib.UI
 			AddClass( "entry" );
 
 			avatar = Add.Image( null, "avatar" );
+			vip = Add.Icon( "star", "vip" );
 			playerName = Add.Label( "PlayerName", "name" );
+
 			kills = Add.Label( "k", "kills" );
 			deaths = Add.Label( "d", "deaths" );
 			ratio = Add.Label( "r", "ratio" );
 			ping = Add.Label( "ping", "ping" );
-			accuracy = Add.Label( "%hit", "accuracy" );
 		}
 
 		RealTimeSince TimeSinceUpdate = 0;
@@ -70,23 +72,10 @@ namespace Instagib.UI
 				ratio.Text = ratioVal.ToString( "N1" );
 			}
 
-			//
-			// Accuracy
-			//
-			{
-				var totalShotsVal = Client.GetInt( "totalShots", 0 );
-				var totalHitsVal = Client.GetInt( "totalHits", 0 );
-				var accuracyVal = ((float)totalHitsVal / totalShotsVal) * 100f;
-
-				if ( totalHitsVal == 0 )
-					accuracyVal = 0f;
-
-				accuracy.Text = accuracyVal.ToString( "N1" ) + "%";
-			}
-
 			avatar.SetTexture( $"avatar:{Client.SteamId}" );
 			ping.Text = Client.Ping.ToString();
 			SetClass( "me", Client == Local.Client );
+			vip.SetClass( "visible", Client.SteamId == InstagibGlobal.AlexSteamId );
 		}
 
 		public virtual void UpdateFrom( Client client )

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Sandbox;
+using System;
 
 namespace Instagib
 {
 	public struct Medal
 	{
 		public string Name { get; set; }
-		public string Description { get; set; }
-		
+
 		/// <summary>
 		/// Attacker, Victim
 		/// <para>
@@ -14,55 +14,56 @@ namespace Instagib
 		/// </para>
 		/// </summary>
 		public ConditionDelegate Condition { get; set; }
-		public int Experience { get; set; }
 
 		public delegate bool ConditionDelegate( Player attacker, Player victim );
-		
-		public Medal( string name, string description, ConditionDelegate condition, int experience )
+
+		public Medal( string name, ConditionDelegate condition )
 		{
 			Name = name;
-			Description = description;
 			Condition = condition;
-			Experience = experience;
 		}
 	}
 
 	public static class Medals
 	{
-		public static Medal[] KillMedals = new Medal[]
+		public static Medal[] KillMedals => new Medal[]
 		{
 			new Medal( "Airborne",
-				"Frag an enemy that is in the air",
 				( attacker, victim ) =>
 				{
 					return (victim.GroundEntity == null);
-				},
-				50 ),
+				}),
 
-			new Medal( "Killing Spree",
-				"Get 5 frags without dying",
-				( attacker, _ ) => attacker.CurrentStreak == 5,
-				10 ),
-			new Medal( "Rage",
-				"Get 10 frags without dying",
-				( attacker, _ ) => attacker.CurrentStreak == 10,
-				10 ),
-			new Medal( "Frenzy",
-				"Get 20 frags without dying",
-				( attacker, _ ) => attacker.CurrentStreak == 20,
-				10 ),
-			new Medal( "Rampage",
-				"Get 30 frags without dying",
-				( attacker, _ ) => attacker.CurrentStreak == 30,
-				10 ),
-			new Medal( "Headshot",
-				"Shoot someone in the head",
-				( attacker, victim) => victim.LastHitboxDamaged == Player.HitboxGroup.Head,
-				50 ),
-			new Medal( "Nutshot",
-				"Shoot someone in the goolies",
-				( attacker, victim) => victim.LastHitboxDamaged == Player.HitboxGroup.Stomach,
-				10 ),
+			new Medal( "Longshot",
+				( attacker, victim ) =>
+				{
+					var distance = attacker.Position.Distance( victim.Position );
+					Log.Trace( distance );
+					return ( distance > 2048 );
+				}),
+
+			new Medal( "Up Close",
+				( attacker, victim ) =>
+				{
+					var distance = attacker.Position.Distance( victim.Position );
+					Log.Trace( distance );
+					return ( distance < 128 );
+				}),
+
+			new Medal( "Killing Spree (5 💀)",
+				( attacker, _ ) => attacker.CurrentStreak == 5),
+
+			new Medal( "Frenzy (10 💀)",
+				( attacker, _ ) => attacker.CurrentStreak == 10),
+
+			new Medal( "Rampage (20 💀)",
+				( attacker, _ ) => attacker.CurrentStreak == 20),
+
+			new Medal( "Unstoppable (30 💀)",
+				( attacker, _ ) => attacker.CurrentStreak == 30),
+
+			new Medal( "Buzzkill",
+				(_, victim) => victim.CurrentStreak > 3),
 		};
 	}
 }

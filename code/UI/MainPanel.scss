@@ -1,332 +1,359 @@
 @import "Colors";
 
 .main {
-	// opacity: 0.75;
+    // opacity: 0.75;
+    z-index: -1;
 }
 
-text,label,input,textentry,icon,iconpanel
-{
-	font-family: Poppins;
-	font-weight: 700;
-	color: white;
+text, label, input, textentry, icon, iconpanel {
+    font-family: Poppins;
+    font-weight: 700;
+    color: white;
 }
 
 text.alert {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	font-size: 32px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    font-size: 32px;
 }
 
 text.alert, text.menu-prompt {
-	padding: 75px 100px;
-	text-align: center;
-	opacity: 0.2;
+    padding: 75px 100px;
+    text-align: center;
+    opacity: 0.2;
 }
 
 text.menu-prompt {
-	font-size: 20px;
-	transition: opacity 100ms ease;
-	
-	opacity: 0;
-	
-	&.visible {
-		opacity: 0.2;
-	}
+    font-size: 20px;
+    transition: opacity 100ms ease;
+    opacity: 0;
+
+    &.visible {
+        // opacity: 0.2;
+    }
 }
 
 .bottom {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	
-	padding: 75px 100px;
-	
-	font-size: 32px;
-	
-	align-items: flex-end;
-	justify-content: space-between;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 75px 100px;
+    font-size: 32px;
+    align-items: flex-end;
+    justify-content: space-around;
 
-	.health, .ammo {
-		align-items: center;
-	}
+    .health, .ammo {
+        align-items: center;
+    }
 
-	.icon {
-		width: 64px;
-		height: 64px;
-		background-size: cover;
+    .icon {
+        width: 64px;
+        height: 64px;
+        background-size: cover;
 
-		&.slugs {
-			background-image: url( /textures/ui/slugs.png );
-			margin-left: -16px;
-		}
-		&.health {
-			background-image: url( /textures/ui/health.png );
-			margin-right: -16px;
-		}
-	}
-	
-	.speed {
-		font-size: 20px;
-		align-items: center;
-		margin-left: -50px;
-	}
-	
-	text {
-		padding: 10px 20px;
-	}
+        &.slugs {
+            background-image: url( /textures/ui/slugs.png );
+            margin-left: -16px;
+        }
+
+        &.health {
+            background-image: url( /textures/ui/health.png );
+            margin-right: -16px;
+        }
+    }
+
+    .speed {
+        font-size: 20px;
+        align-items: center;
+    }
+
+    text {
+        padding: 10px 20px;
+    }
 }
 
 .frag {
-	position: absolute;
-	top: 400px;
-	right: 0;
-	left: 0;
-	bottom: 0;
-	align-items: center;
-	justify-content: center;
-	font-size: 20px;
-	flex-direction: row;
+    position: absolute;
+    top: 400px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-direction: row;
 
-	.frag-message {
-		backdrop-filter: blur( 20px ) brightness( 0.5 );
-		border: 2px solid rgba( black, 0.4 );
-		flex-direction: row;
-		text-align: center;
-		border-radius: 10px;
-		flex-shrink: 0;
-		margin: 10px 10px;
-		align-items: center;
+    .frag-message {
+        backdrop-filter: blur( 20px ) brightness( 0.5 );
+        border: 2px solid rgba( black, 0.4 );
+        flex-direction: row;
+        text-align: center;
+        border-radius: 10px;
+        flex-shrink: 0;
+        margin: 10px 10px;
+        align-items: center;
+        position: absolute;
+        opacity: 1;
+        transform: scale( 1 );
+        transition: all 200ms ease, box-shadow 500ms ease;
+        box-shadow: 0 0 25px transparent;
 
-		position: absolute;
+        &:intro {
+            opacity: 0;
+            transform: scale( 0 );
+            box-shadow: 0 0 500px rgba( white, 0.5 );
+        }
 
-		opacity: 1;
-		transform: scale( 1 );
-		transition: all 200ms ease, box-shadow 500ms ease;
-		box-shadow: 0 0 25px transparent;
+        &:outro {
+            opacity: 0;
+            transform: scale( 0 );
+        }
+    }
 
-		&:intro {
-			opacity: 0;
-			transform: scale( 0 );
-			box-shadow: 0 0 500px rgba( white, 0.5 );
-		}
+    .frag-details {
+        padding: 10px 20px;
+        text-align: right;
+        margin-left: 10px;
+        justify-content: left;
+        flex-direction: column;
+    }
 
-		&:outro {
-			opacity: 0;
-			transform: scale( 0 );
-		}
-	}
+    .player {
+        color: #D3FF19;
+    }
 
-	.frag-details {
-		padding: 10px 20px;
-		text-align: right;
-		margin-left: 10px;
-		justify-content: left;
-		flex-direction: column;
-	}
+    .frag-skull {
+        padding: 10px 15px 10px 15px;
+        height: 100%;
+        font-size: 32px;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba( white, 0.05 );
+        background-image-tint: rgba( white, 0.5 );
+        border-radius: 11px 0px 0px 11px; // 11px is the sweet spot despite the parent being 10px. don't ask why
+    }
 
-	.player {
-		color: #D3FF19;
-	}
+    .medals {
+        flex-direction: column;
+        font-size: 16px;
+    }
 
-	.frag-skull {
-		padding: 10px 15px 10px 15px;
-		height: 100%;
-		font-size: 32px;
-		justify-content: center;
-		align-items: center;
-
-		background-color: rgba( white, 0.05 );
-		background-image-tint: rgba( white, 0.5 );
-		border-radius: 11px 0px 0px 11px; // 11px is the sweet spot despite the parent being 10px. don't ask why
-	}
-
-	.medals {
-		flex-direction: column;
-		font-size: 16px;
-	}
-
-	.weapon {
-		font-size: 20px;
-	}
+    .weapon {
+        font-size: 20px;
+    }
 }
 
-.mainpanel,.staticpanel { 
-	position: absolute; 
-	top: 0; 
-	right: 0; 
-	left: 0; 
-	bottom: 0;
+.mainpanel, .staticpanel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
 }
 
 hitmarker {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	position: absolute;
-	align-items: center;
-	justify-content: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
 
-	hitmarkerinstance {
-		width: 64px;
-		height: 64px;
-		opacity: 1;
-		position: absolute;
-		transition: all 50ms ease;
-		background-image: url( /textures/ui/hit.png );
-		background-image-tint: #f00;
-		background-size: 100%;
+    hitmarkerinstance {
+        width: 64px;
+        height: 64px;
+        opacity: 1;
+        position: absolute;
+        transition: all 50ms ease;
+        background-image: url( /textures/ui/hit.png );
+        background-image-tint: #f00;
+        background-size: 100%;
 
-		&:outro {
-			opacity: 0;
-		}
-	}
+        &:outro {
+            opacity: 0;
+        }
+    }
 }
 
 iconpanel, icon {
-	font-size: 48px;
-	font-family: MaterialIconsRound;
-	margin: 0;
-	padding: 0;
+    font-size: 48px;
+    font-family: MaterialIconsRound;
+    margin: 0;
+    padding: 0;
 }
 
 .round-start {
-	font-size: 32px;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	height: 100%;
-	
-	padding-bottom: 250px;
+    font-size: 32px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 250px;
 }
 
 .speed {
-	padding-left: 20px;
-	icon {
-		font-size: 32px;
-		margin-right: -12px;
-	}
+    padding-left: 20px;
+
+    icon {
+        font-size: 32px;
+        margin-right: -12px;
+    }
 }
 
 .ammo {
-	padding-right: 15px;
-	icon {
-		color: #338DFF;
-		margin-left: -8px;
-	}
+    padding-right: 15px;
+
+    icon {
+        color: #338DFF;
+        margin-left: -8px;
+    }
 }
 
 .health {
-	padding-left: 15px;
-	icon {
-		color: #D3FF19;
-		margin-right: -8px;
-	}
+    padding-left: 15px;
+
+    icon {
+        color: #D3FF19;
+        margin-right: -8px;
+    }
 }
 
-.health,.speed,.ammo {
-	border-radius: 10px;
-	backdrop-filter: blur( 20px ) brightness( 0.5 );
-	border: 2px solid rgba( black, 0.4 );
+.health, .speed, .ammo {
+    text-shadow: 0 0 4px solid black;
 }
 
-.crosshair {
-	position: absolute;
-	top: 50%;
-	left: 50%;
+crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX( -50% ) translateY( -0% );
+    mix-blend-mode: lighten;
+    width: 1px;
+    height: 1px;
 
-	font-family: Crosshairs;
-	color: white;
+    .element {
+        position: absolute;
+    }
 
-	transform: translateX( -50% ) translateY( -50% );
+    .el0 {
+        border-radius: 1000px;
+        width: 6px;
+        height: 6px;
+    }
+
+    .el0, .el1, .el2, .el3, .el4 {
+        background-color: white;
+        border-radius: 0;
+    }
+
+    .el0, .el1 {
+        width: 10px;
+        top: -1px;
+        height: 2px;
+        border-radius: 2px;
+    }
+
+    .el2, .el3 {
+        width: 3px;
+        left: -1px;
+        height: 10px;
+        border-radius: 2px;
+    }
+
+    .el0 {
+        right: 8px;
+    }
+
+    .el1 {
+        left: 8px;
+    }
+
+    .el2 {
+        bottom: 8px;
+    }
+
+    .el3 {
+        top: 8px;
+    }
+
+    .el4 {
+        width: 3px;
+        height: 2px;
+        left: -1px;
+        top: -1px;
+    }
 }
 
 deathpanel {
-	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	bottom: 0;
-	justify-content: center;
-	align-items: center;
-	padding-top: 500px;
-	text-align: center;
-	font-size: 24px;
-	flex-direction: column;
-	opacity: 1;
-	transition: opacity 200ms ease;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    padding-top: 500px;
+    text-align: center;
+    font-size: 24px;
+    flex-direction: column;
+    opacity: 1;
+    transition: opacity 200ms ease;
 
-	&:outro {
-		opacity: 0;
-	}
+    &:outro {
+        opacity: 0;
+    }
 
-	.player {
-		color: #D3FF19;
-	}
+    .player {
+        color: #D3FF19;
+    }
 
-	.medals {
-		flex-direction: column;
-		font-size: 18px;
-	}
+    .medals {
+        flex-direction: column;
+        font-size: 18px;
+    }
 }
 
 .game-state {
-	position: absolute;
-	top: 75px;
-	left: 50px;
-	right: 50px;
-	font-size: 20px;
-	
-	justify-content: center;
-	align-items: center;
-	
-	div {
-		border-radius: 10px;
-		backdrop-filter: blur( 20px ) brightness( 0.5 );
-		border: 2px solid rgba( black, 0.4 );
-	}
-	
-	.game-state-text {
-		margin-right: 4px;
-		padding: 10px 20px;
-	}
-	
-	.game-time {
-		margin-left: 4px;
-		padding: 10px 20px;
-		border-radius: 0 10px 10px 0;
-		backdrop-filter: brightness( 1.5 );
-	}
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
+
+    div {
+        border-radius: 10px;
+        backdrop-filter: blur( 20px ) brightness( 0.5 );
+        border: 2px solid rgba( black, 0.4 );
+    }
+
+    .game-state-text {
+        margin-right: 4px;
+        padding: 10px 20px;
+    }
+
+    .game-time {
+        margin-left: 4px;
+        padding: 10px 20px;
+        border-radius: 0 10px 10px 0;
+        backdrop-filter: brightness( 1.5 );
+    }
 }
 
-.controls {
-	backdrop-filter: blur( 20px ) brightness( 0.5 );
-	border: 2px solid rgba( black, 0.4 );
-	position: absolute;
-	bottom: 10%;
-	right: 100px;
-	border-radius: 10px;
-	padding: 0 20px;
-}
+KillFeed {
+    top: 50px;
+    right: 50px;
 
-grappleindicator {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	border-radius: 1000px;
-	border: 2px solid rgba( white, 0.4 );
-	transform: translateX( -49% ) translateY( -50% );
-	pixel-snap: 0;
-	
-	&.active {
-		border-color: $accent;		
-	}
-	
-	&.cooldown {
-		border-color: rgba( white, 0.05 );
-	}
+    > KillFeedEntry {
+        border-radius: 10px;
+        backdrop-filter: blur( 20px ) brightness( 0.5 );
+        border: 2px solid rgba( black, 0.4 );
+        background-color: transparent;
+        height: 50px;
+    }
 }
