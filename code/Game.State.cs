@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Instagib.Utils;
 using Sandbox;
 
 namespace Instagib
 {
 	public partial class Game
 	{
+		public static bool UseGameServices => false;
+
 		public class BaseGameState
 		{
 			protected RealTimeSince stateStart;
@@ -36,6 +36,26 @@ namespace Instagib
 			}
 
 			protected int GetPlayerCount() => Client.All.Count();
+
+			public virtual void OnKill( Client attackerClient, Client victimClient )
+			{
+				Log.Trace( "Player got a kill" );
+			}
+
+			public virtual void OnDeath( Client cl ) 
+			{
+				Log.Trace( "Player died" );
+			}
+
+			public virtual void OnPlayerJoin( Client cl ) 
+			{
+				Log.Trace( "Player joined" );
+			}
+
+			public virtual void OnPlayerLeave( Client cl )
+			{
+				Log.Trace( "Player left" );
+			}
 		}
 
 		private class WaitingForPlayersState : BaseGameState
@@ -133,7 +153,27 @@ namespace Instagib
 					entity.SetInt( "totalHits", 0 );
 				}
 
-				stateEnds = 5 * 60;
+				//stateEnds = 5 * 60;
+				stateEnds = 30;
+
+				if ( UseGameServices )
+					GameServices.StartGame();
+			}
+
+			public override void OnKill( Client attackerClient, Client victimClient )
+			{
+				base.OnKill( attackerClient, victimClient );
+
+				if ( UseGameServices )
+					GameServices.RecordEvent( attackerClient, "killed", victim: victimClient );
+			}
+
+			public override void OnDeath( Client cl )
+			{
+				base.OnDeath( cl );
+
+				if ( UseGameServices )
+					GameServices.RecordEvent( cl, "died" );
 			}
 
 			public override string StateTime()
@@ -151,11 +191,21 @@ namespace Instagib
 				if ( GetPlayerCount() <= 1 )
 				{
 					SetState( new GameFinishedState() );
+
+					if ( UseGameServices )
+						GameServices.EndGame();
+
+					return;
 				}
 
 				if ( stateEnds < 0 )
 				{
 					SetState( new GameFinishedState() );
+
+					if ( UseGameServices )
+						GameServices.EndGame();
+
+					return;
 				}
 			}
 		}

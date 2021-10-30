@@ -31,16 +31,18 @@ namespace Instagib
 			}
 		}
 
-		public override void ClientJoined( Client client )
+		public override void ClientJoined( Client cl )
 		{
-			base.ClientJoined( client );
+			base.ClientJoined( cl );
 			
 			Event.Run( "playerJoined" );
 
-			var player = new Player( client );
-			client.Pawn = player;
+			var player = new Player( cl );
+			cl.Pawn = player;
 			
 			player.Respawn();
+
+			CurrentState.OnPlayerJoin( cl );
 
 			// StartStatsRpc( To.Single( client ) );
 		}
@@ -48,29 +50,31 @@ namespace Instagib
 		[ClientCmd( "reconnect_stats" )]
 		public static void ReconnectStatsCmd()
 		{
-			// (Sandbox.Game.Current as Game).StartStatsRpc( To.Single( Local.Pawn ) ); 
+			// (Sandbox.Game.Current as Game).StartStatsRpc( To.Single( Local.Pawn ) );
 		}
 		
-		public override void DoPlayerNoclip( Client player )
+		public override void DoPlayerNoclip( Client cl )
 		{
-			if ( player.SteamId != InstagibGlobal.AlexSteamId )
+			if ( cl.SteamId != InstagibGlobal.AlexSteamId )
 				return;
 
-			base.DoPlayerNoclip( player );
+			base.DoPlayerNoclip( cl );
 		}
 
-		public override void DoPlayerDevCam( Client player )
+		public override void DoPlayerDevCam( Client cl )
 		{
-			if ( player.SteamId != InstagibGlobal.AlexSteamId )
+			if ( cl.SteamId != InstagibGlobal.AlexSteamId )
 				return;
 			
-			base.DoPlayerDevCam( player );
+			base.DoPlayerDevCam( cl );
 		}
 
 		public override void ClientDisconnect( Client cl, NetworkDisconnectionReason reason )
 		{
 			base.ClientDisconnect( cl, reason );
 			Event.Run( "playerLeft" );
+
+			CurrentState.OnPlayerLeave( cl );
 		}
 
 		public override void OnKilled( Client client, Entity pawn )
@@ -81,7 +85,9 @@ namespace Instagib
 			
 			if ( pawn is not Player victim )
 				return;
-			
+
+			CurrentState.OnDeath( victim.Client );
+
 			// HACK: Assign a respawn timer for this player
 			async Task RespawnTimer()
 			{
@@ -90,13 +96,18 @@ namespace Instagib
 			}
 			_ = RespawnTimer();
 
+			//
+			// Get attacker info
+			//
 			if ( pawn.LastAttacker is not Player attacker )
 			{
 				PlayerDiedRpc( To.Single( victim ), null );
 				OnKilledMessage( 0, "", client.SteamId, client.Name, "died" );
 				return;
 			}
-			
+
+			CurrentState.OnKill( attacker.Client, victim.Client );
+
 			PlayerDiedRpc( To.Single( victim ), attacker );
 
 			// Killstreak tracking
