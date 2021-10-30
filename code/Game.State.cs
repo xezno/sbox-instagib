@@ -7,7 +7,8 @@ namespace Instagib
 {
 	public partial class Game
 	{
-		public static bool UseGameServices => false;
+		[ServerVar]
+		public static bool UseGameServices { get; set; } = true;
 
 		public class BaseGameState
 		{
@@ -97,7 +98,7 @@ namespace Instagib
 					client.SetInt( "totalHits", 0 );
 				}
 
-				stateEnds = 15;
+				stateEnds = 5 * 60;
 			}
 
 			public override string StateTime()
