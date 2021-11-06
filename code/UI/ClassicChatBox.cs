@@ -17,7 +17,7 @@ public partial class ClassicChatBox : Panel
 		StyleSheet.Load( "/Code/UI/ClassicChatBox.scss" );
 
 		Canvas = Add.Panel( "classicchat_canvas" );
-		// Canvas.PreferScrollToBottom = true;
+		Canvas.PreferScrollToBottom = true;
 
 		Input = Add.TextEntry( "" );
 		Input.AddEventListener( "onsubmit", () => Submit() );
@@ -40,6 +40,8 @@ public partial class ClassicChatBox : Panel
 				message.AddClass( "show" );
 			}
 		}
+
+		Canvas.TryScrollToBottom();
 	}
 
 	void Close()
@@ -55,6 +57,8 @@ public partial class ClassicChatBox : Panel
 				message.AddClass( "expired" );
 			}	
 		}
+
+		Canvas.TryScrollToBottom();
 	}
 
 	void Submit()
@@ -68,6 +72,8 @@ public partial class ClassicChatBox : Panel
 			return;
 		
 		Say( msg );
+
+		Canvas.TryScrollToBottom();
 	}
 
 	public void AddEntry( string name, string message, string avatar )
@@ -79,6 +85,8 @@ public partial class ClassicChatBox : Panel
 
 		e.SetClass( "noname", string.IsNullOrEmpty( name ) );
 		e.SetClass( "noavatar", string.IsNullOrEmpty( avatar ) );
+
+		Canvas.TryScrollToBottom();
 	}
 
 	[ClientCmd( "chat_add", CanBeCalledFromServer = true )]

@@ -25,7 +25,7 @@ namespace Instagib.UI
 
 			async Task KillAfterTime()
 			{
-				await Task.Delay( 200 );
+				await Task.Delay( 50 );
 				Delete();
 			}
 		}

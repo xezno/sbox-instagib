@@ -1,0 +1,30 @@
+﻿@import "Colors";
+
+.post-game-screen {
+    padding: 50px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    backdrop-filter: blur( 50px );
+    background-color: rgba( $gray-900, 0.7 );
+    justify-content: center;
+    align-items: center;
+
+    &WinnerScreen {
+        flex-direction: column-reverse; // HACK: For some reason winner screen generates the wrong way around. dumb
+    }
+
+    &MapVoteScreen {
+        flex-direction: column;
+    }
+
+    transition: all 150ms ease;
+    pointer-events: all;
+
+    &:intro {
+        opacity: 0;
+    }
+}

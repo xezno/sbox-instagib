@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Instagib.UI.Elements;
+using Sandbox;
 using Sandbox.UI;
 
 namespace Instagib.UI
@@ -12,8 +13,8 @@ namespace Instagib.UI
 		public string PlayerHealthText => $"{Local.Client.Pawn.Health.CeilToInt()}";
 		public string PlayerSpeedText => $"{PlayerSpeed:N0}u/s";
 
-		public string GameStateText => (Game.Current as Game).CurrentStateName;
-		public string GameStateTime => (Game.Current as Game).CurrentStateTime;
+		public string GameStateText => Game.Instance?.CurrentStateName;
+		public string GameStateTime => Game.Instance?.CurrentStateTime;
 
 		public MainPanel()
 		{

@@ -6,10 +6,10 @@ using Sandbox.UI.Construct;
 
 namespace Instagib.UI
 {
-	public class FragsPanel : Panel
+	public class MessagesPanel : Panel
 	{
-		public static FragsPanel Instance { get; private set; }
-		public FragsPanel()
+		public static MessagesPanel Instance { get; private set; }
+		public MessagesPanel()
 		{
 			Instance = this;
 			
@@ -26,8 +26,48 @@ namespace Instagib.UI
 			var fragMessage = new FragMessage( weapon, target, medals );
 			fragMessage.Parent = this;
 		}
+
+		public void AddDeathMessage( string weapon, string target )
+		{
+			foreach ( var child in Children?.Where( c => c is DeathMessage ) )
+			{
+				child?.Delete();
+			}
+
+			var deathMessage = new DeathMessage( weapon, target );
+			deathMessage.Parent = this;
+		}
 	}
-	
+
+	public class DeathMessage : Panel
+	{
+		private Label skullLabel;
+
+		public DeathMessage( string weapon, string target )
+		{
+			SetClass( "frag-message", true );
+			StyleSheet.Load( "/Code/UI/MainPanel.scss" );
+
+			skullLabel = Add.Label( "💀", "frag-skull" );
+			var fragDetails = Add.Panel( "frag-details" );
+
+			fragDetails.Add.Label( $"FRAGGED BY" );
+			fragDetails.Add.Label( $"{target}", "player" );
+			fragDetails.Add.Label( $"{weapon}", "weapon" );
+
+			//
+			// Timeout
+			//
+			_ = KillAfterTime();
+		}
+
+		async Task KillAfterTime()
+		{
+			await Task.Delay( 2500 );
+			Delete();
+		}
+	}
+
 	public class FragMessage : Panel
 	{
 		private Label skullLabel;

@@ -1,4 +1,6 @@
 ﻿using Instagib.UI.Menus;
+using Instagib.UI.PostGameScreens;
+using Instagib.UI.Elements;
 using Sandbox;
 using Sandbox.UI;
 
@@ -8,11 +10,14 @@ namespace Instagib.UI
 	{
 		public static Panel TiltingHudPanel;
 		public static Panel StaticHudPanel;
-		
+
+		private static Panel WinnerScreen;
+		private static Panel MapVoteScreen;
+
 		public static InstagibHud CurrentHud;
 
 		private static BaseMenu currentMenu;
-		
+
 		public InstagibHud()
 		{
 			if ( IsClient )
@@ -24,16 +29,31 @@ namespace Instagib.UI
 				StaticHudPanel.AddChild<Crosshair>();
 				StaticHudPanel.AddChild<ClassicChatBox>();
 				StaticHudPanel.AddChild<Hitmarker>();
-				StaticHudPanel.AddChild<FragsPanel>();
+				StaticHudPanel.AddChild<MessagesPanel>();
 				StaticHudPanel.AddChild<NameTags>();
 				StaticHudPanel.AddChild<KillFeed>();
-				// StaticHudPanel.AddChild<WinnerScreen>();
 
 				SetCurrentMenu( new MainMenu() );
 
 				TiltingHudPanel = RootPanel.AddChild<MainPanel>();
 				CurrentHud = this;
 			}
+		}
+
+		public static void ToggleMapVoteScreen( bool oldValue, bool newValue )
+		{
+			if ( newValue )
+				MapVoteScreen = StaticHudPanel.AddChild<MapVoteScreen>();
+			else
+				MapVoteScreen?.Delete();
+		}
+
+		public static void ToggleWinnerScreen( bool oldValue, bool newValue )
+		{
+			if ( newValue )
+				WinnerScreen = StaticHudPanel.AddChild<WinnerScreen>();
+			else
+				WinnerScreen?.Delete();
 		}
 
 		public void SetCurrentMenu( BaseMenu menu )
@@ -46,12 +66,11 @@ namespace Instagib.UI
 		public void OnDeath( string killer )
 		{
 			Host.AssertClient();
-			
+
 			// We died
 			TiltingHudPanel?.DeleteChildren();
 
-			StaticHudPanel.AddChild<DeathsPanel>();
-			DeathsPanel.Instance.AddDeathMessage( "Railgun", killer );
+			MessagesPanel.Instance.AddDeathMessage( "Railgun", killer );
 		}
 
 		public void OnRespawn()
@@ -64,9 +83,9 @@ namespace Instagib.UI
 		{
 			if ( attacker.Client.SteamId != (Local.Client?.SteamId) )
 				return;
-			
+
 			// We killed someone
-			FragsPanel.Instance.AddFragMessage( "Railgun", victim.Client.Name, medals );
+			MessagesPanel.Instance.AddFragMessage( "Railgun", victim.Client.Name, medals );
 		}
 	}
 }

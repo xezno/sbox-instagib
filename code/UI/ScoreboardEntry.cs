@@ -14,7 +14,7 @@ namespace Instagib.UI
 		private Label ratio;
 		private Label ping;
 
-		private IconPanel vip;
+		private Label vip;
 
 		private Image avatar;
 
@@ -23,7 +23,7 @@ namespace Instagib.UI
 			AddClass( "entry" );
 
 			avatar = Add.Image( null, "avatar" );
-			vip = Add.Icon( "star", "vip" );
+			vip = Add.Label( "👑", "vip" );
 			playerName = Add.Label( "PlayerName", "name" );
 
 			kills = Add.Label( "k", "kills" );
