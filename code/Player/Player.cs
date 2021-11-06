@@ -36,6 +36,12 @@ namespace Instagib
 			Clothing.LoadFromClient( cl );
 		}
 
+		public override void Spawn()
+		{
+			base.Spawn(); 
+			LagCompensation = true;
+		}
+
 		public override void Respawn()
 		{
 			Event.Run( "playerRespawn" );

@@ -130,48 +130,6 @@ namespace Instagib
 			ownerClient.AddInt( "totalShots" );
 		}
 
-		[ServerCmd]
-		private static void CmdShoot( int targetIdent, int ownerIdent, Vector3 startPos, Vector3 endPos,
-			Vector3 forward, int tick, int hitbox )
-		{
-			Host.AssertServer();
-
-			var target = Entity.All.First( e => e.NetworkIdent == targetIdent );
-			var owner = Entity.All.First( e => e.NetworkIdent == ownerIdent );
-
-			//
-			// Checking:
-			// In order to prevent people from just typing stuff like "shoot Alex", we'll do some light checking to
-			// verify stuff
-			//	
-			if ( target is Player )
-			{
-				var ownerClient = owner.Client;
-				ownerClient.AddInt( "totalHits" );
-
-				if ( tick - Time.Tick > MaxHitTolerance )
-				{
-					// Too much time passed - player's lagging too much for us to do any proper checks
-					Log.Trace( $"Too much time passed: {tick - Time.Tick}" );
-					return;
-				}
-			}
-
-			if ( owner is not Player )
-			{
-				Log.Trace( $"Owner {owner.EngineEntityName} ({ownerIdent} isn't player" );
-				return;
-			}
-
-			//
-			// Damage
-			//
-			var damage = DamageInfo.FromBullet( endPos, forward.Normal * 100 * 1000, 1000 )
-				.WithAttacker( owner ).WithHitbox( hitbox );
-
-			target.TakeDamage( damage );
-		}
-
 		public IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 dir, float radius = 2.0f, float dist = 100000f )
 		{
 			bool InWater = Physics.TestPointContents( start, CollisionLayer.Water );
@@ -179,6 +137,7 @@ namespace Instagib
 			var end = start + dir * dist;
 			var tr = Trace.Ray( start, end )
 				.HitLayer( CollisionLayer.Water, !InWater )
+				.UseLagCompensation()
 				.Ignore( Owner )
 				.Ignore( this )
 				.Size( radius )
@@ -187,7 +146,6 @@ namespace Instagib
 			yield return tr;
 		}
 
-		[ClientRpc]
 		private void Shoot( Vector3 pos, Vector3 dir )
 		{
 			foreach ( var tr in TraceBullet( pos, dir, 8f, 8192f ) )
@@ -218,14 +176,15 @@ namespace Instagib
 					beamParticles.SetPosition( 2, particleCount );
 				}
 
+				if ( !IsServer ) continue;
 				if ( !tr.Entity.IsValid() ) continue;
 
-				// This is the only way to do client->server RPCs :(
-				if ( IsClient )
-				{
-					CmdShoot( tr.Entity.NetworkIdent, Owner.NetworkIdent, pos, tr.EndPos, dir, Time.Tick,
-						tr.HitboxIndex );
-				}
+				var damageInfo = DamageInfo.FromBullet( tr.EndPos, dir * 1000, 1000 )
+					.UsingTraceResult( tr )
+					.WithAttacker( Owner )
+					.WithWeapon( this );
+
+				tr.Entity.TakeDamage( damageInfo );
 			}
 
 			ShootEffects();
