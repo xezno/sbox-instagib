@@ -69,6 +69,8 @@ namespace Instagib
 
 			IsSpawnProtected = true;
 
+			Transmit = TransmitType.Always;
+
 			if ( IsServer )
 			{
 				_ = ApplySpawnProtection();

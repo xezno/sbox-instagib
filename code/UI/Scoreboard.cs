@@ -68,7 +68,7 @@ namespace Instagib.UI
 
 		private void Sort()
 		{
-			EntryContainer.SortChildren( ( panel1, panel2 ) =>
+			Canvas.SortChildren( ( panel1, panel2 ) =>
 			{
 				if ( panel1 is ScoreboardEntry a && panel2 is ScoreboardEntry b )
 				{

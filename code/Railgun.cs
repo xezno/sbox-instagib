@@ -122,7 +122,7 @@ namespace Instagib
 			(ViewModelEntity as ViewModel)?.OnFire();
 
 			TimeSincePrimaryAttack = 0;
-			TimeSinceSecondaryAttack = 0;
+			// TimeSinceSecondaryAttack = 0;
 
 			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
 
@@ -170,10 +170,10 @@ namespace Instagib
 					beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity,
 						"muzzle", false );
 
-					beamParticles.SetPosition( 1, tr.EndPos );
+					beamParticles?.SetPosition( 1, tr.EndPos );
 
 					float particleCount = tr.Distance / 128f;
-					beamParticles.SetPosition( 2, particleCount );
+					beamParticles?.SetPosition( 2, particleCount );
 				}
 
 				if ( !IsServer ) continue;
