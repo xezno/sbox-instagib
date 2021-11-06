@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Instagib.UI;
 using Sandbox;
-using Event = Sandbox.Event;
 
 namespace Instagib
 {
 	public partial class Game : Sandbox.Game
 	{
 		private static InstagibHud hud;
+		public static Game Instance;
+
 		public Game()
 		{
 			Precache.Add( "particles/gib_blood.vpcf" );
@@ -29,28 +29,20 @@ namespace Instagib
 			{
 				hud = new InstagibHud();
 			}
+
+			Instance = this;
 		}
 
 		public override void ClientJoined( Client cl )
 		{
 			base.ClientJoined( cl );
-			
-			Event.Run( "playerJoined" );
+			CurrentState.OnPlayerJoin( cl );
+
+			Log.Trace( $"Lobby name: {Global.Lobby.Title}" );
 
 			var player = new Player( cl );
 			cl.Pawn = player;
-			
 			player.Respawn();
-
-			CurrentState.OnPlayerJoin( cl );
-
-			// StartStatsRpc( To.Single( client ) );
-		}
-
-		[ClientCmd( "reconnect_stats" )]
-		public static void ReconnectStatsCmd()
-		{
-			// (Sandbox.Game.Current as Game).StartStatsRpc( To.Single( Local.Pawn ) );
 		}
 		
 		public override void DoPlayerNoclip( Client cl )
@@ -72,8 +64,6 @@ namespace Instagib
 		public override void ClientDisconnect( Client cl, NetworkDisconnectionReason reason )
 		{
 			base.ClientDisconnect( cl, reason );
-			Event.Run( "playerLeft" );
-
 			CurrentState.OnPlayerLeave( cl );
 		}
 
@@ -106,17 +96,16 @@ namespace Instagib
 				return;
 			}
 
+			// Killstreak tracking
+			attacker.CurrentStreak++;
 			CurrentState.OnKill( attacker.Client, victim.Client );
 
 			PlayerDiedRpc( To.Single( victim ), attacker );
 
-			// Killstreak tracking
-			attacker.CurrentStreak++;
-
 			//
 			// Give out medals to the attacker
 			//
-			List<Medal> medals = Medals.KillMedals.Where( medal => medal.Condition.Invoke( attacker, victim ) ).ToList();
+			List<Medal> medals = Medals.GetMedalsForKill( attacker, victim );
 
 			string[] medalArr = new string[medals.Count];
 			for ( int i = 0; i < medals.Count; ++i )
@@ -147,11 +136,6 @@ namespace Instagib
 		public void PlayerDiedRpc( Player attacker )
 		{
 			// Attacker, victim
-			var attackerName = "suicide";
-			if ( attacker != null )
-				attackerName = attacker.Client?.SteamId.ToString();
-			
-			Event.Run( "playerDeath", attackerName, Local.Client.SteamId.ToString() );
 			InstagibHud.CurrentHud.OnDeath( attacker?.Client?.Name ?? "Yourself" );
 		}
 
@@ -159,9 +143,7 @@ namespace Instagib
 		public void PlayerKilledRpc( Player attacker, Player victim, string[] medals )
 		{
 			// Attacker, victim
-			// Log.Trace( "Player killed rpc" );
 			InstagibHud.CurrentHud.OnKilledMessage( attacker, victim, medals );
-			Event.Run( "playerKilled", attacker.Client.SteamId.ToString(), victim.Client.SteamId.ToString() );
 		}
 	}
 }

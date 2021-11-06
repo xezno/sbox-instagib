@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using Instagib.Utils;
 using Sandbox;
 using Trace = Sandbox.Trace;
 
@@ -12,22 +10,20 @@ namespace Instagib
 	partial class Railgun : BaseWeapon
 	{
 		public override string ViewModelPath => "weapons/railgun/models/railgun.vmdl";
-		public override float PrimaryRate => 1 / 1.5f;
+		public override float PrimaryRate => 0.75f;
 		public override float SecondaryRate => 2f;
 
-		private static float MaxHitTolerance =>
-			(Global.TickRate / 1000f) *
-			1000; // (tickrate / 1000ms) * desired_ms, number of ticks tolerance given to a hit.
+		private static float MaxHitTolerance => (Global.TickRate / 1000f) * 1000;
 
 		private Particles beamParticles;
 		public bool IsZooming { get; private set; }
 
-		public override void Reload() { } // No reload
+		public override void Reload() { }
 
 		public override void Spawn()
 		{
 			base.Spawn();
-			SetModel( "weapons/railgun/models/railgun.vmdl" ); // TODO: LOD
+			SetModel( "weapons/railgun/models/railgun.vmdl" );
 		}
 
 		public override void SimulateAnimator( PawnAnimator anim )
@@ -62,12 +58,7 @@ namespace Instagib
 		{
 			bool debug = false;
 
-			// Grapple reset
 			(ViewModelEntity as ViewModel)?.OnFire();
-			TimeSinceLastGrapple = 100;
-
-			if ( !IsServer )
-				return;
 
 			var sourcePos = pos;
 			var radius = 128;
@@ -79,18 +70,13 @@ namespace Instagib
 			foreach ( var overlap in overlaps )
 			{
 				if ( overlap is not ModelEntity ent || !ent.IsValid() ) continue;
-				if ( ent.LifeState != LifeState.Alive && !ent.PhysicsBody.IsValid() && ent.IsWorld ) continue;
-				if ( ent.PhysicsBody == null ) continue;
-				if ( ent.IsWorld ) continue;
+				if ( ent != Owner ) continue;
+				if ( ent.LifeState != LifeState.Alive || !ent.PhysicsBody.IsValid() || ent.IsWorld ) continue;
 
-				var targetPos = ent.PhysicsBody.MassCenter;
-				var dir = (targetPos - sourcePos).Normal;
+				var dir = normal.Normal;
 				var dist = dir.Length;
 
 				if ( dist > radius ) continue;
-
-				if ( debug )
-					DebugOverlay.Line( sourcePos, targetPos, 5 );
 
 				var distanceFactor = 1.0f - Math.Clamp( dist / radius, 0, 1 );
 				distanceFactor *= 0.5f;
@@ -103,11 +89,7 @@ namespace Instagib
 						playerController.ClearGroundEntity();
 				}
 
-				if ( ent is not Player )
-					force *= 10;
-
-				ent.Velocity += Vector3.Reflect( dir.WithZ( -32 ), normal ).Normal * force;
-				// ent.Velocity += force * Vector3.Lerp( normal, forceDir, 0.5f );
+				ent.ApplyAbsoluteImpulse( dir * force );
 			}
 
 			using ( Prediction.Off() )
@@ -128,8 +110,6 @@ namespace Instagib
 			{
 				if ( !tr.Hit )
 					return;
-
-				// DebugOverlay.Line( tr.StartPos, tr.EndPos, 10f );
 
 				RocketJump( tr.EndPos, tr.Normal );
 			}
@@ -192,17 +172,12 @@ namespace Instagib
 			target.TakeDamage( damage );
 		}
 
-		/// <summary>
-		/// Does a trace from start to end, does bullet impact effects. Coded as an IEnumerable so you can return multiple
-		/// hits, like if you're going through layers or ricocet'ing or something.
-		/// </summary>
 		public IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 dir, float radius = 2.0f, float dist = 100000f )
 		{
 			bool InWater = Physics.TestPointContents( start, CollisionLayer.Water );
 
 			var end = start + dir * dist;
 			var tr = Trace.Ray( start, end )
-				//.UseHitboxes()
 				.HitLayer( CollisionLayer.Water, !InWater )
 				.Ignore( Owner )
 				.Ignore( this )
@@ -210,19 +185,13 @@ namespace Instagib
 				.Run();
 
 			yield return tr;
-			//
-			// Another trace, bullet going through thin material, penetrating water surface?
-			//
 		}
 
 		[ClientRpc]
 		private void Shoot( Vector3 pos, Vector3 dir )
 		{
-			foreach ( var tr in TraceBullet( pos, dir, 8f, 100000f ) )
+			foreach ( var tr in TraceBullet( pos, dir, 8f, 8192f ) )
 			{
-				// DebugOverlay.Line( tr.StartPos, tr.EndPos, 5f );
-				// DebugOverlay.Circle( tr.EndPos, Rotation.From( tr.Normal.EulerAngles ), 8f, Color.Red, false, 5f );
-				
 				if ( Prediction.FirstTime )
 				{
 					var impactParticles =
@@ -231,21 +200,32 @@ namespace Instagib
 				}
 
 				if ( tr.Entity is not Player )
+				{
 					tr.Surface.DoBulletImpact( tr );
+				}
 
-				// Do beam particles on client and server
-				beamParticles?.Destroy( true );
-				beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity,
-					"muzzle", false );
+				//
+				// Particles
+				//
+				{
+					beamParticles?.Destroy( true );
+					beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity,
+						"muzzle", false );
 
-				beamParticles.SetPosition( 1, tr.EndPos );
+					beamParticles.SetPosition( 1, tr.EndPos );
+
+					float particleCount = tr.Distance / 128f;
+					beamParticles.SetPosition( 2, particleCount );
+				}
 
 				if ( !tr.Entity.IsValid() ) continue;
 
 				// This is the only way to do client->server RPCs :(
 				if ( IsClient )
+				{
 					CmdShoot( tr.Entity.NetworkIdent, Owner.NetworkIdent, pos, tr.EndPos, dir, Time.Tick,
 						tr.HitboxIndex );
+				}
 			}
 
 			ShootEffects();
@@ -317,12 +297,6 @@ namespace Instagib
 		{
 			ViewModelEntity?.Delete();
 			ViewModelEntity = null;
-		}
-
-		public override void ActiveEnd( Entity ent, bool dropped )
-		{
-			base.ActiveEnd( ent, dropped );
-			RemoveGrapple();
 		}
 	}
 }

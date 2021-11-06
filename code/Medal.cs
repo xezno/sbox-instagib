@@ -1,5 +1,6 @@
 ﻿using Sandbox;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Instagib
 {
@@ -65,5 +66,10 @@ namespace Instagib
 			new Medal( "Buzzkill",
 				(_, victim) => victim.CurrentStreak > 3),
 		};
+
+		public static List<Medal> GetMedalsForKill( Player attacker, Player victim )
+		{
+			return KillMedals.Where( medal => medal.Condition.Invoke( attacker, victim ) ).ToList();
+		}
 	}
 }

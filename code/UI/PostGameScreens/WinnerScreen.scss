@@ -1,0 +1,75 @@
+﻿@import "Colors";
+
+WinnerParticle {
+    font-size: 32px;
+    position: absolute;
+}
+
+label.title {
+    font-size: 128px;
+    font-weight: 700;
+    font-family: Poppins-ExtraBoldItalic;
+    text-align: center;
+    text-shadow: 0 0 16px rgba( black, 0.25 );
+
+    transition: all 500ms ease 0;
+
+    &:intro {
+        opacity: 0;
+        transform: scale( 1.1 );
+    }
+}
+
+.first {
+    color: gold;
+    transition: all 500ms ease 500ms;
+}
+
+.second {
+    color: silver;
+    transition: all 500ms ease 1000ms;
+}
+
+.third {
+    color: orange;
+    transition: all 500ms ease 1500ms;
+}
+
+.thanks {
+    transition: all 500ms ease 2000ms;
+    margin-top: 20px;
+
+    &:intro {
+        opacity: 0;
+        transform: scale( 1.1 );
+    }
+}
+
+.players {
+    WinnerText {
+        flex-direction: column;
+        align-items: center;
+        min-width: 250px;
+        flex-grow: 1;
+
+        .position {
+            font-size: 64px;
+            text-shadow: 0 0 8px rgba( black, 0.25 );
+        }
+
+        .stats {
+            font-size: 16px;
+        }
+
+        .player {
+            font-size: 32px;
+            margin: 0 32px;
+            text-shadow: 0 0 8px rgba( black, 0.25 );
+
+            &:intro {
+                opacity: 0;
+                transform: scale( 1.1 );
+            }
+        }
+    }
+}

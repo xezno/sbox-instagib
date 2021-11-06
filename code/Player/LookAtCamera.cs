@@ -55,7 +55,7 @@ namespace Instagib
 		public override void Update()
 		{
 			Viewer = null;
-			Pos = Origin;
+			Position = Origin;
 
 			var targetPos = GetTargetPos();
 
@@ -71,7 +71,7 @@ namespace Instagib
 			var targetDirection = targetDelta.Normal;
 
 			// should be a helper func
-			Rot = Rotation.From( new Angles(
+			Rotation = Rotation.From( new Angles(
 				((float)Math.Asin( targetDirection.z )).RadianToDegree() * -1.0f,
 				((float)Math.Atan2( targetDirection.y, targetDirection.x )).RadianToDegree(),
 				0.0f ) );

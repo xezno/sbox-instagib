@@ -24,29 +24,6 @@ namespace Instagib
 
 		[Net, Local] public bool IsSpawnProtected { get; set; }
 
-		public enum HitboxGroup
-		{
-			None = -1,
-			Generic = 0,
-			Head = 1,
-			Chest = 2,
-			Stomach = 3,
-			LeftArm = 4,
-			RightArm = 5,
-			LeftLeg = 6,
-			RightLeg = 7,
-			Gear = 10,
-			Special = 11,
-		}
-		[Net] public HitboxGroup LastHitboxDamaged { get; set; }
-
-		//
-		// Dynamic hud / camera
-		//
-		private Vector3 lastCameraPos = Vector3.Zero;
-		private Rotation lastCameraRot = Rotation.Identity;
-		private float lastHudOffset;
-
 		public Clothing.Container Clothing = new();
 
 		public Player()
@@ -78,6 +55,7 @@ namespace Instagib
 
 			Clothing.DressEntity( this );
 
+			Inventory.DeleteContents();
 			Inventory.Add( new Railgun(), true );
 
 			CurrentStreak = 0;
@@ -107,6 +85,11 @@ namespace Instagib
 			base.Simulate( cl );
 			SimulateActiveChild( cl, ActiveChild );
 
+			if ( Position.z < -2500 )
+			{
+				TakeDamage( DamageInfo.Generic( 10000 ) );
+			}
+
 			if ( cl == Local.Client )
 			{
 				GlowActive = false;
@@ -117,6 +100,8 @@ namespace Instagib
 				if ( IsClient && Velocity.Length > 500 )
 				{
 					speedLines ??= Particles.Create( "particles/speed_lines.vpcf" );
+					var perlinStrength = Velocity.Length.LerpInverse( 500, 700 ) * 0.5f;
+					_ = new Sandbox.ScreenShake.Perlin( 1.0f, 1.0f, perlinStrength, 2.0f * perlinStrength );
 				}
 				else if ( IsClient && Velocity.Length < 600 && speedLines != null )
 				{
@@ -151,23 +136,15 @@ namespace Instagib
 		{
 			base.OnKilled();
 
-			// Attacker, victim
-			if ( LastAttacker == null )
-			{
-				Event.Run( "playerKilled", Client?.SteamId.ToString(), Client?.SteamId.ToString() );
-			}
-			else
-			{
-				Event.Run( "playerKilled", LastAttacker?.Client.SteamId.ToString(), Client?.SteamId.ToString() );
-			}
-
 			Velocity = Vector3.Zero;
 
 			Camera = new LookAtCamera();
-			(Camera as LookAtCamera).TargetEntity = LastAttacker;
-			(Camera as LookAtCamera).Origin = EyePos;
-			(Camera as LookAtCamera).Rot = EyeRot;
-			(Camera as LookAtCamera).TargetOffset = Vector3.Up * 64f;
+			var lookAtCamera = Camera as LookAtCamera;
+
+			lookAtCamera.TargetEntity = LastAttacker;
+			lookAtCamera.Origin = EyePos;
+			lookAtCamera.Rotation = EyeRot;
+			lookAtCamera.TargetOffset = Vector3.Up * 64f;
 
 			Inventory.DeleteContents();
 
@@ -216,13 +193,10 @@ namespace Instagib
 
 		public override void TakeDamage( DamageInfo info )
 		{
-			var hitboxGroup = (HitboxGroup)GetHitboxGroup( info.HitboxIndex );
-
 			if ( IsSpawnProtected || info.Flags.HasFlag( DamageFlags.PhysicsImpact ) )
 				return;
 
 			lastDamageInfo = info;
-			LastHitboxDamaged = hitboxGroup;
 
 			base.TakeDamage( info );
 
@@ -231,82 +205,5 @@ namespace Instagib
 				attacker.OnDamageOther( To.Single( attacker ), info.Position, info.Damage );
 			}
 		}
-
-		public override void PostCameraSetup( ref CameraSetup setup )
-		{
-			base.PostCameraSetup( ref setup );
-
-			if ( lastCameraRot == Rotation.Identity )
-				lastCameraRot = setup.Rotation;
-
-			var angleDiff = Rotation.Difference( lastCameraRot, setup.Rotation );
-			var angleDiffDegrees = angleDiff.Angle();
-			var allowance = 10.0f;
-
-			if ( angleDiffDegrees > allowance )
-				lastCameraRot = Rotation.Lerp( lastCameraRot, setup.Rotation, 1.0f - (allowance / angleDiffDegrees) );
-
-			if ( setup.Viewer != null )
-				AddCameraEffects( ref setup );
-		}
-
-		float walkBob = 0;
-		float lean = 0;
-		float fov = 0;
-
-		private void AddCameraEffects( ref CameraSetup setup )
-		{
-			var speed = Velocity.Length.LerpInverse( 0, 320 );
-			var forwardspeed = Velocity.Normal.Dot( setup.Rotation.Forward );
-
-			var left = setup.Rotation.Left;
-			var up = setup.Rotation.Up;
-
-			if ( GroundEntity != null )
-			{
-				walkBob += Time.Delta * 25.0f * speed;
-			}
-
-			setup.Position += up * MathF.Sin( walkBob ) * speed * 2;
-			setup.Position += left * MathF.Sin( walkBob * 0.6f ) * speed * 1;
-
-			// Camera lean
-			var leanMax = 0.015f;
-			var leanMul = 0.005f;
-			var leanSmooth = 15.0f;
-
-			lean = lean.LerpTo( Velocity.Dot( setup.Rotation.Right ) * leanMul, Time.Delta * leanSmooth );
-			lean.Clamp( -leanMax, leanMax );
-
-			var appliedLean = lean;
-			appliedLean += MathF.Sin( walkBob ) * speed * 0.2f;
-			setup.Rotation *= Rotation.From( 0, 0, appliedLean );
-
-			speed = (speed - 0.7f).Clamp( 0, 1 ) * 3.0f;
-
-			fov = fov.LerpTo( speed * 20 * MathF.Abs( forwardspeed ), Time.Delta * 2.0f );
-
-			setup.FieldOfView += fov;
-
-			var panelTransform = new Sandbox.UI.PanelTransform();
-			panelTransform.AddRotation( 0, 0, lean * -0.2f );
-
-			var zOffset = (lastCameraPos - setup.Position).z * 4f;
-			zOffset = zOffset.Clamp( -16f, 16f );
-			zOffset = lastHudOffset.LerpTo( zOffset, 25.0f * Time.Delta );
-
-			panelTransform.AddTranslateY( zOffset );
-
-			lastHudOffset = zOffset;
-
-			if ( InstagibHud.TiltingHudPanel != null )
-			{
-				InstagibHud.TiltingHudPanel.Style.Transform = panelTransform;
-				InstagibHud.TiltingHudPanel.Style.Dirty();
-			}
-
-			lastCameraPos = setup.Position;
-		}
-
 	}
 }

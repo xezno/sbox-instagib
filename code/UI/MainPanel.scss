@@ -1,7 +1,6 @@
 @import "Colors";
 
 .main {
-    // opacity: 0.75;
     z-index: -1;
 }
 
@@ -29,10 +28,6 @@ text.menu-prompt {
     font-size: 20px;
     transition: opacity 100ms ease;
     opacity: 0;
-
-    &.visible {
-        // opacity: 0.2;
-    }
 }
 
 .bottom {
@@ -53,16 +48,6 @@ text.menu-prompt {
         width: 64px;
         height: 64px;
         background-size: cover;
-
-        &.slugs {
-            background-image: url( /textures/ui/slugs.png );
-            margin-left: -16px;
-        }
-
-        &.health {
-            background-image: url( /textures/ui/health.png );
-            margin-right: -16px;
-        }
     }
 
     .speed {
@@ -117,7 +102,7 @@ text.menu-prompt {
         padding: 10px 20px;
         text-align: right;
         margin-left: 10px;
-        justify-content: left;
+        justify-content: flex-start;
         flex-direction: column;
     }
 
@@ -169,10 +154,18 @@ hitmarker {
         height: 64px;
         opacity: 1;
         position: absolute;
-        transition: all 50ms ease;
+        transition: all 100ms ease;
         background-image: url( /textures/ui/hit.png );
-        background-image-tint: #f00;
         background-size: 100%;
+
+        &.kill {
+            background-image-tint: #f00;
+        }
+
+        &:intro {
+            opacity: 0;
+            transform: scale( 2 );
+        }
 
         &:outro {
             opacity: 0;
@@ -232,9 +225,9 @@ crosshair {
     top: 50%;
     left: 50%;
     transform: translateX( -50% ) translateY( -0% );
-    mix-blend-mode: lighten;
     width: 1px;
     height: 1px;
+    mix-blend-mode: lighten;
 
     .element {
         position: absolute;
@@ -247,8 +240,14 @@ crosshair {
     }
 
     .el0, .el1, .el2, .el3, .el4 {
-        background-color: white;
+        background-color: #00aa00;
         border-radius: 0;
+    }
+
+    &:not(.canfire) {
+        .el0, .el1, .el2, .el3, .el4 {
+            background-color: #aaaaaa;
+        }
     }
 
     .el0, .el1 {
@@ -355,5 +354,70 @@ KillFeed {
         border: 2px solid rgba( black, 0.4 );
         background-color: transparent;
         height: 50px;
+    }
+}
+
+Leaderboard {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    border-radius: 10px;
+    width: 300px;
+    transform: translateX( -50% );
+    backdrop-filter: blur( 20px );
+
+    .canvas {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    LeaderboardEntry {
+        width: 100%;
+        justify-content: space-between;
+        backdrop-filter: brightness( 0.5 );
+        border-radius: 10px;
+        border: 2px solid rgba( black, 0.4 );
+        margin: 2px 0;
+
+        &:not(.visible) {
+            height: 0px;
+            display: none;
+        }
+
+        & label {
+            padding: 10px 20px;
+        }
+
+        .kills {
+            backdrop-filter: brightness( 1.5 );
+            border-radius: 10px;
+        }
+
+        .player-name {
+            width: 250px;
+        }
+    }
+}
+
+Controls {
+    position: absolute;
+    top: 120px;
+    left: 50px;
+
+    padding: 10px 20px;
+    
+    flex-direction: column;
+
+    border-radius: 10px;
+    backdrop-filter: blur( 20px ) brightness( 0.5 );
+    border: 2px solid rgba( black, 0.4 );
+    width: 250px;
+
+    .title {
+        font-size: 20px;
+    }
+
+    .control {
+        justify-content: space-between;
     }
 }

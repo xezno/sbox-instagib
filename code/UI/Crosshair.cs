@@ -5,8 +5,6 @@ namespace Instagib.UI
 {
 	public class Crosshair : Label
 	{
-		int fireCounter;
-
 		public Crosshair()
 		{
 			StyleSheet.Load( "/Code/UI/MainPanel.scss" );
@@ -14,6 +12,16 @@ namespace Instagib.UI
 			{
 				var p = Add.Panel( "element" );
 				p.AddClass( $"el{i}" );
+			}
+		}
+
+		public override void Tick()
+		{
+			base.Tick();
+
+			if ( Local.Pawn is Player { ActiveChild: Railgun railgun })
+			{
+				SetClass( "canfire", railgun.TimeSincePrimaryAttack > 1/railgun.PrimaryRate );
 			}
 		}
 	}

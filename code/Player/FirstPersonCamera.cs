@@ -13,10 +13,10 @@ namespace Instagib
 			var pawn = Local.Pawn;
 			if ( pawn == null ) return;
 
-			Pos = pawn.EyePos;
-			Rot = pawn.EyeRot;
+			Position = pawn.EyePos;
+			Rotation = pawn.EyeRot;
 
-			lastPos = Pos;
+			lastPos = Position;
 		}
 
 		public override void Update()
@@ -27,14 +27,14 @@ namespace Instagib
 			var eyePos = pawn.EyePos;
 			if ( eyePos.Distance( lastPos ) < 250 )
 			{
-				Pos = Vector3.Lerp( eyePos.WithZ( lastPos.z ), eyePos, 20.0f * Time.Delta );
+				Position = Vector3.Lerp( eyePos.WithZ( lastPos.z ), eyePos, 20.0f * Time.Delta );
 			}
 			else
 			{
-				Pos = eyePos;
+				Position = eyePos;
 			}
 
-			Rot = pawn.EyeRot;
+			Rotation = pawn.EyeRot;
 
 			FieldOfView = PlayerSettings.Fov;
 			if ( pawn.ActiveChild is Railgun { IsZooming: true } )
@@ -49,7 +49,7 @@ namespace Instagib
 			ZFar = 20000;
 
 			Viewer = pawn;
-			lastPos = Pos;
+			lastPos = Position;
 		}
 	}
 }

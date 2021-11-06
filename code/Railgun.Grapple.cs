@@ -52,74 +52,80 @@ namespace Instagib
 			grappleHookEntity?.Simulate( owner );
 		}
 
-		private TraceResult GrappleTrace( out Vector3 calcEndPos, out bool isExtendedRay )
+		private TraceResult GrappleTrace( out Vector3 calcEndPos )
 		{
 			var tr = Trace.Ray( Owner.EyePos + Owner.EyeRot.Forward * GrappleTraceRadius, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
 				.Ignore( this )
 				.Ignore( Owner )
 				.WorldAndEntities()
-				.HitLayer( CollisionLayer.Player, false ) // Why the fuck doesn't this work?
 				.Run();
-			isExtendedRay = false;
+
 			calcEndPos = tr.EndPos;
+
 			if ( tr.Hit && tr.Entity is not Player )
 				return tr;
-			
+
 			var trExtended = Trace.Ray( Owner.EyePos + Owner.EyeRot.Forward * GrappleTraceRadius, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
 				.Ignore( this )
 				.Ignore( Owner )
 				.WorldAndEntities()
 				.Radius( GrappleTraceRadius )
-				.HitLayer( CollisionLayer.Player, false ) // Why the fuck doesn't this work???? x2
 				.Run();
-			isExtendedRay = true;
+
 			calcEndPos = trExtended.EndPos - trExtended.Normal * GrappleTraceRadius;
-			if ( trExtended.Hit && trExtended.Entity is not Player && ( trExtended.EndPos - Owner.EyePos ).Length > 96f )
+
+			if ( trExtended.Hit && trExtended.Entity is not Player && (trExtended.EndPos - Owner.EyePos).Length > 96f )
 				return trExtended;
 
 			calcEndPos = Owner.EyePos + Owner.EyeRot.Forward * MaxDistance;
-			return new TraceResult() { Hit = false, EndPos = calcEndPos };
+
+			return new TraceResult() 
+			{ 
+				Hit = false,
+				EndPos = calcEndPos 
+			};
 		}
 
 		protected virtual void DeployGrapple()
 		{
-			var tr = GrappleTrace( out var calcEndPos, out _ );
-			if ( tr.Hit && tr.Entity != null )
-			{
-				isGrappling = true;
+			var tr = GrappleTrace( out var calcEndPos );
 
-				using ( Prediction.Off() )
-				{
-					if ( Owner is Player { Controller: PlayerController controller } player )
-					{
-						player.GroundEntity = null;
-						controller.ClearGroundEntity();
-					}
-
-					if ( Host.IsServer )
-					{
-						grappleHookEntity = new()
-						{
-							Position = tr.StartPos,
-							Target = calcEndPos,
-							Rotation = Owner.EyeRot,
-							Parent = tr.Entity,
-							Owner = Owner
-						};
-						grappleHookEntity.Spawn();
-
-						var rope = Particles.Create( "particles/grapple_beam.vpcf" );
-						rope.SetEntity( 0, grappleHookEntity, Vector3.Backward * 32 );
-						rope.SetEntity( 1, Owner, Vector3.Up * 32 );
-
-						grappleParticles = rope;
-					}
-				}
-			}
-			else
+			// Grapple missed
+			if ( !tr.Hit || !tr.Entity.IsValid() )
 			{
 				using ( Prediction.Off() )
 					PlaySound( "player_use_fail" );
+				return;
+			}
+
+			isGrappling = true;
+
+			using ( Prediction.Off() )
+			{
+				if ( Owner is Player { Controller: PlayerController controller } player )
+				{
+					player.GroundEntity = null;
+					controller.ClearGroundEntity();
+				}
+
+				if ( Host.IsServer )
+				{
+					grappleHookEntity = new()
+					{
+						Position = tr.StartPos,
+						Target = calcEndPos,
+						Rotation = Owner.EyeRot,
+						Parent = tr.Entity,
+						Owner = Owner
+					};
+					grappleHookEntity.Spawn();
+
+					var rope = Particles.Create( "particles/grapple_beam.vpcf" );
+					rope.SetEntity( 0, grappleHookEntity, Vector3.Backward * 32 );
+					rope.SetEntity( 1, Owner, Vector3.Up * 32 );
+
+					grappleParticles = rope;
+				}
 			}
 		}
 
@@ -145,7 +151,6 @@ namespace Instagib
 			}
 
 			grappleHookEntity = null;
-
 			grappleParticles?.Destroy( true );
 		}
 

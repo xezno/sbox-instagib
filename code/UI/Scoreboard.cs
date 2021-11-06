@@ -25,8 +25,6 @@ namespace Instagib.UI
 			AddHeader();
 
 			EntryContainer = Canvas.Add.Panel( "entry-container" );
-
-			Sort();
 		}
 
 		public override void Tick()
@@ -54,6 +52,8 @@ namespace Instagib.UI
 					Rows.Remove( client );
 				}
 			}
+
+			Sort();
 		}
 
 		protected virtual void AddHeader()
@@ -72,17 +72,8 @@ namespace Instagib.UI
 			{
 				if ( panel1 is ScoreboardEntry a && panel2 is ScoreboardEntry b )
 				{
-					var aKills = a.Client.GetInt( "kills", 0 );
-					var bKills = b.Client.GetInt( "kills", 0 );
-
-					if ( bKills > aKills )
-						return 1;
-					if ( aKills > bKills )
-						return -1;
-
-					return 0;
+					return InstagibGlobal.SortClients( a.Client, b.Client );
 				}
-
 				return 1;
 			} );
 		}
