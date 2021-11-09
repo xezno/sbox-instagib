@@ -39,5 +39,8 @@ namespace Instagib.Teams
 
 			return false;
 		}
+
+		public static bool operator ==( BaseTeam a, BaseTeam b ) => a.Equals( b );
+		public static bool operator !=( BaseTeam a, BaseTeam b ) => !a.Equals( b );
 	}
 }
