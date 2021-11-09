@@ -118,6 +118,10 @@ namespace Instagib.UI.Elements
 
 			image.Texture = texture;
 		}
+		float ClampToBox( float a, bool isX = true )
+		{
+			return a.Clamp( 0, isX ? image.Box.Rect.Size.x : image.Box.Rect.Size.y - 1 );
+		}
 
 		private void UpdateColor()
 		{
@@ -135,16 +139,17 @@ namespace Instagib.UI.Elements
 			}
 
 			var localPos = Mouse.Position - image.Box.Rect.Position;
-			if ( localPos.Outside( Vector2.Zero ) || localPos.Inside( image.Box.Rect.Size ) )
-				return;
-			
+
+			localPos.x = ClampToBox( localPos.x );
+			localPos.y = ClampToBox( localPos.y, false );
+
 			var normalizedPos = localPos / image.Box.Rect.Size;
 
 			var arrayPos = normalizedPos * new Vector2( width, height );
 			var arrayEntry = GetPixel( (int)arrayPos.x, (int)arrayPos.y );
 			
-			pickedColor.Style.Left = MousePosition.x * ScaleFromScreen;
-			pickedColor.Style.Top = MousePosition.y * ScaleFromScreen;
+			pickedColor.Style.Left = ClampToBox( MousePosition.x * ScaleFromScreen );
+			pickedColor.Style.Top = ClampToBox( MousePosition.y * ScaleFromScreen, false );
 			pickedColor.Style.Opacity = 1;
 			pickedColor.Style.Dirty();
 			pickedColor.Style.BackgroundColor = arrayEntry;

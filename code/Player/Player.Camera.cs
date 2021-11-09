@@ -61,7 +61,7 @@ namespace Instagib
 
 			var appliedLean = lean;
 			appliedLean += MathF.Sin( walkBob ) * speed * 0.2f;
-			setup.Rotation *= Rotation.From( 0, 0, appliedLean );
+			setup.Rotation *= Rotation.From( 0, 0, appliedLean ) * PlayerSettings.ViewTiltMultiplier;
 
 			speed = (speed - 0.7f).Clamp( 0, 1 ) * 3.0f;
 

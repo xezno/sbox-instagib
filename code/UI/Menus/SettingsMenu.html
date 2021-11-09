@@ -10,21 +10,16 @@
                 <slider @ref="FovSlider"></slider>
             </span>
 
+            <span class="no-shrink">
+                <text>View Tilt</text>
+                <slider @ref="ViewTiltMultiplierSlider"></slider>
+            </span>
+
             <text class="big no-shrink">HUD</text>
 
             <span class="no-shrink">
-                <text>Draw Crosshair</text>
-                <checkbox @ref="CrosshairToggle"></checkbox>
-            </span>
-
-<!--            <span class="no-shrink">-->
-<!--                <text>Crosshair</text>-->
-<!--                <textentry @ref="CrosshairGlyph" style="font-family: Crosshairs; font-size: 32px; text-align: center">a</textentry>-->
-<!--            </span>-->
-
-            <span class="no-shrink">
-                <text>Crosshair Size</text>
-                <slider @ref="CrosshairSlider"></slider>
+                <text>Crosshair Color</text>
+                <colorpicker @ref="CrosshairColor" NoColorSlider="true"></colorpicker>
             </span>
 
             <text class="big no-shrink">VIEWMODEL</text>
@@ -43,22 +38,11 @@
                 <checkbox @ref="ViewmodelFlip"></checkbox>
             </span>
 
-            <!--<text class="big no-shrink">Cosmetics</text>
-            <span class="no-shrink">
-                <text>Player Skin</text>
-                <textentry style="width: 100px; text-align: center">0</textentry>
-            </span>
-
-            <span class="no-shrink">
-                <text>Railgun Skin</text>
-                <textentry style="width: 100px; text-align: center">0</textentry>
-            </span>-->
-
             <text class="big no-shrink">OUTLINES</text>
             <!--<span class="no-shrink">
-                <text>Team Outline Color</text>
-                <colorpicker></colorpicker>
-            </span>-->
+        <text>Team Outline Color</text>
+        <colorpicker></colorpicker>
+    </span>-->
 
             <span class="no-shrink">
                 <text>Enemy Outline Color</text>

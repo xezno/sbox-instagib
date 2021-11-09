@@ -11,10 +11,8 @@ namespace Instagib
 		public static float ViewmodelOffset { get; set; } = 0;
 		public static bool ViewmodelVisible { get; set; } = true;
 		public static bool ViewmodelFlip { get; set; } = false;
-
-		public static bool CrosshairVisible { get; set; } = true;
-		public static string CrosshairGlyph { get; set; } = "t";
-		public static int CrosshairSize { get; set; } = 24;
+		public static Color CrosshairColor { get; set; } = Color.Green;
+		public static float ViewTiltMultiplier { get; set; } = 1.0f;
 
 		public static Color EnemyOutlineColor { get; set; } = Color.Red;
 
@@ -26,9 +24,8 @@ namespace Instagib
 			ViewmodelOffset = Cookie.Get<float>( "Instagib.ViewmodelOffset", 0 );
 			ViewmodelVisible = Cookie.Get( "Instagib.ViewmodelVisible", true );
 			ViewmodelFlip = Cookie.Get( "Instagib.ViewmodelFlip", false );
-			CrosshairVisible = Cookie.Get( "Instagib.CrosshairVisible", true );
-			CrosshairGlyph = Cookie.Get( "Instagib.CrosshairGlyph", "t" );
-			CrosshairSize = Cookie.Get( "Instagib.CrosshairSize", 24 );
+			ViewTiltMultiplier = Cookie.Get( "Instagib.ViewTiltMultiplier", 1.0f );
+			CrosshairColor = Color.Parse( Cookie.Get( "Instagib.CrosshairColor", Color.Red.Hex ) ) ?? Color.Green;
 			EnemyOutlineColor = Color.Parse( Cookie.Get( "Instagib.EnemyOutlineColor", Color.Red.Hex ) ) ?? Color.Red;
 		}
 
@@ -40,9 +37,8 @@ namespace Instagib
 			Cookie.Set( "Instagib.ViewmodelOffset", ViewmodelOffset );
 			Cookie.Set( "Instagib.ViewmodelVisible", ViewmodelVisible );
 			Cookie.Set( "Instagib.ViewmodelFlip", ViewmodelFlip );
-			Cookie.Set( "Instagib.CrosshairVisible", CrosshairVisible );
-			Cookie.Set( "Instagib.CrosshairGlyph", CrosshairGlyph );
-			Cookie.Set( "Instagib.CrosshairSize", CrosshairSize );
+			Cookie.Set( "Instagib.ViewTiltMultiplier", ViewTiltMultiplier );
+			Cookie.Set( "Instagib.CrosshairColor", CrosshairColor.Hex );
 			Cookie.Set( "Instagib.EnemyOutlineColor", EnemyOutlineColor.Hex );
 		}
 	}
