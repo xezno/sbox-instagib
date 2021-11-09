@@ -20,8 +20,8 @@ namespace Instagib.Entities
 		public override void Spawn()
 		{
 			base.Spawn();
-			SetModel( "models/flag/flag_podium.vmdl" );
-			SetupPhysicsFromModel( PhysicsMotionType.Static );
+			//SetModel( "models/flag/flag_podium.vmdl" );
+			//SetupPhysicsFromModel( PhysicsMotionType.Static );
 
 			SpawnFlag();
 		}

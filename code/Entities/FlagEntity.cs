@@ -60,12 +60,12 @@ namespace Instagib.Entities
 						// Check if we have a flag to capture
 						if ( player.Children.Any( e => e is FlagEntity ) )
 						{
-							var playerCarryingFlag = player.Children.First( e => e is FlagEntity );
-							if ( playerCarryingFlag.IsValid() )
+							var playerCarryingEntity = player.Children.First( e => e is FlagEntity );
+							if ( playerCarryingEntity.IsValid() && playerCarryingEntity is FlagEntity playerCarryingFlag )
 							{
 								// Capture flag
-								playerCarryingFlag.TakeDamage( DamageInfo.Generic( 10000 ) );
-
+								playerCarryingEntity.TakeDamage( DamageInfo.Generic( 10000 ) );
+								ClassicChatBox.AddInformation( To.Everyone, $"The {playerCarryingFlag.Team.TeamName} flag has been captured!" );
 								// Tell the game to add score
 								// Game.Instance.GameType.AddScore( Team, 1 );
 							}
