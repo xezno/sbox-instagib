@@ -34,9 +34,9 @@ namespace Instagib.Teams
 		{
 			if ( obj is BaseTeam team )
 			{
-				Log.Trace( TeamId + " vs " + team.TeamId );
 				return team.TeamId == TeamId;
 			}
+
 			return false;
 		}
 	}
