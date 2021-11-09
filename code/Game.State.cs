@@ -125,7 +125,7 @@ namespace Instagib
 
 		private class MainGameState : BaseGameState
 		{
-			public override string StateName() => Game.Instance.gameType.GameTypeName;
+			public override string StateName() => Game.Instance.GameType.GameTypeName;
 
 			private RealTimeUntil stateEnds;
 
@@ -180,7 +180,7 @@ namespace Instagib
 			{
 				base.Tick();
 
-				if ( Game.Instance.gameType.GameShouldEnd() || GetPlayerCount() <= 1 ||
+				if ( Game.Instance.GameType.GameShouldEnd() || GetPlayerCount() <= 1 ||
 					stateEnds < 0 )
 				{
 					SetState( new GameFinishedState() );
