@@ -51,6 +51,8 @@ namespace Instagib.UI.PostGameScreens
 
 		public MapVotePanel( string mapName, string backgroundImage, int index )
 		{
+			AddClass( "vote-panel" );
+
 			VoteCount = Add.Label( "0", "vote-count" );
 
 			Add.Label( "VOTES", "vote-subtext" );

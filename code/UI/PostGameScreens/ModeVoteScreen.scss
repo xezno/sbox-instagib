@@ -10,7 +10,6 @@ label.title {
     font-family: Poppins-ExtraBoldItalic;
     text-align: center;
     text-shadow: 0 0 16px rgba( black, 0.25 );
-
     transition: all 500ms ease 0;
 
     &:intro {
@@ -27,4 +26,15 @@ label.title {
 .time-left {
     font-size: 16px;
     margin: 10px;
+}
+
+.vote-panel {
+    .mode-name-panel {
+        align-items: center;
+    }
+
+    .experimental {
+        font-size: 12px;
+        margin-left: 4px;
+    }
 }

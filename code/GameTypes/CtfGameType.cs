@@ -3,6 +3,7 @@ using Instagib.Teams;
 
 namespace Instagib.GameTypes
 {
+	[Library( "gametype_ctf", Title = "Capture the flag", Description = "Capture the enemy's flag to win" )]
 	public partial class CtfGameType : BaseGameType
 	{
 		[Net] public BaseTeam BlueTeam { get; set; }
