@@ -1,23 +1,43 @@
 ﻿using Sandbox;
+using System;
 using System.Collections.Generic;
 
 namespace Instagib.Teams
 {
 	public partial class BaseTeam : BaseNetworkable
 	{
-		[Net] public List<Player> Players { get; set; }
+		[Net] public string TeamColor { get; set; }
+		[Net] public int TeamId { get; set; }
+		[Net] public string TeamName { get; set; }
 
-		public virtual Color GetTeamColor()
+		public bool AreFriendly( Player a, Player b )
 		{
-			return Color.Gray;
+			return a.Team.Equals( b.Team );
 		}
 
-		public virtual string GetTeamName()
+		public bool AreEnemies( Player a, Player b )
 		{
-			return "Team";
+			return !AreFriendly( a, b );
 		}
 
-		public bool AreFriendly( Player a, Player b ) { return true; }
-		public bool AreEnemies( Player a, Player b ) { return !AreFriendly( a, b ); }
+		public BaseTeam Clone()
+		{
+			return new BaseTeam()
+			{
+				TeamName = TeamName,
+				TeamId = TeamId,
+				TeamColor = TeamColor,
+			};
+		}
+
+		public override bool Equals( object obj )
+		{
+			if ( obj is BaseTeam team )
+			{
+				Log.Trace( TeamId + " vs " + team.TeamId );
+				return team.TeamId == TeamId;
+			}
+			return false;
+		}
 	}
 }

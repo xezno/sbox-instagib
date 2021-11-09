@@ -68,7 +68,6 @@ namespace Instagib
 			CurrentDamageDealt = 0;
 
 			IsSpawnProtected = true;
-
 			Transmit = TransmitType.Always;
 
 			if ( IsServer )
@@ -135,8 +134,13 @@ namespace Instagib
 			if ( IsServer )
 				return;
 
-			var hsvColor = PlayerSettings.EnemyOutlineColor.ToHsv();
+			var hsvColor = Color.Red.ToHsv();
+
+			if ( IsFriendly( Local.Client ) )
+				hsvColor = Color.Cyan.ToHsv();
+
 			hsvColor.Value = 1.0f;
+			hsvColor.Saturation = 1.0f;
 			GlowColor = hsvColor.ToColor();
 		}
 
@@ -202,6 +206,9 @@ namespace Instagib
 		public override void TakeDamage( DamageInfo info )
 		{
 			if ( IsSpawnProtected || info.Flags.HasFlag( DamageFlags.PhysicsImpact ) )
+				return;
+
+			if ( IsFriendly( info.Attacker ) )
 				return;
 
 			lastDamageInfo = info;

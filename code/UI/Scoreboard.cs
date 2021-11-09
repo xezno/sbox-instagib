@@ -64,6 +64,7 @@ namespace Instagib.UI
 			Header.Add.Label( "Deaths", "deaths" );
 			Header.Add.Label( "Ratio", "ratio" );
 			Header.Add.Label( "Ping", "ping" );
+			Header.Add.Label( "Team", "team" );
 		}
 
 		private void Sort()

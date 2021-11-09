@@ -5,12 +5,7 @@ namespace Instagib
 {
 	public partial class Player
 	{
-		public BaseTeam Team => Components.Get<TeamComponent>().Team;
-
-		[BindComponent]
-		public TeamComponent TeamComponent { get; set; }
-
-		public string TeamName => Team.ToString();
+		[Net] public BaseTeam Team { get; set; }
 
 		public bool IsFriendly( Client otherClient )
 		{

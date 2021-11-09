@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Instagib.Teams;
+using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
@@ -13,6 +14,7 @@ namespace Instagib.UI
 		private Label deaths;
 		private Label ratio;
 		private Label ping;
+		private Label team;
 
 		private Label vip;
 
@@ -30,6 +32,7 @@ namespace Instagib.UI
 			deaths = Add.Label( "d", "deaths" );
 			ratio = Add.Label( "r", "ratio" );
 			ping = Add.Label( "ping", "ping" );
+			team = Add.Label( "team", "team" );
 		}
 
 		RealTimeSince TimeSinceUpdate = 0;
@@ -72,10 +75,13 @@ namespace Instagib.UI
 				ratio.Text = ratioVal.ToString( "N1" );
 			}
 
-			avatar.SetTexture( $"avatar:{Client.SteamId}" );
+			avatar.SetTexture( $"avatar:{Client.PlayerId}" );
 			ping.Text = Client.Ping.ToString();
+			var playerTeam = Client.GetTeam();
+			team.Text = Client.GetTeam().TeamName;
+
 			SetClass( "me", Client == Local.Client );
-			vip.SetClass( "visible", Client.SteamId == InstagibGlobal.AlexSteamId );
+			vip.SetClass( "visible", Client.PlayerId == InstagibGlobal.AlexSteamId );
 		}
 
 		public virtual void UpdateFrom( Client client )

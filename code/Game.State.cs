@@ -144,7 +144,7 @@ namespace Instagib
 				stateEnds = 5 * 60;
 
 				if ( DebugMode )
-					stateEnds = 15;
+					stateEnds = 5 * 60 * 1000;
 				else
 					GameServices.StartGame();
 			}

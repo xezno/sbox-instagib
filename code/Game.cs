@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Instagib.GameTypes;
 using Instagib.UI;
 using Sandbox;
 
@@ -9,6 +10,8 @@ namespace Instagib
 	{
 		private static InstagibHud hud;
 		public static Game Instance;
+
+		private CtfGameType gameType;
 
 		public Game()
 		{
@@ -28,6 +31,7 @@ namespace Instagib
 			if ( IsServer )
 			{
 				hud = new InstagibHud();
+				gameType = new();
 			}
 
 			Instance = this;
@@ -42,6 +46,7 @@ namespace Instagib
 
 			var player = new Player( cl );
 			cl.Pawn = player;
+			gameType.AssignPlayerTeam( player );
 			player.Respawn();
 		}
 		
