@@ -86,6 +86,9 @@ namespace Instagib
 				}
 
 				stateEnds = 10;
+
+				if ( DebugMode )
+					stateEnds = 1;
 			}
 
 			public override string StateTime()

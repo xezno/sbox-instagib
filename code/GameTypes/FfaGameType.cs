@@ -7,6 +7,8 @@ namespace Instagib.GameTypes
 		public FfaGameType()
 		{
 			GameTypeName = "Free-for-all";
+			GameTypeDescription = "";
+			IsExperimental = false;
 		}
 	}
 }

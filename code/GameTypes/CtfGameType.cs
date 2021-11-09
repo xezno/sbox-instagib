@@ -13,7 +13,9 @@ namespace Instagib.GameTypes
 
 		public CtfGameType()
 		{
-			GameTypeName = "Capture the Flag";
+			GameTypeName = "Capture the flag";
+			GameTypeDescription = "Capture the enemy's flag to win";
+			IsExperimental = true;
 
 			BlueTeam = new()
 			{

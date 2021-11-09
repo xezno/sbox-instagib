@@ -2,9 +2,13 @@
 
 namespace Instagib.GameTypes
 {
-	public class BaseGameType : BaseNetworkable
+	public partial class BaseGameType : BaseNetworkable
 	{
-		public string GameTypeName { get; protected set; }
+		[Net] public string GameTypeName { get; set; }
+		[Net] public string GameTypeDescription { get; set; }
+		[Net] public bool IsExperimental { get; set; }
+
+		public string LibraryName { get; set; }
 		
 		public virtual bool GameShouldEnd()
 		{
