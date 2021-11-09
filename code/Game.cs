@@ -92,7 +92,7 @@ namespace Instagib
 			if ( pawn.LastAttacker is not Player attacker )
 			{
 				PlayerDiedRpc( To.Single( victim ), null );
-				OnKilledMessage( 0, "", client.SteamId, client.Name, "died" );
+				OnKilledMessage( 0, "", (long)client.PlayerId, client.Name, "died" );
 				return;
 			}
 
@@ -115,7 +115,7 @@ namespace Instagib
 			PlayerKilledRpc( To.Single( attacker ), attacker, victim, medalArr );
 
 			var attackerClient = attacker.Client;
-			OnKilledMessage( attackerClient.SteamId, attackerClient.Name, client.SteamId, client.Name, "Railgun" );
+			OnKilledMessage( (long)attackerClient.PlayerId, attackerClient.Name, (long)client.PlayerId, client.Name, "Railgun" );
 		}
 
 		[ClientRpc]
