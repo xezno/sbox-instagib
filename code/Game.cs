@@ -11,7 +11,7 @@ namespace Instagib
 		private static InstagibHud hud;
 		public static Game Instance;
 
-		private CtfGameType gameType;
+		private BaseGameType gameType;
 
 		public Game()
 		{
@@ -31,7 +31,7 @@ namespace Instagib
 			if ( IsServer )
 			{
 				hud = new InstagibHud();
-				gameType = new();
+				gameType = new CtfGameType();
 			}
 
 			Instance = this;
