@@ -15,7 +15,7 @@
 						[
 							{
 								from = "cube.vmat"
-								to = "materials/dev/primary_red.vmat"
+								to = "materials/dev/primary_white.vmat"
 							},
 							{
 								from = "cylinder.vmat"
@@ -24,6 +24,28 @@
 						]
 						use_global_default = false
 						global_default_material = ""
+					},
+					{
+						_class = "MaterialGroup"
+						name = "RedFlag"
+						remaps = 
+						[
+							{
+								from = "materials/dev/primary_white.vmat"
+								to = "materials/dev/primary_red.vmat"
+							},
+						]
+					},
+					{
+						_class = "MaterialGroup"
+						name = "BlueFlag"
+						remaps = 
+						[
+							{
+								from = "materials/dev/primary_white.vmat"
+								to = "materials/dev/primary_blue.vmat"
+							},
+						]
 					},
 				]
 			},
