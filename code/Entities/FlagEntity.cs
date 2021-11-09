@@ -1,5 +1,6 @@
 ﻿using Instagib.Teams;
 using Sandbox;
+using System.Linq;
 
 namespace Instagib.Entities
 {
@@ -8,14 +9,25 @@ namespace Instagib.Entities
 	{
 		public PickupTrigger PickupTrigger { get; set; }
 
-		public BaseTeam Team { get; set; }
+		private BaseTeam team;
+		public BaseTeam Team
+		{
+			get => team; 
+			set
+			{
+				team = value;
+				SetMaterialGroup( Team.TeamName + "Flag" );
+			}
+		}
+
+		public bool HasBeenMoved { get; set; }
 
 		public override void Spawn()
 		{
 			base.Spawn();
 			SetModel( "models/flag/flag.vmdl" );
 			SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
-			SetInteractsAs( CollisionLayer.Debris );
+			SetInteractsAs( CollisionLayer.Empty );
 			SetInteractsExclude( CollisionLayer.Player );
 
 			EnableTouch = true;
@@ -25,8 +37,9 @@ namespace Instagib.Entities
 			PickupTrigger.Position = Position;
 			PickupTrigger.EnableTouch = true;
 
-			var player = Client.All[0];
-			Team = player.GetTeam();
+			HasBeenMoved = false;
+
+			Health = 1;
 		}
 
 		public override void StartTouch( Entity other )
@@ -35,10 +48,35 @@ namespace Instagib.Entities
 
 			if ( other is Player player )
 			{
-				if ( player.Team != Team )
+				if ( player.Team == Team )
 				{
-					// Log.Trace( $"{player} should pick this flag up!! TODO " );
+					if ( HasBeenMoved )
+					{
+						// Return this flag
+						TakeDamage( DamageInfo.Generic( 10000 ) );
+					}
+					else
+					{
+						// Check if we have a flag to capture
+						if ( player.Children.Any( e => e is FlagEntity ) )
+						{
+							var playerCarryingFlag = player.Children.First( e => e is FlagEntity );
+							if ( playerCarryingFlag.IsValid() )
+							{
+								// Capture flag
+								playerCarryingFlag.TakeDamage( DamageInfo.Generic( 10000 ) );
+
+								// Tell the game to add score
+								// Game.Instance.GameType.AddScore( Team, 1 );
+							}
+						}
+					}
+				}
+				else if ( player.Team != Team ) // Other player grabs flag
+				{
 					SetParent( player, null, new Transform( Vector3.Backward * 32f ) );
+					EnableAllCollisions = false;
+					HasBeenMoved = true;
 				}
 			}
 		}
@@ -53,6 +91,11 @@ namespace Instagib.Entities
 
 			if ( Parent.LifeState == LifeState.Dead )
 				SetParent( null );
+
+			if ( Position.z < -2500 )
+			{
+				TakeDamage( DamageInfo.Generic( 10000 ) );
+			}
 		}
 	}
 }
