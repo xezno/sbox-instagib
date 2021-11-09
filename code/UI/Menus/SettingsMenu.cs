@@ -48,7 +48,7 @@ namespace Instagib.UI.Menus
 			FovSlider.ValueCalcFunc = value => fovRange.Min.LerpTo( fovRange.Max, value ).CeilToInt();
 			FovSlider.Value = 110f;
 
-			ViewTiltMultiplierSlider.SnapRate = 1;
+			ViewTiltMultiplierSlider.SnapRate = 10;
 			ViewTiltMultiplierSlider.ValueCalcFunc =
 				value => viewTiltRange.Min.LerpTo( viewTiltRange.Max, value ).CeilToInt();
 
