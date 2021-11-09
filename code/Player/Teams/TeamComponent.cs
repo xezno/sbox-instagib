@@ -14,5 +14,4 @@ namespace Instagib.Teams
 			return base.CanAddToEntity( entity );
 		}
 	}
-
 }

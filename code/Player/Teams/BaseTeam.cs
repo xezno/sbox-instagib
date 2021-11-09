@@ -7,9 +7,9 @@ namespace Instagib.Teams
 	{
 		[Net] public List<Player> Players { get; set; }
 
-		public virtual int GetTeamColor()
+		public virtual Color GetTeamColor()
 		{
-			return -1;
+			return Color.Gray;
 		}
 
 		public virtual string GetTeamName()
