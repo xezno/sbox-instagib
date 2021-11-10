@@ -1,0 +1,28 @@
+﻿FlagInfo {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
+    transform: translateX( -50% );
+    border-radius: 10px;
+    backdrop-filter: blur( 20px ) brightness( 0.5 );
+    border: 2px solid rgba( black, 0.4 );
+    padding: 10px 20px;
+
+    .red {
+        color: red;
+    }
+
+    .blue {
+        color: blue;
+    }
+
+    .separator {
+        height: 100%;
+        width: 2px;
+        margin: 5px 20px;
+        background-color: rgba( black, 0.5 );
+    }
+}

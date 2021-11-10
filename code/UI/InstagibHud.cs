@@ -40,6 +40,18 @@ namespace Instagib.UI
 			}
 		}
 
+		bool isFirstTick = true;
+
+		[Event.Tick.Client]
+		public void OnTick()
+		{
+			if ( isFirstTick )
+			{
+				Game.Instance.GameType.CreateHUDElements( TiltingHudPanel );
+				isFirstTick = false;
+			}
+		}
+
 		public static void ToggleMapVoteScreen( bool oldValue, bool newValue )
 		{
 			if ( newValue )
@@ -77,6 +89,7 @@ namespace Instagib.UI
 		{
 			Host.AssertClient();
 			TiltingHudPanel = RootPanel.AddChild<MainPanel>();
+			isFirstTick = true;
 		}
 
 		public void OnKilledMessage( Player attacker, Player victim, string[] medals )

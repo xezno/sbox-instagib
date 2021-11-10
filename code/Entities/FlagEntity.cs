@@ -1,4 +1,5 @@
-﻿using Instagib.Teams;
+﻿using Instagib.GameTypes;
+using Instagib.Teams;
 using Sandbox;
 using System.Linq;
 
@@ -12,7 +13,7 @@ namespace Instagib.Entities
 		private BaseTeam team;
 		public BaseTeam Team
 		{
-			get => team; 
+			get => team;
 			set
 			{
 				team = value;
@@ -42,42 +43,70 @@ namespace Instagib.Entities
 			Health = 1;
 		}
 
+		private void ReturnFlag()
+		{
+			ClassicChatBox.AddInformation( To.Everyone, $"The {Team.TeamName} flag has been returned!" );
+			TakeDamage( DamageInfo.Generic( 10000 ) );
+		}
+
+		private void CaptureFlag( FlagEntity targetFlag )
+		{
+			targetFlag.TakeDamage( DamageInfo.Generic( 10000 ) );
+			ClassicChatBox.AddInformation( To.Everyone, $"The {targetFlag.Team.TeamName} flag has been captured!" );
+
+			// Team in this case is the team capturing the flag
+			if ( Game.Instance.GameType is CtfGameType ctfGame )
+			{
+				ctfGame.CaptureFlag( Team );
+			}
+		}
+
+		private void PickupFlag( Player player )
+		{
+			ClassicChatBox.AddInformation( To.Everyone, $"{player.Client.Name} picked up the {Team.TeamName} flag!" );
+			SetParent( player, null, new Transform( Vector3.Backward * 32f ) );
+			EnableAllCollisions = false;
+			HasBeenMoved = true;
+		}
+
+		private void DropFlag()
+		{
+			ClassicChatBox.AddInformation( To.Everyone, $"The {Team.TeamName} flag has been dropped!" );
+			SetParent( null );
+		}
+
 		public override void StartTouch( Entity other )
 		{
 			base.StartTouch( other );
 
-			if ( other is Player player )
+			if ( !Game.Instance.InPlay )
+				return;
+
+			if ( other is not Player player )
+				return;
+
+			if ( player.Team == Team )
 			{
-				if ( player.Team == Team )
+				if ( HasBeenMoved )
 				{
-					if ( HasBeenMoved )
+					ReturnFlag();
+				}
+				else
+				{
+					// Check if we have a flag to capture
+					if ( player.Children.Any( e => e is FlagEntity ) )
 					{
-						// Return this flag
-						TakeDamage( DamageInfo.Generic( 10000 ) );
-					}
-					else
-					{
-						// Check if we have a flag to capture
-						if ( player.Children.Any( e => e is FlagEntity ) )
+						var playerCarryingEntity = player.Children.First( e => e is FlagEntity );
+						if ( playerCarryingEntity.IsValid() && playerCarryingEntity is FlagEntity playerCarryingFlag )
 						{
-							var playerCarryingEntity = player.Children.First( e => e is FlagEntity );
-							if ( playerCarryingEntity.IsValid() && playerCarryingEntity is FlagEntity playerCarryingFlag )
-							{
-								// Capture flag
-								playerCarryingEntity.TakeDamage( DamageInfo.Generic( 10000 ) );
-								ClassicChatBox.AddInformation( To.Everyone, $"The {playerCarryingFlag.Team.TeamName} flag has been captured!" );
-								// Tell the game to add score
-								// Game.Instance.GameType.AddScore( Team, 1 );
-							}
+							CaptureFlag( playerCarryingFlag );
 						}
 					}
 				}
-				else if ( player.Team != Team ) // Other player grabs flag
-				{
-					SetParent( player, null, new Transform( Vector3.Backward * 32f ) );
-					EnableAllCollisions = false;
-					HasBeenMoved = true;
-				}
+			}
+			else if ( player.Team != Team )
+			{
+				PickupFlag( player );
 			}
 		}
 
@@ -86,16 +115,14 @@ namespace Instagib.Entities
 		{
 			Rotation = Rotation.Identity;
 
+			if ( Position.z < -2500 )
+				TakeDamage( DamageInfo.Generic( 10000 ) );
+
 			if ( Parent == null )
 				return;
 
 			if ( Parent.LifeState == LifeState.Dead )
-				SetParent( null );
-
-			if ( Position.z < -2500 )
-			{
-				TakeDamage( DamageInfo.Generic( 10000 ) );
-			}
+				DropFlag();
 		}
 	}
 }

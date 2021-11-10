@@ -11,7 +11,7 @@ namespace Instagib
 		private static InstagibHud hud;
 		public static Game Instance;
 
-		public BaseGameType GameType { get; set; }
+		[Net] public BaseGameType GameType { get; set; }
 
 		public Game()
 		{
@@ -41,8 +41,6 @@ namespace Instagib
 		{
 			base.ClientJoined( cl );
 			CurrentState.OnPlayerJoin( cl );
-
-			Log.Trace( $"Lobby name: {Global.Lobby.Title}" );
 
 			var player = new Player( cl );
 			cl.Pawn = player;

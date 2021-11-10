@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Sandbox.UI;
 
 namespace Instagib.GameTypes
 {
@@ -24,5 +25,7 @@ namespace Instagib.GameTypes
 				TeamId = player.NetworkIdent
 			};
 		}
+
+		public virtual void CreateHUDElements( Panel RootPanel ) { }
 	}
 }
