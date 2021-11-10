@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Instagib.UI.PostGameScreens;
+using Sandbox;
 using Sandbox.UI;
 
 namespace Instagib.GameTypes
@@ -21,11 +22,13 @@ namespace Instagib.GameTypes
 			player.Team = new Teams.BaseTeam()
 			{
 				TeamName = player.Client.Name,
-				TeamColor = "#deadbeef",
+				TeamColor = "#bada55",
 				TeamId = player.NetworkIdent
 			};
 		}
 
-		public virtual void CreateHUDElements( Panel RootPanel ) { }
+		public virtual void CreateWinnerElements( WinnerScreen winnerScreen ) { }
+
+		public virtual void CreateHUDElements( Panel panel ) { }
 	}
 }

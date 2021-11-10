@@ -1,4 +1,5 @@
 ﻿using Instagib.GameTypes;
+using Instagib.Teams;
 using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
@@ -19,6 +20,9 @@ namespace Instagib.UI.Elements
 
 			Add.Icon( "flag", "flag-icon blue" );
 			BlueCaptureLabel = Add.Label( "0", "capture-count blue" );
+
+			var localTeam = Local.Client.GetTeam();
+			Add.Label( $"You are playing on {localTeam.TeamName} team", $"playing-as {localTeam.TeamName}" );
 
 			StyleSheet.Load( "/Code/UI/Elements/FlagInfo.scss" );
 		}

@@ -12,11 +12,11 @@
     padding: 10px 20px;
 
     .red {
-        color: red;
+        color: #fe7171;
     }
 
     .blue {
-        color: blue;
+        color: #71a5fe;
     }
 
     .separator {
@@ -24,5 +24,10 @@
         width: 2px;
         margin: 5px 20px;
         background-color: rgba( black, 0.5 );
+    }
+
+    .playing-as {
+        position: absolute;
+        bottom: -50px;
     }
 }

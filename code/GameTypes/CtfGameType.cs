@@ -2,6 +2,9 @@
 using Instagib.Teams;
 using Sandbox.UI;
 using Instagib.UI.Elements;
+using Instagib.UI.PostGameScreens;
+using System.Collections.Generic;
+using Sandbox.UI.Construct;
 
 namespace Instagib.GameTypes
 {
@@ -44,6 +47,31 @@ namespace Instagib.GameTypes
 			else
 			{
 				RedCaptures++;
+			}
+		}
+
+		public override void CreateWinnerElements( WinnerScreen winnerScreen )
+		{
+			var sortedClients = new List<Client>( Client.All );
+			sortedClients.Sort( InstagibGlobal.SortClients );
+			var playersPanel = winnerScreen.Add.Panel( "players" );
+			int particleCount = 0;
+
+			BaseTeam winningTeam;
+			if ( RedCaptures > BlueCaptures )
+				winningTeam = RedTeam;
+			else
+				winningTeam = BlueTeam;
+
+			winnerScreen.Add.Label( $"{winningTeam.TeamName.ToUpper()} WINS ", "title " + winningTeam.TeamName );
+			particleCount = Local.Client.GetTeam() == winningTeam ? 64 : 0;
+
+			for ( int i = 0; i < particleCount; ++i )
+			{
+				var particle = new WinnerParticle();
+				var rand = (Vector2.Random + Vector2.Random + Vector2.Random + Vector2.Random) * new Vector2( 0.5f, 1.0f );
+				particle.Origin = new Vector2( 0.5f, -2.0f ) + rand;
+				particle.Parent = winnerScreen;
 			}
 		}
 
