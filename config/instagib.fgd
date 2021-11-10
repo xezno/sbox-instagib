@@ -24,19 +24,9 @@
 ]
 
 //
-// Instagib.Entities.FlagEntity
-//
-@PointClass base(BaseProperties_Instagib) = ent_flag : ""
-[
-	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
-
-	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
-]
-
-//
 // Instagib.Entities.FlagPodiumEntity
 //
-@PointClass base(BaseProperties_Instagib) = ent_flag_podium : ""
+@PointClass base(BaseProperties_Instagib) = ent_flag_podium : "This is where flags are held / spawned / etc."
 [
 	flagteam(choices) : "Flag Team" : 0 : "" =
 	[

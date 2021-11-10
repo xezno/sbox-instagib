@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace Instagib.Entities
 {
-	[Library( "ent_flag" )]
 	public class FlagEntity : ModelEntity
 	{
 		public PickupTrigger PickupTrigger { get; set; }

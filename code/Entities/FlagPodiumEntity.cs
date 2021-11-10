@@ -3,6 +3,9 @@ using Sandbox;
 
 namespace Instagib.Entities
 {
+	/// <summary>
+	/// This is where flags are held / spawned / etc.
+	/// </summary>
 	[Library( "ent_flag_podium" )]
 	public class FlagPodiumEntity : ModelEntity
 	{
