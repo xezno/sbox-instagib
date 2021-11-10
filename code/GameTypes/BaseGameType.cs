@@ -27,6 +27,13 @@ namespace Instagib.GameTypes
 			};
 		}
 
+		public virtual void Notify( string str )
+		{
+			// Shouldn't be using the chatbox for this
+			// TODO: revisit
+			ClassicChatBox.AddInformation( To.Everyone, str );
+		}
+
 		public virtual void CreateWinnerElements( WinnerScreen winnerScreen ) { }
 
 		public virtual void CreateHUDElements( Panel panel ) { }

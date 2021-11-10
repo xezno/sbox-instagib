@@ -76,7 +76,7 @@ public partial class ClassicChatBox : Panel
 		Canvas.TryScrollToBottom();
 	}
 
-	public void AddEntry( string name, string message, string avatar )
+	public void AddEntry( string name, string message, string avatar, string additionalClass = null )
 	{
 		var e = Canvas.AddChild<ClassicChatEntry>();
 		e.Message.Text = message;
@@ -85,6 +85,9 @@ public partial class ClassicChatBox : Panel
 
 		e.SetClass( "noname", string.IsNullOrEmpty( name ) );
 		e.SetClass( "noavatar", string.IsNullOrEmpty( avatar ) );
+
+		if ( !string.IsNullOrEmpty( additionalClass ) )
+			e.AddClass( additionalClass );
 
 		Canvas.TryScrollToBottom();
 	}
@@ -104,7 +107,7 @@ public partial class ClassicChatBox : Panel
 	[ClientCmd( "chat_addinfo", CanBeCalledFromServer = true )]
 	public static void AddInformation( string message, string avatar = null )
 	{
-		Current?.AddEntry( null, message, avatar );
+		Current?.AddEntry( null, message, avatar, "information" );
 	}
 
 	[ServerCmd( "say" )]

@@ -37,6 +37,9 @@ namespace Instagib.Entities
 			PickupTrigger.Position = Position;
 			PickupTrigger.EnableTouch = true;
 
+			PickupTrigger.SetTriggerSize( 32 );
+			PickupTrigger.LocalPosition = new Vector3( 16, 0, 0 );
+
 			HasBeenMoved = false;
 
 			Health = 1;
@@ -44,14 +47,14 @@ namespace Instagib.Entities
 
 		private void ReturnFlag()
 		{
-			ClassicChatBox.AddInformation( To.Everyone, $"The {Team.TeamName} flag has been returned!" );
+			Game.Instance.GameType.Notify( $"The {Team.TeamName} flag has been returned!" );
 			TakeDamage( DamageInfo.Generic( 10000 ) );
 		}
 
 		private void CaptureFlag( FlagEntity targetFlag )
 		{
 			targetFlag.TakeDamage( DamageInfo.Generic( 10000 ) );
-			ClassicChatBox.AddInformation( To.Everyone, $"The {targetFlag.Team.TeamName} flag has been captured!" );
+			Game.Instance.GameType.Notify( $"The {targetFlag.Team.TeamName} flag has been captured!" );
 
 			// Team in this case is the team capturing the flag
 			if ( Game.Instance.GameType is CtfGameType ctfGame )
@@ -62,7 +65,7 @@ namespace Instagib.Entities
 
 		private void PickupFlag( Player player )
 		{
-			ClassicChatBox.AddInformation( To.Everyone, $"{player.Client.Name} picked up the {Team.TeamName} flag!" );
+			Game.Instance.GameType.Notify( $"{player.Client.Name} picked up the {Team.TeamName} flag!" );
 			SetParent( player, null, new Transform( Vector3.Backward * 32f ) );
 			EnableAllCollisions = false;
 			HasBeenMoved = true;
@@ -70,7 +73,7 @@ namespace Instagib.Entities
 
 		private void DropFlag()
 		{
-			ClassicChatBox.AddInformation( To.Everyone, $"The {Team.TeamName} flag has been dropped!" );
+			Game.Instance.GameType.Notify( $"The {Team.TeamName} flag has been dropped!" );
 			SetParent( null );
 		}
 
@@ -118,7 +121,10 @@ namespace Instagib.Entities
 				TakeDamage( DamageInfo.Generic( 10000 ) );
 
 			if ( Parent == null )
+			{
+				EnableAllCollisions = true;
 				return;
+			}
 
 			if ( Parent.LifeState == LifeState.Dead )
 				DropFlag();

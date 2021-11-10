@@ -61,6 +61,7 @@ classicchatentry {
     transform: scale( 1 );
     width: 100%;
     align-items: center;
+    border-radius: 10px;
 
     &:intro {
         opacity: 0;
@@ -79,6 +80,18 @@ classicchatentry {
     &.show {
         opacity: 1;
         transition: all 0.2s ease-out;
+    }
+
+    &.information {
+        background-color: rgba( $accent, 0.5 );
+
+        &:hover {
+            background-color: rgba( $accent, 1 );
+        }
+
+        .message {
+            color: $accent-text;
+        }
     }
 
     &:outro {
