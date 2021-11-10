@@ -105,9 +105,9 @@ public partial class ClassicChatBox : Panel
 	}
 
 	[ClientCmd( "chat_addinfo", CanBeCalledFromServer = true )]
-	public static void AddInformation( string message, string avatar = null )
+	public static void AddInformation( string message, string avatar = null, bool important = false )
 	{
-		Current?.AddEntry( null, message, avatar, "information" );
+		Current?.AddEntry( null, message, avatar, important ? "information" : null );
 	}
 
 	[ServerCmd( "say" )]

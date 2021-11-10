@@ -31,7 +31,7 @@ namespace Instagib.GameTypes
 		{
 			// Shouldn't be using the chatbox for this
 			// TODO: revisit
-			ClassicChatBox.AddInformation( To.Everyone, str );
+			ClassicChatBox.AddInformation( To.Everyone, str, null, true );
 		}
 
 		public virtual void CreateWinnerElements( WinnerScreen winnerScreen ) { }

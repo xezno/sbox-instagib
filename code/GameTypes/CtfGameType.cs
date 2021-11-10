@@ -57,22 +57,30 @@ namespace Instagib.GameTypes
 			var playersPanel = winnerScreen.Add.Panel( "players" );
 			int particleCount = 0;
 
-			BaseTeam winningTeam;
+			BaseTeam winningTeam = null;
 			if ( RedCaptures > BlueCaptures )
 				winningTeam = RedTeam;
-			else
+			else if ( BlueCaptures > RedCaptures )
 				winningTeam = BlueTeam;
 
-			winnerScreen.Add.Label( $"{winningTeam.TeamName.ToUpper()} WINS ", "title " + winningTeam.TeamName );
-			particleCount = Local.Client.GetTeam() == winningTeam ? 64 : 0;
+			if ( winningTeam != null )
+				winnerScreen.Add.Label( $"{winningTeam.TeamName.ToUpper()} WINS", "title " + winningTeam.TeamName );
+			else
+				winnerScreen.Add.Label( $"TIE", "title" );
 
-			for ( int i = 0; i < particleCount; ++i )
 			{
-				var particle = new WinnerParticle();
-				var rand = (Vector2.Random + Vector2.Random + Vector2.Random + Vector2.Random) * new Vector2( 0.5f, 1.0f );
-				particle.Origin = new Vector2( 0.5f, -2.0f ) + rand;
-				particle.Parent = winnerScreen;
+				var redTeam = playersPanel.Add.Panel( "red-team" );
+				redTeam.Add.Label( "RED", "team-name red" );
+				redTeam.Add.Label( RedCaptures.ToString(), "captures red" );
 			}
+			{
+				var blueTeam = playersPanel.Add.Panel( "blue-team" );
+				blueTeam.Add.Label( "BLUE", "team-name blue" );
+				blueTeam.Add.Label( BlueCaptures.ToString(), "captures blue" );
+			}
+
+			particleCount = Local.Client.GetTeam() == winningTeam ? 64 : 0;
+			winnerScreen.CreateWinnerParticles( particleCount );
 		}
 
 		public override bool GameShouldEnd()

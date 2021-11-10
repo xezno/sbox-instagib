@@ -22,7 +22,7 @@ namespace Instagib.UI.Elements
 			BlueCaptureLabel = Add.Label( "0", "capture-count blue" );
 
 			var localTeam = Local.Client.GetTeam();
-			Add.Label( $"You are playing on {localTeam.TeamName} team", $"playing-as {localTeam.TeamName}" );
+			Add.Label( $"You are playing as {localTeam.TeamName}", $"playing-as {localTeam.TeamName}" );
 
 			StyleSheet.Load( "/Code/UI/Elements/FlagInfo.scss" );
 		}

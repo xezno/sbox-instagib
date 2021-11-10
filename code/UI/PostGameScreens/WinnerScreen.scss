@@ -54,13 +54,13 @@ label.title {
 }
 
 .players {
-    WinnerText {
+    WinnerText,.red-team,.blue-team {
         flex-direction: column;
         align-items: center;
         min-width: 250px;
         flex-grow: 1;
 
-        .position {
+        .position,.captures {
             font-size: 64px;
             text-shadow: 0 0 8px rgba( black, 0.25 );
         }
@@ -69,7 +69,7 @@ label.title {
             font-size: 16px;
         }
 
-        .player {
+        .player,.team-name {
             font-size: 32px;
             margin: 0 32px;
             text-shadow: 0 0 8px rgba( black, 0.25 );

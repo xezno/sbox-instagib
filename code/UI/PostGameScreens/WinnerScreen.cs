@@ -14,6 +14,19 @@ namespace Instagib.UI.PostGameScreens
 
 			Game.Instance.GameType.CreateWinnerElements( this );
 		}
+
+		public void CreateWinnerParticles( int particleCount )
+		{
+			particleCount = particleCount.Clamp( 0, 128 );
+
+			for ( int i = 0; i < particleCount; ++i )
+			{
+				var particle = new WinnerParticle();
+				var rand = (Vector2.Random + Vector2.Random + Vector2.Random + Vector2.Random) * new Vector2( 0.5f, 1.0f );
+				particle.Origin = new Vector2( 0.5f, -2.0f ) + rand;
+				particle.Parent = this;
+			}
+		}
 	}
 
 	public class WinnerText : Panel
