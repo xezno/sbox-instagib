@@ -57,6 +57,7 @@ namespace Instagib.Entities
 			if ( Game.Instance.GameType is CtfGameType ctfGame )
 			{
 				ctfGame.CaptureFlag( Team );
+				_ = Particles.Create( "particles/explosion/barrel_explosion/explosion_gib.vpcf", targetFlag.Position ); // TODO
 			}
 		}
 
