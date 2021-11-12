@@ -5,6 +5,7 @@ using Instagib.UI.Elements;
 using Instagib.UI.PostGameScreens;
 using System.Collections.Generic;
 using Sandbox.UI.Construct;
+using System.Linq;
 
 namespace Instagib.GameTypes
 {
@@ -105,7 +106,8 @@ namespace Instagib.GameTypes
 
 			RootPanel.AddChild<FlagInfo>();
 
-			StaticHudPanel.AddChild<FlagTags>();
+			if ( StaticHudPanel.Children.FirstOrDefault( p => p is FlagTags ) == null )
+				StaticHudPanel.AddChild<FlagTags>();
 		}
 	}
 }
