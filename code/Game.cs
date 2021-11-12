@@ -18,7 +18,7 @@ namespace Instagib
 			Precache.Add( "particles/gib_blood.vpcf" );
 			Precache.Add( "particles/speed_lines.vpcf" );
 			Precache.Add( "sounds/jump.vsnd" );
-			
+
 			Precache.Add( "weapons/railgun/particles/railgun_beam.vpcf" );
 			Precache.Add( "weapons/railgun/particles/railgun_pulse.vpcf" );
 			Precache.Add( "weapons/railgun/sounds/railgun_fire.vsnd" );
@@ -27,11 +27,19 @@ namespace Instagib
 			{
 				PlayerSettings.Load();
 			}
-			
+
 			if ( IsServer )
 			{
 				hud = new InstagibHud();
-				GameType = new CtfGameType();
+
+				if ( Global.MapName.Contains( "ctf" ) ) // TODO: Revisit this, not a great solution
+				{
+					GameType = new CtfGameType();
+				}
+				else
+				{
+					GameType = new FfaGameType();
+				}
 			}
 
 			Instance = this;
@@ -47,7 +55,7 @@ namespace Instagib
 			GameType.AssignPlayerTeam( player );
 			player.Respawn();
 		}
-		
+
 		public override void DoPlayerNoclip( Client cl )
 		{
 			if ( cl.SteamId != InstagibGlobal.AlexSteamId )
@@ -60,7 +68,7 @@ namespace Instagib
 		{
 			if ( cl.SteamId != InstagibGlobal.AlexSteamId )
 				return;
-			
+
 			base.DoPlayerDevCam( cl );
 		}
 
@@ -75,7 +83,7 @@ namespace Instagib
 			Host.AssertServer();
 
 			Log.Info( $"{client.Name} was killed" );
-			
+
 			if ( pawn is not Player victim )
 				return;
 
