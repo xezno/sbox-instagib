@@ -1,28 +1,28 @@
-﻿using Instagib.GameTypes;
+﻿using Instagib.Entities;
+using Instagib.GameTypes;
 using Instagib.Teams;
 using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
+using System.Linq;
 
 namespace Instagib.UI.Elements
 {
+	[UseTemplate]
 	public class FlagInfo : Panel
 	{
 		private Label RedCaptureLabel { get; set; }
 		private Label BlueCaptureLabel { get; set; }
+		private Label PlayingAsLabel { get; set; }
+
+		private Label CurrentlyCarryingLabel { get; set; }
 
 		public FlagInfo()
 		{
-			Add.Icon( "flag", "flag-icon red" );
-			RedCaptureLabel = Add.Label( "0", "capture-count red" );
-
-			Add.Panel( "separator" );
-
-			Add.Icon( "flag", "flag-icon blue" );
-			BlueCaptureLabel = Add.Label( "0", "capture-count blue" );
-
 			var localTeam = Local.Client.GetTeam();
-			Add.Label( $"You are playing as {localTeam.TeamName}", $"playing-as {localTeam.TeamName}" );
+
+			PlayingAsLabel.Text = $"You are playing as {localTeam.TeamName}";
+			PlayingAsLabel.AddClass( localTeam.TeamName );
 
 			StyleSheet.Load( "/Code/UI/Elements/FlagInfo.scss" );
 		}
@@ -35,6 +35,17 @@ namespace Instagib.UI.Elements
 			{
 				RedCaptureLabel.Text = ctfGame.RedCaptures.ToString();
 				BlueCaptureLabel.Text = ctfGame.BlueCaptures.ToString();
+			}
+
+			var flagEntity = Local.Pawn.Children.FirstOrDefault( e => e is FlagEntity );
+			if ( flagEntity.IsValid() && flagEntity is FlagEntity flag && CurrentlyCarryingLabel == null )
+			{
+				CurrentlyCarryingLabel = Add.Label( $"You have the {flag.Team.TeamName} flag", $"has-flag {flag.Team.TeamName}" );
+			}
+			else if ( !flagEntity.IsValid() && CurrentlyCarryingLabel != null )
+			{
+				CurrentlyCarryingLabel.Delete();
+				CurrentlyCarryingLabel = null;
 			}
 		}
 	}

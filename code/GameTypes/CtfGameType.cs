@@ -99,11 +99,13 @@ namespace Instagib.GameTypes
 			Log.Trace( $"Added player {player.Name} to team {selectedTeam.TeamName}" );
 		}
 
-		public override void CreateHUDElements( Panel RootPanel )
+		public override void CreateHUDElements( Panel RootPanel, Panel StaticHudPanel )
 		{
-			base.CreateHUDElements( RootPanel );
+			base.CreateHUDElements( RootPanel, StaticHudPanel );
 
 			RootPanel.AddChild<FlagInfo>();
+
+			StaticHudPanel.AddChild<FlagTags>();
 		}
 	}
 }

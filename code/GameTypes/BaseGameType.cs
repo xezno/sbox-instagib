@@ -36,6 +36,6 @@ namespace Instagib.GameTypes
 
 		public virtual void CreateWinnerElements( WinnerScreen winnerScreen ) { }
 
-		public virtual void CreateHUDElements( Panel panel ) { }
+		public virtual void CreateHUDElements( Panel panel, Panel StaticHudPanel ) { }
 	}
 }

@@ -1,0 +1,43 @@
+﻿FlagTags {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    .red {
+        color: #fe7171;
+
+        &.flag-tag {
+            border: 2px solid #fe7171;
+        }
+
+        text, icon, label {
+            color: #fe7171;
+        }
+    }
+
+    .blue {
+        color: #71a5fe;
+
+        &.flag-tag {
+            border: 2px solid #71a5fe;
+        }
+
+        text, icon, label {
+            color: #71a5fe;
+        }
+    }
+
+    .flag-tag {
+        border: 2px solid red;
+        position: absolute;
+        font-size: 24px;
+        transform: translate( -50% -50% );
+        text-shadow: 0 0 5px rgba( black, 0.1 );
+        border-radius: 100%;
+        padding: 10px;
+        text-align: center;
+        backdrop-filter: brightness( 200% );
+    }
+}

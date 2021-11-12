@@ -47,7 +47,7 @@ namespace Instagib.UI
 		{
 			if ( isFirstTick )
 			{
-				Game.Instance.GameType.CreateHUDElements( TiltingHudPanel );
+				Game.Instance.GameType.CreateHUDElements( TiltingHudPanel, StaticHudPanel );
 				isFirstTick = false;
 			}
 		}

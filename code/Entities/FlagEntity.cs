@@ -5,20 +5,12 @@ using System.Linq;
 
 namespace Instagib.Entities
 {
-	public class FlagEntity : ModelEntity
+	public partial class FlagEntity : ModelEntity
 	{
 		public PickupTrigger PickupTrigger { get; set; }
 
-		private BaseTeam team;
-		public BaseTeam Team
-		{
-			get => team;
-			set
-			{
-				team = value;
-				SetMaterialGroup( Team.TeamName + "Flag" );
-			}
-		}
+		[Net, Change( "OnTeamChange" )]
+		public BaseTeam Team { get; set; }
 
 		public bool HasBeenMoved { get; set; }
 
@@ -43,6 +35,11 @@ namespace Instagib.Entities
 			HasBeenMoved = false;
 
 			Health = 1;
+		}
+
+		private void OnTeamChange()
+		{
+			SetMaterialGroup( Team.TeamName + "Flag" );
 		}
 
 		private void ReturnFlag()

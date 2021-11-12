@@ -11,12 +11,42 @@
     border: 2px solid rgba( black, 0.4 );
     padding: 10px 20px;
 
+    .team-container {
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        .capture-count {
+            font-size: 32px;
+        }
+
+        icon {
+            font-size: 48px;
+
+            &:not(.flag-icon) {
+                position: absolute;
+                right: 0;
+                top: 18px;
+                margin-top: 16px;
+                font-size: 16px;
+            }
+        }
+    }
+
     .red {
         color: #fe7171;
+
+        text, icon, label {
+            color: #fe7171;
+        }
     }
 
     .blue {
         color: #71a5fe;
+
+        text, icon, label {
+            color: #71a5fe;
+        }
     }
 
     .separator {
@@ -29,5 +59,15 @@
     .playing-as {
         position: absolute;
         bottom: -50px;
+    }
+
+    .has-flag {
+        position: absolute;
+        bottom: -100px;
+        transition: all 150ms ease;
+
+        &:intro, &:outro {
+            opacity: 0;
+        }
     }
 }
