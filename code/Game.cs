@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Instagib.GameTypes;
 using Instagib.UI;
 using Sandbox;
 
@@ -10,12 +11,14 @@ namespace Instagib
 		private static InstagibHud hud;
 		public static Game Instance;
 
+		[Net] public BaseGameType GameType { get; set; }
+
 		public Game()
 		{
 			Precache.Add( "particles/gib_blood.vpcf" );
 			Precache.Add( "particles/speed_lines.vpcf" );
 			Precache.Add( "sounds/jump.vsnd" );
-			
+
 			Precache.Add( "weapons/railgun/particles/railgun_beam.vpcf" );
 			Precache.Add( "weapons/railgun/particles/railgun_pulse.vpcf" );
 			Precache.Add( "weapons/railgun/sounds/railgun_fire.vsnd" );
@@ -24,10 +27,19 @@ namespace Instagib
 			{
 				PlayerSettings.Load();
 			}
-			
+
 			if ( IsServer )
 			{
 				hud = new InstagibHud();
+
+				if ( Global.MapName.Contains( "ctf" ) ) // TODO: Revisit this, not a great solution
+				{
+					GameType = new CtfGameType();
+				}
+				else
+				{
+					GameType = new FfaGameType();
+				}
 			}
 
 			Instance = this;
@@ -38,16 +50,15 @@ namespace Instagib
 			base.ClientJoined( cl );
 			CurrentState.OnPlayerJoin( cl );
 
-			Log.Trace( $"Lobby name: {Global.Lobby.Title}" );
-
 			var player = new Player( cl );
 			cl.Pawn = player;
+			GameType.AssignPlayerTeam( player );
 			player.Respawn();
 		}
-		
+
 		public override void DoPlayerNoclip( Client cl )
 		{
-			if ( cl.SteamId != InstagibGlobal.AlexSteamId )
+			if ( cl.PlayerId != InstagibGlobal.AlexSteamId )
 				return;
 
 			base.DoPlayerNoclip( cl );
@@ -55,9 +66,9 @@ namespace Instagib
 
 		public override void DoPlayerDevCam( Client cl )
 		{
-			if ( cl.SteamId != InstagibGlobal.AlexSteamId )
+			if ( cl.PlayerId != InstagibGlobal.AlexSteamId )
 				return;
-			
+
 			base.DoPlayerDevCam( cl );
 		}
 
@@ -72,7 +83,7 @@ namespace Instagib
 			Host.AssertServer();
 
 			Log.Info( $"{client.Name} was killed" );
-			
+
 			if ( pawn is not Player victim )
 				return;
 
@@ -121,7 +132,7 @@ namespace Instagib
 		[ClientRpc]
 		public void PlayerRespawnRpc()
 		{
-			InstagibHud.CurrentHud?.OnRespawn();
+			InstagibHud.currentHud?.OnRespawn();
 		}
 
 		[ServerCmd( "recreatehud", Help = "Recreate hud object" )]
@@ -136,14 +147,14 @@ namespace Instagib
 		public void PlayerDiedRpc( Player attacker )
 		{
 			// Attacker, victim
-			InstagibHud.CurrentHud.OnDeath( attacker?.Client?.Name ?? "Yourself" );
+			InstagibHud.currentHud.OnDeath( attacker?.Client?.Name ?? "Yourself" );
 		}
 
 		[ClientRpc]
 		public void PlayerKilledRpc( Player attacker, Player victim, string[] medals )
 		{
 			// Attacker, victim
-			InstagibHud.CurrentHud.OnKilledMessage( attacker, victim, medals );
+			InstagibHud.currentHud.OnKilledMessage( attacker, victim, medals );
 		}
 	}
 }

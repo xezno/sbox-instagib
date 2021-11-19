@@ -8,6 +8,7 @@ namespace Instagib.UI.Elements
 	{
 		public Controls()
 		{
+			StyleSheet.Load( "/Code/UI/Elements/Controls.scss" );
 			Add.Label( "Controls:", "title" );
 			AddControl( "Grapple", "iv_duck" );
 			AddControl( "Zoom", "iv_sprint" );

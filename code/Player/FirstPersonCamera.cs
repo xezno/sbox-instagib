@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Instagib.Weapons;
+using Sandbox;
 
 namespace Instagib
 {

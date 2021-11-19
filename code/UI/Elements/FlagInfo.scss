@@ -1,0 +1,73 @@
+﻿FlagInfo {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
+    transform: translateX( -50% );
+    border-radius: 10px;
+    backdrop-filter: blur( 20px ) brightness( 0.5 );
+    border: 2px solid rgba( black, 0.4 );
+    padding: 10px 20px;
+
+    .team-container {
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        .capture-count {
+            font-size: 32px;
+        }
+
+        icon {
+            font-size: 48px;
+
+            &:not(.flag-icon) {
+                position: absolute;
+                right: 0;
+                top: 18px;
+                margin-top: 16px;
+                font-size: 16px;
+            }
+        }
+    }
+
+    .red {
+        color: #fe7171;
+
+        text, icon, label {
+            color: #fe7171;
+        }
+    }
+
+    .blue {
+        color: #71a5fe;
+
+        text, icon, label {
+            color: #71a5fe;
+        }
+    }
+
+    .separator {
+        height: 100%;
+        width: 2px;
+        margin: 5px 20px;
+        background-color: rgba( black, 0.5 );
+    }
+
+    .playing-as {
+        position: absolute;
+        bottom: -50px;
+    }
+
+    .has-flag {
+        position: absolute;
+        bottom: -100px;
+        transition: all 150ms ease;
+
+        &:intro, &:outro {
+            opacity: 0;
+        }
+    }
+}

@@ -6,6 +6,11 @@ namespace Instagib
 	{
 		public const long AlexSteamId = 76561198128972602;
 
+		[ServerVar]
+		public static bool DebugMode { get; set; } = false;
+
+
+		// TODO: Move to game type
 		public static int SortClients( Client a, Client b )
 		{
 			var aKills = a.GetInt( "kills", 0 );

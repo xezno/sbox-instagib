@@ -512,7 +512,7 @@ namespace Instagib
 
 		public virtual void TryPlayerMove()
 		{
-			var mover = new MoveHelper( Position, Velocity );
+			var mover = new CustomMoveHelper( Position, Velocity );
 			mover.Trace = mover.Trace.Size( mins, maxs ).Ignore( Pawn );
 			mover.MaxStandableAngle = GroundAngle;
 

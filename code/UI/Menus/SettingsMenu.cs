@@ -3,6 +3,7 @@ using Instagib.UI.Menus;
 using Instagib.UI.Elements;
 using Sandbox;
 using Sandbox.UI;
+using Instagib.Weapons;
 
 namespace Instagib.UI.Menus
 {
@@ -90,14 +91,6 @@ namespace Instagib.UI.Menus
 		public void RestoreSettings()
 		{
 			PlayerSettings.Load();
-		}
-
-		private ViewModel GetViewModel()
-		{
-			var player = Local.Pawn as Player;
-			var weapon = player.Inventory.Active as Railgun;
-			
-			return weapon.ViewModelEntity as ViewModel;
 		}
 	}
 }
