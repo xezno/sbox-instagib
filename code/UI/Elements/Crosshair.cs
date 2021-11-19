@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Instagib.Weapons;
+using Sandbox;
 using Sandbox.UI;
 
 namespace Instagib.UI
@@ -8,7 +9,7 @@ namespace Instagib.UI
 		Panel[] elements;
 		public Crosshair()
 		{
-			StyleSheet.Load( "/Code/UI/MainPanel.scss" );
+			StyleSheet.Load( "/Code/UI/Elements/Crosshair.scss" );
 			elements = new Panel[5];
 			for ( int i = 0; i < 5; i++ )
 			{

@@ -58,7 +58,7 @@ namespace Instagib
 
 		public override void DoPlayerNoclip( Client cl )
 		{
-			if ( cl.SteamId != InstagibGlobal.AlexSteamId )
+			if ( cl.PlayerId != InstagibGlobal.AlexSteamId )
 				return;
 
 			base.DoPlayerNoclip( cl );
@@ -66,7 +66,7 @@ namespace Instagib
 
 		public override void DoPlayerDevCam( Client cl )
 		{
-			if ( cl.SteamId != InstagibGlobal.AlexSteamId )
+			if ( cl.PlayerId != InstagibGlobal.AlexSteamId )
 				return;
 
 			base.DoPlayerDevCam( cl );
@@ -132,7 +132,7 @@ namespace Instagib
 		[ClientRpc]
 		public void PlayerRespawnRpc()
 		{
-			InstagibHud.CurrentHud?.OnRespawn();
+			InstagibHud.currentHud?.OnRespawn();
 		}
 
 		[ServerCmd( "recreatehud", Help = "Recreate hud object" )]
@@ -147,14 +147,14 @@ namespace Instagib
 		public void PlayerDiedRpc( Player attacker )
 		{
 			// Attacker, victim
-			InstagibHud.CurrentHud.OnDeath( attacker?.Client?.Name ?? "Yourself" );
+			InstagibHud.currentHud.OnDeath( attacker?.Client?.Name ?? "Yourself" );
 		}
 
 		[ClientRpc]
 		public void PlayerKilledRpc( Player attacker, Player victim, string[] medals )
 		{
 			// Attacker, victim
-			InstagibHud.CurrentHud.OnKilledMessage( attacker, victim, medals );
+			InstagibHud.currentHud.OnKilledMessage( attacker, victim, medals );
 		}
 	}
 }

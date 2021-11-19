@@ -12,7 +12,7 @@ namespace Instagib.UI
 		public MessagesPanel()
 		{
 			Instance = this;
-			
+
 			SetClass( "frag", true );
 		}
 
@@ -22,7 +22,7 @@ namespace Instagib.UI
 			{
 				child?.Delete();
 			}
-			
+
 			var fragMessage = new FragMessage( weapon, target, medals );
 			fragMessage.Parent = this;
 		}
@@ -41,14 +41,13 @@ namespace Instagib.UI
 
 	public class DeathMessage : Panel
 	{
-		private Label skullLabel;
 
 		public DeathMessage( string weapon, string target )
 		{
 			SetClass( "frag-message", true );
-			StyleSheet.Load( "/Code/UI/MainPanel.scss" );
+			StyleSheet.Load( "/Code/UI/Elements/MainPanel.scss" );
 
-			skullLabel = Add.Label( "💀", "frag-skull" );
+			Add.Label( "💀", "frag-skull" );
 			var fragDetails = Add.Panel( "frag-details" );
 
 			fragDetails.Add.Label( $"FRAGGED BY" );
@@ -70,18 +69,15 @@ namespace Instagib.UI
 
 	public class FragMessage : Panel
 	{
-		private Label skullLabel;
 
 		public FragMessage( string weapon, string target, string[] medals )
 		{
-			// Log.Trace( "Frag message created"  );
-			
 			SetClass( "frag-message", true );
 			StyleSheet.Load( "/Code/UI/MainPanel.scss" );
-			
-			skullLabel = Add.Label( "💀", "frag-skull" );
+
+			Add.Label( "💀", "frag-skull" );
 			var fragDetails = Add.Panel( "frag-details" );
-			
+
 			fragDetails.Add.Label( $"{target}", "player" );
 			fragDetails.Add.Label( $"{weapon}", "weapon" );
 
@@ -89,10 +85,10 @@ namespace Instagib.UI
 			// Medal display
 			//
 			var medalPanel = fragDetails.Add.Panel( "medals" );
-			
+
 			foreach ( string medal in medals )
 				medalPanel.AddChild<Label>().SetText( medal );
-			
+
 			//
 			// Timeout
 			//

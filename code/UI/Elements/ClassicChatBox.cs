@@ -14,7 +14,7 @@ public partial class ClassicChatBox : Panel
 	{
 		Current = this;
 
-		StyleSheet.Load( "/Code/UI/ClassicChatBox.scss" );
+		StyleSheet.Load( "/Code/UI/Elements/ClassicChatBox.scss" );
 
 		Canvas = Add.Panel( "classicchat_canvas" );
 		Canvas.PreferScrollToBottom = true;
@@ -120,6 +120,6 @@ public partial class ClassicChatBox : Panel
 			return;
 
 		Log.Info( $"{ConsoleSystem.Caller}: {message}" );
-		AddChatEntry( To.Everyone, ConsoleSystem.Caller.Name, message, $"avatar:{ConsoleSystem.Caller.SteamId}" );
+		AddChatEntry( To.Everyone, ConsoleSystem.Caller.Name, message, $"avatar:{ConsoleSystem.Caller.PlayerId}" );
 	}
 }

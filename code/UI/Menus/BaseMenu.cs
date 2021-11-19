@@ -19,17 +19,12 @@ namespace Instagib.UI.Menus
 
 		public void Toggle()
 		{
-			InstagibHud.CurrentHud.SetCurrentMenu( new MainMenu() );
+			InstagibHud.currentHud.SetCurrentMenu( new MainMenu() );
 		}
 
 		public void ShowSettings()
 		{
-			InstagibHud.CurrentHud.SetCurrentMenu( new SettingsMenu() );
-		}
-
-		public void ShowModifiers()
-		{
-			InstagibHud.CurrentHud.SetCurrentMenu( new ModifiersMenu() );
+			InstagibHud.currentHud.SetCurrentMenu( new SettingsMenu() );
 		}
 	}
 }

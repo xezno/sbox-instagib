@@ -1,17 +1,16 @@
 ﻿using Sandbox;
-using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Instagib.UI;
-using Sandbox.ScreenShake;
-using Instagib.Utils;
 using Event = Sandbox.Event;
+using Instagib.Weapons;
 
 namespace Instagib
 {
 	public partial class Player : Sandbox.Player
 	{
+		[Net, Local] private TimeSince TimeSinceSpawn { get; set; }
+		public bool IsSpawnProtected => TimeSinceSpawn < 3;
+
 		private Particles speedLines;
 
 		private DamageInfo lastDamageInfo;
@@ -21,8 +20,6 @@ namespace Instagib
 		//
 		public int CurrentStreak { get; set; }
 		public float CurrentDamageDealt { get; set; }
-
-		[Net, Local] public bool IsSpawnProtected { get; set; }
 
 		public Clothing.Container Clothing = new();
 
@@ -56,6 +53,7 @@ namespace Instagib
 			EnableDrawing = true;
 			EnableHideInFirstPerson = true;
 			EnableShadowInFirstPerson = true;
+			Transmit = TransmitType.Always;
 
 			Tags.Add( "player" );
 
@@ -66,25 +64,9 @@ namespace Instagib
 
 			CurrentStreak = 0;
 			CurrentDamageDealt = 0;
-
-			IsSpawnProtected = true;
-			Transmit = TransmitType.Always;
-
-			if ( IsServer )
-			{
-				_ = ApplySpawnProtection();
-			}
+			TimeSinceSpawn = 0;
 
 			base.Respawn();
-		}
-
-		private async Task ApplySpawnProtection()
-		{
-			Host.AssertServer();
-
-			IsSpawnProtected = true;
-			await Task.DelaySeconds( 3.0f );
-			IsSpawnProtected = false;
 		}
 
 		public override void Simulate( Client cl )

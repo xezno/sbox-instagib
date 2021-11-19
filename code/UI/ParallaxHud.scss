@@ -1,4 +1,4 @@
-@import "Colors";
+@import "/Code/UI/_Colors.scss";
 
 .main {
     z-index: -1;
@@ -131,46 +131,12 @@ text.menu-prompt {
     }
 }
 
-.mainpanel, .staticpanel {
+ParallaxHud, InstagibHud {
     position: absolute;
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
-}
-
-hitmarker {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    position: absolute;
-    align-items: center;
-    justify-content: center;
-
-    hitmarkerinstance {
-        width: 64px;
-        height: 64px;
-        opacity: 1;
-        position: absolute;
-        transition: all 100ms ease;
-        background-image: url( /textures/ui/hit.png );
-        background-size: 100%;
-
-        &.kill {
-            background-image-tint: #f00;
-        }
-
-        &:intro {
-            opacity: 0;
-            transform: scale( 2 );
-        }
-
-        &:outro {
-            opacity: 0;
-        }
-    }
 }
 
 iconpanel, icon {
@@ -220,73 +186,6 @@ iconpanel, icon {
     text-shadow: 0 0 4px solid black;
 }
 
-crosshair {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX( -50% ) translateY( -0% );
-    width: 1px;
-    height: 1px;
-
-    .element {
-        position: absolute;
-    }
-
-    .el0 {
-        border-radius: 1000px;
-        width: 6px;
-        height: 6px;
-    }
-
-    .el0, .el1, .el2, .el3, .el4 {
-        background-color: #00aa00;
-        border-radius: 0;
-    }
-
-    &:not(.canfire) {
-        .el0, .el1, .el2, .el3, .el4 {
-            background-color: #aaaaaa;
-        }
-    }
-
-    .el0, .el1 {
-        width: 10px;
-        top: -1px;
-        height: 2px;
-        border-radius: 2px;
-    }
-
-    .el2, .el3 {
-        width: 3px;
-        left: -1px;
-        height: 10px;
-        border-radius: 2px;
-    }
-
-    .el0 {
-        right: 8px;
-    }
-
-    .el1 {
-        left: 8px;
-    }
-
-    .el2 {
-        bottom: 8px;
-    }
-
-    .el3 {
-        top: 8px;
-    }
-
-    .el4 {
-        width: 3px;
-        height: 2px;
-        left: -1px;
-        top: -1px;
-    }
-}
-
 deathpanel {
     position: absolute;
     top: 0;
@@ -316,33 +215,6 @@ deathpanel {
     }
 }
 
-.game-state {
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    font-size: 20px;
-    justify-content: center;
-    align-items: center;
-
-    div {
-        border-radius: 10px;
-        backdrop-filter: blur( 20px ) brightness( 0.5 );
-        border: 2px solid rgba( black, 0.4 );
-    }
-
-    .game-state-text {
-        margin-right: 4px;
-        padding: 10px 20px;
-    }
-
-    .game-time {
-        margin-left: 4px;
-        padding: 10px 20px;
-        border-radius: 0 10px 10px 0;
-        backdrop-filter: brightness( 1.5 );
-    }
-}
-
 KillFeed {
     top: 50px;
     right: 50px;
@@ -353,70 +225,5 @@ KillFeed {
         border: 2px solid rgba( black, 0.4 );
         background-color: transparent;
         height: 50px;
-    }
-}
-
-Leaderboard {
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    border-radius: 10px;
-    width: 300px;
-    transform: translateX( -50% );
-    backdrop-filter: blur( 20px );
-
-    .canvas {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    LeaderboardEntry {
-        width: 100%;
-        justify-content: space-between;
-        backdrop-filter: brightness( 0.5 );
-        border-radius: 10px;
-        border: 2px solid rgba( black, 0.4 );
-        margin: 2px 0;
-
-        &:not(.visible) {
-            height: 0px;
-            display: none;
-        }
-
-        & label {
-            padding: 10px 20px;
-        }
-
-        .kills {
-            backdrop-filter: brightness( 1.5 );
-            border-radius: 10px;
-        }
-
-        .player-name {
-            width: 250px;
-        }
-    }
-}
-
-Controls {
-    position: absolute;
-    top: 120px;
-    left: 50px;
-
-    padding: 10px 20px;
-    
-    flex-direction: column;
-
-    border-radius: 10px;
-    backdrop-filter: blur( 20px ) brightness( 0.5 );
-    border: 2px solid rgba( black, 0.4 );
-    width: 250px;
-
-    .title {
-        font-size: 20px;
-    }
-
-    .control {
-        justify-content: space-between;
     }
 }

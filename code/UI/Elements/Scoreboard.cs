@@ -16,7 +16,7 @@ namespace Instagib.UI
 
 		public Scoreboard()
 		{
-			StyleSheet.Load( "/Code/UI/Scoreboard.scss" );
+			StyleSheet.Load( "/Code/UI/Elements/Scoreboard.scss" );
 			AddClass( "scoreboard" );
 
 			Canvas = Add.Panel( "canvas" );

@@ -14,7 +14,7 @@
 ]
 
 //
-// Instagib.Railgun
+// Instagib.Weapons.Railgun
 //
 @PointClass base(BaseProperties_Instagib) = railgun : ""
 [

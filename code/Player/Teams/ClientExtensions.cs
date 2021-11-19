@@ -4,7 +4,7 @@ namespace Instagib.Teams
 {
 	public static class ClientExtensions
 	{
-		public static BaseTeam? GetTeam( this Client client )
+		public static BaseTeam GetTeam( this Client client )
 		{
 			if ( client.Pawn is Player player )
 			{

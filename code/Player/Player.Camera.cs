@@ -80,10 +80,10 @@ namespace Instagib
 
 			lastHudOffset = zOffset;
 
-			if ( InstagibHud.TiltingHudPanel != null )
+			if ( InstagibHud.parallaxPanel != null )
 			{
-				InstagibHud.TiltingHudPanel.Style.Transform = panelTransform;
-				InstagibHud.TiltingHudPanel.Style.Dirty();
+				InstagibHud.parallaxPanel.Style.Transform = panelTransform;
+				InstagibHud.parallaxPanel.Style.Dirty();
 			}
 
 			lastCameraPos = setup.Position;

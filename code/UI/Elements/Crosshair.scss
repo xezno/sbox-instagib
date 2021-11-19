@@ -1,0 +1,66 @@
+﻿crosshair {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translateX( -50% ) translateY( -0% );
+    width: 1px;
+    height: 1px;
+
+    .element {
+        position: absolute;
+    }
+
+    .el0 {
+        border-radius: 1000px;
+        width: 6px;
+        height: 6px;
+    }
+
+    .el0, .el1, .el2, .el3, .el4 {
+        background-color: #00aa00;
+        border-radius: 0;
+    }
+
+    &:not(.canfire) {
+        .el0, .el1, .el2, .el3, .el4 {
+            background-color: #aaaaaa;
+        }
+    }
+
+    .el0, .el1 {
+        width: 10px;
+        top: -1px;
+        height: 2px;
+        border-radius: 2px;
+    }
+
+    .el2, .el3 {
+        width: 3px;
+        left: -1px;
+        height: 10px;
+        border-radius: 2px;
+    }
+
+    .el0 {
+        right: 8px;
+    }
+
+    .el1 {
+        left: 8px;
+    }
+
+    .el2 {
+        bottom: 8px;
+    }
+
+    .el3 {
+        top: 8px;
+    }
+
+    .el4 {
+        width: 3px;
+        height: 2px;
+        left: -1px;
+        top: -1px;
+    }
+}

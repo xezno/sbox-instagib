@@ -79,8 +79,8 @@ namespace Instagib.UI.PostGameScreens
 			int votes = 0;
 			foreach ( var mapVote in Game.Instance?.MapVotes )
 			{
-				SetClass( "disabled", mapVote.PlayerId == Local.Client.SteamId );
-				SetClass( "voted-for", mapVote.PlayerId == Local.Client.SteamId && mapVote.MapIndex == this.Index );
+				SetClass( "disabled", mapVote.PlayerId == Local.Client.PlayerId );
+				SetClass( "voted-for", mapVote.PlayerId == Local.Client.PlayerId && mapVote.MapIndex == this.Index );
 				if ( mapVote.MapIndex == this.Index )
 					votes++;
 			}
