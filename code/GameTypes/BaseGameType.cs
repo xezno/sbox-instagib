@@ -34,7 +34,7 @@ namespace Instagib.GameTypes
 			ClassicChatBox.AddInformation( To.Everyone, str, null, true );
 		}
 
-		public virtual void CreateWinnerElements( WinnerScreen winnerScreen ) { }
+		public virtual void CreateWinnerElements( EndGameScreen winnerScreen, Panel parent ) { }
 
 		public virtual void CreateHUDElements( Panel panel, Panel StaticHudPanel ) { }
 	}

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Sandbox;
 
 namespace Instagib.GameStates
@@ -11,14 +13,10 @@ namespace Instagib.GameStates
 
 		public GameFinishedState()
 		{
-			// Pause player movement
-			foreach ( var client in Client.All )
-			{
-				((client.Pawn as Player).Controller as PlayerController).CanMove = false;
-				(client.Pawn as Player).Inventory.DeleteContents();
-			}
+			stateEnds = 15;
 
-			stateEnds = 10;
+			if ( InstagibGlobal.DebugMode )
+				stateEnds = 1000;
 		}
 
 		public override string StateTime()
@@ -35,7 +33,24 @@ namespace Instagib.GameStates
 
 			if ( stateEnds < 0 )
 			{
-				SetState( new MapVoteState() );
+				Dictionary<int, int> mapVotePairs = new();
+				foreach ( var mapVote in Game.Instance.MapVotes )
+				{
+					if ( !mapVotePairs.ContainsKey( mapVote.MapIndex ) )
+						mapVotePairs.Add( mapVote.MapIndex, 0 );
+
+					mapVotePairs[mapVote.MapIndex]++;
+				}
+
+				var sortedMapVotePairs = from entry in mapVotePairs orderby entry.Value descending select entry;
+				if ( sortedMapVotePairs.Count() == 0 )
+				{
+
+					Global.ChangeLevel( InstagibGlobal.GetMaps()[0] );
+				}
+
+				var votedMap = sortedMapVotePairs.First();
+				Global.ChangeLevel( InstagibGlobal.GetMaps()[votedMap.Key] );
 			}
 		}
 	}

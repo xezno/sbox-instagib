@@ -27,7 +27,7 @@ namespace Instagib.GameStates
 			stateEnds = 5 * 60;
 
 			if ( InstagibGlobal.DebugMode )
-				stateEnds = 5 * 60 * 1000;
+				stateEnds = 5;
 			else
 				GameServices.StartGame();
 		}

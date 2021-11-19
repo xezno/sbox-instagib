@@ -12,18 +12,21 @@ namespace Instagib.UI
 		public static Panel parallaxPanel;
 		public static Panel staticPanel;
 
+		private static Panel endGameScreen;
 		private static Panel winnerScreen;
 		private static Panel mapVoteScreen;
 
 		private static BaseMenu currentMenu;
+
+		private static Scoreboard<ScoreboardEntry> scoreboard;
 
 		public InstagibHud()
 		{
 			if ( IsClient )
 			{
 				staticPanel = RootPanel.Add.Panel( "staticpanel" );
-				staticPanel.StyleSheet.Load( "/Code/UI/MainPanel.scss" );
-				staticPanel.AddChild<Scoreboard<ScoreboardEntry>>();
+				staticPanel.StyleSheet.Load( "/Code/UI/ParallaxHud.scss" );
+				scoreboard = staticPanel.AddChild<Scoreboard<ScoreboardEntry>>();
 				staticPanel.AddChild<Crosshair>();
 				staticPanel.AddChild<ClassicChatBox>();
 				staticPanel.AddChild<Hitmarker>();
@@ -50,20 +53,18 @@ namespace Instagib.UI
 			}
 		}
 
-		public static void ToggleMapVoteScreen( bool oldValue, bool newValue )
+		public static void ToggleEndGameScreen( bool oldValue, bool newValue )
 		{
 			if ( newValue )
-				mapVoteScreen = staticPanel.AddChild<MapVoteScreen>();
+			{
+				endGameScreen = staticPanel.AddChild<EndGameScreen>();
+				scoreboard.ForceOpen = true;
+			}
 			else
-				mapVoteScreen?.Delete();
-		}
-
-		public static void ToggleWinnerScreen( bool oldValue, bool newValue )
-		{
-			if ( newValue )
-				winnerScreen = staticPanel.AddChild<WinnerScreen>();
-			else
-				winnerScreen?.Delete();
+			{
+				endGameScreen?.Delete();
+				scoreboard.ForceOpen = false;
+			}
 		}
 
 		public void SetCurrentMenu( BaseMenu menu )

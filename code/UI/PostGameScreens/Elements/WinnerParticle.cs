@@ -1,46 +1,9 @@
 ﻿using Sandbox;
 using Sandbox.UI;
-using Sandbox.UI.Construct;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Instagib.UI.PostGameScreens
+namespace Instagib.UI.PostGameScreens.Elements
 {
-	public class WinnerScreen : BasePostGameScreen
-	{
-		public WinnerScreen() : base()
-		{
-			StyleSheet.Load( "/Code/UI/PostGameScreens/WinnerScreen.scss" );
-
-			Game.Instance.GameType.CreateWinnerElements( this );
-		}
-
-		public void CreateWinnerParticles( int particleCount )
-		{
-			particleCount = particleCount.Clamp( 0, 128 );
-
-			for ( int i = 0; i < particleCount; ++i )
-			{
-				var particle = new WinnerParticle();
-				var rand = (Vector2.Random + Vector2.Random + Vector2.Random + Vector2.Random) * new Vector2( 0.5f, 1.0f );
-				particle.Origin = new Vector2( 0.5f, -2.0f ) + rand;
-				particle.Parent = this;
-			}
-		}
-	}
-
-	public class WinnerText : Panel
-	{
-		public WinnerText( string position, Client player, string className )
-		{
-			Add.Label( position, "position " + className );
-			Add.Label( player.Name, "player " + className );
-
-			var kdrString = $"K: {player.GetInt( "kills" )} | D: {player.GetInt( "deaths" )}";
-			Add.Label( kdrString, "stats " + className );
-		}
-	}
-
 	public class WinnerParticle : Label
 	{
 		public Vector2 Origin { get; set; }

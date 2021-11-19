@@ -3,15 +3,21 @@
 WinnerParticle {
     font-size: 32px;
     position: absolute;
+    z-index: 100;
+}
+
+.time-left {
+    font-size: 16px;
+    margin: 10px;
+    text-align: center;
 }
 
 label.title {
-    font-size: 128px;
+    font-size: 64px;
     font-weight: 700;
     font-family: Poppins-ExtraBoldItalic;
     text-align: center;
     text-shadow: 0 0 16px rgba( black, 0.25 );
-
     transition: all 500ms ease 0;
 
     &:intro {
@@ -43,25 +49,17 @@ label.title {
     transition: all 500ms ease 1500ms;
 }
 
-.thanks {
-    transition: all 500ms ease 2000ms;
-    margin-top: 20px;
-
-    &:intro {
-        opacity: 0;
-        transform: scale( 1.1 );
-    }
-}
-
 .players {
-    WinnerText,.red-team,.blue-team {
+    justify-content: center;
+
+    WinnerText, .red-team, .blue-team {
         flex-direction: column;
         align-items: center;
-        min-width: 250px;
         flex-grow: 1;
+        max-width: 200px;
 
-        .position,.captures {
-            font-size: 64px;
+        .position, .captures {
+            font-size: 48px;
             text-shadow: 0 0 8px rgba( black, 0.25 );
         }
 
@@ -69,8 +67,8 @@ label.title {
             font-size: 16px;
         }
 
-        .player,.team-name {
-            font-size: 32px;
+        .player, .team-name {
+            font-size: 24px;
             margin: 0 32px;
             text-shadow: 0 0 8px rgba( black, 0.25 );
 
@@ -80,4 +78,26 @@ label.title {
             }
         }
     }
+}
+
+.post-game-screen {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.map-list {
+    justify-content: center;
+}
+
+.winner-section, .vote-section {
+    padding: 50px 0;
+    width: 50%;
+}
+
+.winner-section {
+    flex-direction: column-reverse;
+}
+
+.vote-section {
+    flex-direction: column;
 }

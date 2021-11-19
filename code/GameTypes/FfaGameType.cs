@@ -1,5 +1,7 @@
 ﻿using Instagib.UI.PostGameScreens;
+using Instagib.UI.PostGameScreens.Elements;
 using Sandbox;
+using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System.Collections.Generic;
 
@@ -29,11 +31,11 @@ namespace Instagib.GameTypes
 			return "";
 		}
 
-		public override void CreateWinnerElements( WinnerScreen winnerScreen )
+		public override void CreateWinnerElements( EndGameScreen winnerScreen, Panel parent )
 		{
 			var sortedClients = new List<Client>( Client.All );
 			sortedClients.Sort( InstagibGlobal.SortClients );
-			var playersPanel = winnerScreen.Add.Panel( "players" );
+			var playersPanel = parent.Add.Panel( "players" );
 			int particleCount = 0;
 
 			//
@@ -44,7 +46,7 @@ namespace Instagib.GameTypes
 				Client client = sortedClients[i];
 				if ( client == Local.Client )
 				{
-					winnerScreen.Add.Label( $"YOU PLACED #{i + 1}", "title " + GetClassForPosition( i + 1 ) );
+					parent.Add.Label( $"YOU PLACED #{i + 1}", "title " + GetClassForPosition( i + 1 ) );
 
 					particleCount = (3 - i) * 16;
 				}

@@ -11,6 +11,7 @@ classicchatbox {
     font-size: 13px;
     border-radius: 10px;
     border: 2px solid rgba( black, 0 );
+    pointer-events: none;
 
     label, textentry {
         font-family: Inter;

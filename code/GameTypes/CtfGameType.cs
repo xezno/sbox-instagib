@@ -51,11 +51,11 @@ namespace Instagib.GameTypes
 			}
 		}
 
-		public override void CreateWinnerElements( WinnerScreen winnerScreen )
+		public override void CreateWinnerElements( EndGameScreen winnerScreen, Panel parent )
 		{
 			var sortedClients = new List<Client>( Client.All );
 			sortedClients.Sort( InstagibGlobal.SortClients );
-			var playersPanel = winnerScreen.Add.Panel( "players" );
+			var playersPanel = parent.Add.Panel( "players" );
 			int particleCount = 0;
 
 			BaseTeam winningTeam = null;
@@ -65,9 +65,9 @@ namespace Instagib.GameTypes
 				winningTeam = BlueTeam;
 
 			if ( winningTeam != null )
-				winnerScreen.Add.Label( $"{winningTeam.TeamName.ToUpper()} WINS", "title " + winningTeam.TeamName );
+				parent.Add.Label( $"{winningTeam.TeamName.ToUpper()} WINS", "title " + winningTeam.TeamName );
 			else
-				winnerScreen.Add.Label( $"TIE", "title" );
+				parent.Add.Label( $"TIE", "title" );
 
 			{
 				var redTeam = playersPanel.Add.Panel( "red-team" );

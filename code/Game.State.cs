@@ -16,8 +16,7 @@ namespace Instagib
 		//
 		[Net] public string CurrentStateName { get; set; }
 		[Net] public string CurrentStateTime { get; set; }
-		[Net, Change( "(a, b) => Instagib.UI.InstagibHud.ToggleWinnerScreen( a, b )" )] public bool ShowWinnerScreen { get; set; }
-		[Net, Change( "(a, b) => Instagib.UI.InstagibHud.ToggleMapVoteScreen( a, b )" )] public bool ShowMapVoteScreen { get; set; }
+		[Net, Change( "(a, b) => Instagib.UI.InstagibHud.ToggleEndGameScreen( a, b )" )] public bool ShowEndGameScreen { get; set; }
 		[Net] public bool InPlay { get; set; }
 
 		public struct MapVote
@@ -75,8 +74,7 @@ namespace Instagib
 			CurrentStateTime = CurrentState.StateTime();
 
 			InPlay = CurrentState is MainGameState;
-			ShowWinnerScreen = CurrentState is GameFinishedState;
-			ShowMapVoteScreen = CurrentState is MapVoteState;
+			ShowEndGameScreen = CurrentState is GameFinishedState;
 
 			CurrentState.Tick();
 		}

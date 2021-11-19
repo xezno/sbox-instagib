@@ -14,6 +14,8 @@ namespace Instagib.UI
 
 		public Panel Header { get; protected set; }
 
+		public bool ForceOpen { get; set; }
+
 		public Scoreboard()
 		{
 			StyleSheet.Load( "/Code/UI/Elements/Scoreboard.scss" );
@@ -31,7 +33,7 @@ namespace Instagib.UI
 		{
 			base.Tick();
 
-			SetClass( "open", Input.Down( InputButton.Score ) );
+			SetClass( "open", Input.Down( InputButton.Score ) || ForceOpen );
 			if ( !IsVisible )
 				return;
 
