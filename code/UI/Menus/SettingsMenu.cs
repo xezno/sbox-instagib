@@ -9,11 +9,11 @@ namespace Instagib.UI.Menus
 {
 	public class SettingsMenu : BaseMenu
 	{
-		public Slider FovSlider { get; set; }
-		public Slider ViewmodelSlider { get; set; }
+		public Elements.Slider FovSlider { get; set; }
+		public Elements.Slider ViewmodelSlider { get; set; }
 		public Checkbox ViewmodelToggle { get; set; }
 		public Checkbox ViewmodelFlip { get; set; }
-		public Slider ViewTiltMultiplierSlider { get; set; }
+		public Elements.Slider ViewTiltMultiplierSlider { get; set; }
 		public ColorPicker CrosshairColor { get; set; }
 		public ColorPicker EnemyOutlineColor { get; set; }
 
@@ -56,7 +56,7 @@ namespace Instagib.UI.Menus
 			ViewmodelSlider.SnapRate = 1;
 			ViewmodelSlider.ValueCalcFunc =
 				value => viewmodelRange.Min.LerpTo( viewmodelRange.Max, value ).CeilToInt();
-			
+
 			// Make it so that we can preview the settings live
 			FovSlider.OnValueChange += v => PlayerSettings.Fov = v;
 			ViewmodelSlider.OnValueChange += v => PlayerSettings.ViewmodelOffset = v;
@@ -70,7 +70,7 @@ namespace Instagib.UI.Menus
 
 			// Set values to existing settings
 			PlayerSettings.Load();
-			
+
 			FovSlider.Value = PlayerSettings.Fov.LerpInverse( fovRange.Min, fovRange.Max );
 			ViewmodelSlider.Value = PlayerSettings.ViewmodelOffset.LerpInverse( viewmodelRange.Min, viewmodelRange.Max );
 
@@ -82,7 +82,7 @@ namespace Instagib.UI.Menus
 			var scrollbar = AddChild<Scrollbar>();
 			scrollbar.Panel = Scroll;
 		}
-		
+
 		public void ApplySettings()
 		{
 			PlayerSettings.Save();

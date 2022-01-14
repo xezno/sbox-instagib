@@ -35,8 +35,8 @@ namespace Instagib
 
 		public override void Spawn()
 		{
-			base.Spawn(); 
-			LagCompensation = true;
+			base.Spawn();
+			EnableLagCompensation = true;
 		}
 
 		public override void Respawn()

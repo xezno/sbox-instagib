@@ -14,8 +14,6 @@ namespace Instagib.Weapons
 		public override float PrimaryRate => 0.75f;
 		public override float SecondaryRate => 2f;
 
-		private static float MaxHitTolerance => (Global.TickRate / 1000f) * 1000;
-
 		private Particles beamParticles;
 		public bool IsZooming { get; private set; }
 
@@ -77,7 +75,7 @@ namespace Instagib.Weapons
 				var distanceFactor = 1.0f - Math.Clamp( dist / radius, 0, 1 );
 				distanceFactor *= 0.5f;
 				var force = distanceFactor * ent.PhysicsBody.Mass;
-				
+
 				if ( ent.GroundEntity != null )
 				{
 					ent.GroundEntity = null;
@@ -129,18 +127,20 @@ namespace Instagib.Weapons
 
 		public IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 dir, float radius = 2.0f, float dist = 100000f )
 		{
-			bool InWater = Physics.TestPointContents( start, CollisionLayer.Water );
+			using ( LagCompensation() )
+			{
+				bool InWater = Physics.TestPointContents( start, CollisionLayer.Water );
 
-			var end = start + dir * dist;
-			var tr = Trace.Ray( start, end )
-				.HitLayer( CollisionLayer.Water, !InWater )
-				.UseLagCompensation()
-				.Ignore( Owner )
-				.Ignore( this )
-				.Size( radius )
-				.Run();
+				var end = start + dir * dist;
+				var tr = Trace.Ray( start, end )
+					.HitLayer( CollisionLayer.Water, !InWater )
+					.Ignore( Owner )
+					.Ignore( this )
+					.Size( radius )
+					.Run();
 
-			yield return tr;
+				yield return tr;
+			}
 		}
 
 		private void Shoot( Vector3 pos, Vector3 dir )
