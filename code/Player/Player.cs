@@ -102,7 +102,7 @@ namespace Instagib
 			}
 
 			GlowActive = true;
-			GlowState = GlowStates.GlowStateOn;
+			GlowState = GlowStates.On;
 			GlowDistanceStart = -32;
 			GlowDistanceEnd = 4096;
 		}
