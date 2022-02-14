@@ -145,11 +145,8 @@ namespace Instagib
 			EnableDrawing = false;
 			EnableAllCollisions = false;
 
-			_ = Particles.Create( "particles/gib_blood.vpcf", Position + (Vector3.Up * (8)) );
-
+			GibParticles( To.Everyone, Position + (Vector3.Up * (8)) );
 			ShakeScreen( To.Everyone, Position );
-
-			Sound.FromWorld( "gibbing", Position );
 
 			var childrenCopy = Children.ToList();
 			foreach ( var child in childrenCopy )
@@ -159,6 +156,13 @@ namespace Instagib
 
 				e.Delete();
 			}
+		}
+
+		[ClientRpc]
+		private void GibParticles( Vector3 position )
+		{
+			_ = Particles.Create( "particles/gib_blood.vpcf", position );
+			Sound.FromWorld( "gibbing", position );
 		}
 
 		[ClientRpc]
