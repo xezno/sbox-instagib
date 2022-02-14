@@ -23,9 +23,6 @@ namespace Instagib.Entities
 		public override void Spawn()
 		{
 			base.Spawn();
-			//SetModel( "models/flag/flag_podium.vmdl" );
-			//SetupPhysicsFromModel( PhysicsMotionType.Static );
-
 			SpawnFlag();
 		}
 
@@ -43,6 +40,8 @@ namespace Instagib.Entities
 					flag.Team = ctfGame.BlueTeam;
 				else if ( FlagTeam == Team.Red )
 					flag.Team = ctfGame.RedTeam;
+				else
+					Log.Error( $"We don't have a team???" );
 			}
 		}
 

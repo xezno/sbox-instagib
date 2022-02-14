@@ -9,7 +9,7 @@ namespace Instagib.Entities
 	{
 		public PickupTrigger PickupTrigger { get; set; }
 
-		[Net, Change( "OnTeamChange" )]
+		[Net, Change( nameof( OnTeamChange ) )]
 		public BaseTeam Team { get; set; }
 
 		public bool HasBeenMoved { get; set; }
@@ -39,6 +39,7 @@ namespace Instagib.Entities
 
 		private void OnTeamChange()
 		{
+			Log.Trace( $"Setting flag team to {Team.TeamName}" );
 			SetMaterialGroup( Team.TeamName + "Flag" );
 		}
 
