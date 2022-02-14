@@ -10,7 +10,7 @@ namespace Instagib.UI
 		public Hitmarker()
 		{
 			CurrentHitmarker = this;
-			StyleSheet.Load( "/Code/UI/Elements/MainPanel.scss" );
+			StyleSheet.Load( "/Code/UI/Elements/Hitmarker.scss" );
 		}
 
 		public void OnHit() => new HitmarkerInstance( this );
@@ -29,5 +29,5 @@ namespace Instagib.UI
 				Delete();
 			}
 		}
-	}	
+	}
 }
