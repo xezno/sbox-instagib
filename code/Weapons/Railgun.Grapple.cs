@@ -33,7 +33,7 @@ namespace Instagib.Weapons
 				}
 
 				Vector3 playerVel = Owner.Velocity;
-				Vector3 playerLookDir = Owner.EyeRot.Forward;
+				Vector3 playerLookDir = Owner.EyeRotation.Forward;
 				Owner.Velocity += playerLookDir * BoostStrength;
 
 				Vector3 playerLatchDir = (Owner.Position - grappleHookEntity.Position).Normal;
@@ -54,7 +54,7 @@ namespace Instagib.Weapons
 
 		private TraceResult GrappleTrace( out Vector3 calcEndPos )
 		{
-			var tr = Trace.Ray( Owner.EyePos + Owner.EyeRot.Forward * GrappleTraceRadius, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
+			var tr = Trace.Ray( Owner.EyePosition + Owner.EyeRotation.Forward * GrappleTraceRadius, Owner.EyePosition + Owner.EyeRotation.Forward * MaxDistance )
 				.Ignore( this )
 				.Ignore( Owner )
 				.WorldAndEntities()
@@ -65,7 +65,7 @@ namespace Instagib.Weapons
 			if ( tr.Hit && tr.Entity is not Player )
 				return tr;
 
-			var trExtended = Trace.Ray( Owner.EyePos + Owner.EyeRot.Forward * GrappleTraceRadius, Owner.EyePos + Owner.EyeRot.Forward * MaxDistance )
+			var trExtended = Trace.Ray( Owner.EyePosition + Owner.EyeRotation.Forward * GrappleTraceRadius, Owner.EyePosition + Owner.EyeRotation.Forward * MaxDistance )
 				.Ignore( this )
 				.Ignore( Owner )
 				.WorldAndEntities()
@@ -74,15 +74,15 @@ namespace Instagib.Weapons
 
 			calcEndPos = trExtended.EndPos - trExtended.Normal * GrappleTraceRadius;
 
-			if ( trExtended.Hit && trExtended.Entity is not Player && (trExtended.EndPos - Owner.EyePos).Length > 96f )
+			if ( trExtended.Hit && trExtended.Entity is not Player && (trExtended.EndPos - Owner.EyePosition).Length > 96f )
 				return trExtended;
 
-			calcEndPos = Owner.EyePos + Owner.EyeRot.Forward * MaxDistance;
+			calcEndPos = Owner.EyePosition + Owner.EyeRotation.Forward * MaxDistance;
 
-			return new TraceResult() 
-			{ 
+			return new TraceResult()
+			{
 				Hit = false,
-				EndPos = calcEndPos 
+				EndPos = calcEndPos
 			};
 		}
 
@@ -114,7 +114,7 @@ namespace Instagib.Weapons
 					{
 						Position = tr.StartPos,
 						Target = calcEndPos,
-						Rotation = Owner.EyeRot,
+						Rotation = Owner.EyeRotation,
 						Parent = tr.Entity,
 						Owner = Owner
 					};

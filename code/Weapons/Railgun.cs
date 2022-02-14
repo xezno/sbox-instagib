@@ -97,8 +97,8 @@ namespace Instagib.Weapons
 		{
 			base.AttackSecondary();
 
-			var pos = Owner.EyePos;
-			var dir = Owner.EyeRot.Forward;
+			var pos = Owner.EyePosition;
+			var dir = Owner.EyeRotation.Forward;
 
 			foreach ( var tr in TraceBullet( pos, dir, 1f, 256f ) )
 			{
@@ -122,7 +122,7 @@ namespace Instagib.Weapons
 				Owner.Client.AddInt( "totalShots" );
 			}
 
-			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
+			Shoot( Owner.EyePosition, Owner.EyeRotation.Forward );
 		}
 
 		public IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 dir, float radius = 2.0f, float dist = 100000f )

@@ -136,8 +136,8 @@ namespace Instagib
 			var lookAtCamera = Camera as LookAtCamera;
 
 			lookAtCamera.TargetEntity = LastAttacker;
-			lookAtCamera.Origin = EyePos;
-			lookAtCamera.Rotation = EyeRot;
+			lookAtCamera.Origin = EyePosition;
+			lookAtCamera.Rotation = EyeRotation;
 			lookAtCamera.TargetOffset = Vector3.Up * 64f;
 
 			Inventory.DeleteContents();

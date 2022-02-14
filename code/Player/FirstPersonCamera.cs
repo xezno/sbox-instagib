@@ -14,8 +14,8 @@ namespace Instagib
 			var pawn = Local.Pawn;
 			if ( pawn == null ) return;
 
-			Position = pawn.EyePos;
-			Rotation = pawn.EyeRot;
+			Position = pawn.EyePosition;
+			Rotation = pawn.EyeRotation;
 
 			lastPos = Position;
 		}
@@ -25,7 +25,7 @@ namespace Instagib
 			var pawn = Local.Pawn;
 			if ( pawn == null ) return;
 
-			var eyePos = pawn.EyePos;
+			var eyePos = pawn.EyePosition;
 			if ( eyePos.Distance( lastPos ) < 250 )
 			{
 				Position = Vector3.Lerp( eyePos.WithZ( lastPos.z ), eyePos, 20.0f * Time.Delta );
@@ -35,7 +35,7 @@ namespace Instagib
 				Position = eyePos;
 			}
 
-			Rotation = pawn.EyeRot;
+			Rotation = pawn.EyeRotation;
 
 			FieldOfView = PlayerSettings.Fov;
 			if ( pawn.ActiveChild is Railgun { IsZooming: true } )
