@@ -85,16 +85,16 @@ namespace Instagib
 		{
 			base.FrameSimulate();
 
-			EyeRot = Input.Rotation;
+			EyeRotation = Input.Rotation;
 		}
 
 		public override void Simulate()
 		{
-			EyePosLocal = Vector3.Up * (EyeHeight * Pawn.Scale);
+			EyeLocalPosition = Vector3.Up * (EyeHeight * Pawn.Scale);
 			UpdateBBox();
 
-			EyePosLocal += TraceOffset;
-			EyeRot = Input.Rotation;
+			EyeLocalPosition += TraceOffset;
+			EyeRotation = Input.Rotation;
 
 			if ( Unstuck.TestAndFix() )
 			{
@@ -259,7 +259,7 @@ namespace Instagib
 
 				if ( pm.Fraction == 1 )
 				{
-					Position = pm.EndPos;
+					Position = pm.EndPosition;
 					StayOnGround();
 					return;
 				}
@@ -300,7 +300,7 @@ namespace Instagib
 			var trace = TraceBBox( Position, Position + Vector3.Up * (StepSize + DistEpsilon) );
 			if ( !trace.StartedSolid )
 			{
-				Position = trace.EndPos;
+				Position = trace.EndPosition;
 			}
 
 			TryPlayerMove();
@@ -319,7 +319,7 @@ namespace Instagib
 
 			if ( !trace.StartedSolid )
 			{
-				Position = trace.EndPos;
+				Position = trace.EndPosition;
 			}
 
 			var withStepPos = Position;
@@ -578,7 +578,7 @@ namespace Instagib
 
 			if ( moveToEndPos && !pm.StartedSolid && pm.Fraction > 0.0f && pm.Fraction < 1.0f )
 			{
-				Position = pm.EndPos;
+				Position = pm.EndPosition;
 			}
 		}
 
@@ -645,7 +645,7 @@ namespace Instagib
 				.Ignore( Pawn )
 				.Run();
 
-			tr.EndPos -= TraceOffset;
+			tr.EndPosition -= TraceOffset;
 			return tr;
 		}
 
@@ -667,7 +667,7 @@ namespace Instagib
 				.Ignore( Pawn )
 				.Run();
 
-			tr.EndPos -= TraceOffset;
+			tr.EndPosition -= TraceOffset;
 			return tr;
 		}
 
@@ -681,7 +681,7 @@ namespace Instagib
 
 			// See how far up we can go without getting stuck
 			var trace = TraceBBox( Position, start );
-			start = trace.EndPos;
+			start = trace.EndPosition;
 
 			// Now trace down from a known safe position
 			trace = TraceBBox( start, end );
@@ -698,7 +698,7 @@ namespace Instagib
 			if ( Vector3.GetAngle( Vector3.Up, trace.Normal ) > GroundAngle )
 				return;
 
-			Position = trace.EndPos;
+			Position = trace.EndPosition;
 		}
 	}
 }

@@ -88,7 +88,7 @@ namespace Instagib
 				{
 					// We want to move out from the end pos by a tiny margin,
 					// sometimes sweeps will consider this end pos as starting in solid, which we have to get unstuck from
-					Position = pm.EndPos + pm.Normal * 0.01f;
+					Position = pm.EndPosition + pm.Normal * 0.01f;
 
 					if ( pm.Fraction == 1 )
 						break;
@@ -155,7 +155,7 @@ namespace Instagib
 		public TraceResult TraceMove( Vector3 delta )
 		{
 			var tr = TraceFromTo( Position, Position + delta );
-			Position = tr.EndPos;
+			Position = tr.EndPosition;
 			return tr;
 		}
 

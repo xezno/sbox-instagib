@@ -3,7 +3,7 @@ using Sandbox;
 
 namespace Instagib
 {
-	public class FirstPersonCamera : Camera
+	public class FirstPersonCamera : CameraMode
 	{
 		Vector3 lastPos;
 
@@ -22,7 +22,7 @@ namespace Instagib
 
 		public override void Update()
 		{
-			var pawn = Local.Pawn;
+			var pawn = Local.Pawn as Player;
 			if ( pawn == null ) return;
 
 			var eyePos = pawn.EyePosition;

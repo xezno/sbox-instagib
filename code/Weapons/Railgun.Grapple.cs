@@ -60,7 +60,7 @@ namespace Instagib.Weapons
 				.WorldAndEntities()
 				.Run();
 
-			calcEndPos = tr.EndPos;
+			calcEndPos = tr.EndPosition;
 
 			if ( tr.Hit && tr.Entity is not Player )
 				return tr;
@@ -72,9 +72,9 @@ namespace Instagib.Weapons
 				.Radius( GrappleTraceRadius )
 				.Run();
 
-			calcEndPos = trExtended.EndPos - trExtended.Normal * GrappleTraceRadius;
+			calcEndPos = trExtended.EndPosition - trExtended.Normal * GrappleTraceRadius;
 
-			if ( trExtended.Hit && trExtended.Entity is not Player && (trExtended.EndPos - Owner.EyePosition).Length > 96f )
+			if ( trExtended.Hit && trExtended.Entity is not Player && (trExtended.EndPosition - Owner.EyePosition).Length > 96f )
 				return trExtended;
 
 			calcEndPos = Owner.EyePosition + Owner.EyeRotation.Forward * MaxDistance;
@@ -82,7 +82,7 @@ namespace Instagib.Weapons
 			return new TraceResult()
 			{
 				Hit = false,
-				EndPos = calcEndPos
+				EndPosition = calcEndPos
 			};
 		}
 
@@ -112,7 +112,7 @@ namespace Instagib.Weapons
 				{
 					grappleHookEntity = new()
 					{
-						Position = tr.StartPos,
+						Position = tr.StartPosition,
 						Target = calcEndPos,
 						Rotation = Owner.EyeRotation,
 						Parent = tr.Entity,

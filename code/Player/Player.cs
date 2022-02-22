@@ -3,6 +3,7 @@ using System.Linq;
 using Instagib.UI;
 using Event = Sandbox.Event;
 using Instagib.Weapons;
+using Sandbox.Component;
 
 namespace Instagib
 {
@@ -47,7 +48,7 @@ namespace Instagib
 
 			Controller = new PlayerController();
 			Animator = new StandardPlayerAnimator();
-			Camera = new FirstPersonCamera();
+			CameraMode = new FirstPersonCamera();
 
 			EnableAllCollisions = true;
 			EnableDrawing = true;
@@ -74,6 +75,8 @@ namespace Instagib
 			base.Simulate( cl );
 			SimulateActiveChild( cl, ActiveChild );
 
+			var glow = Components.GetOrCreate<Glow>();
+
 			if ( Position.z < -2500 )
 			{
 				TakeDamage( DamageInfo.Generic( 10000 ) );
@@ -81,7 +84,8 @@ namespace Instagib
 
 			if ( cl == Local.Client )
 			{
-				GlowActive = false;
+				if ( IsClient )
+					glow.Active = false;
 
 				//
 				// Speed lines
@@ -101,10 +105,12 @@ namespace Instagib
 				return;
 			}
 
-			GlowActive = true;
-			GlowState = GlowStates.On;
-			GlowDistanceStart = -32;
-			GlowDistanceEnd = 4096;
+			if ( IsClient )
+			{
+				glow.Active = true;
+				glow.RangeMin = -32;
+				glow.RangeMax = 4096;
+			}
 		}
 
 		[Event.Tick.Client]
@@ -123,7 +129,9 @@ namespace Instagib
 
 			hsvColor.Value = 1.0f;
 			hsvColor.Saturation = 1.0f;
-			GlowColor = hsvColor.ToColor();
+
+			var glow = Components.GetOrCreate<Glow>();
+			glow.Color = hsvColor.ToColor();
 		}
 
 		public override void OnKilled()
@@ -132,8 +140,8 @@ namespace Instagib
 
 			Velocity = Vector3.Zero;
 
-			Camera = new LookAtCamera();
-			var lookAtCamera = Camera as LookAtCamera;
+			CameraMode = new LookAtCamera();
+			var lookAtCamera = CameraMode as LookAtCamera;
 
 			lookAtCamera.TargetEntity = LastAttacker;
 			lookAtCamera.Origin = EyePosition;

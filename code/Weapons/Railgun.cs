@@ -28,7 +28,7 @@ namespace Instagib.Weapons
 		public override void SimulateAnimator( PawnAnimator anim )
 		{
 			base.SimulateAnimator( anim );
-			anim.SetParam( "holdtype", 3 );
+			anim.SetAnimParameter( "holdtype", 3 );
 		}
 
 		public override bool CanPrimaryAttack()
@@ -59,7 +59,7 @@ namespace Instagib.Weapons
 
 			var sourcePos = pos;
 			var radius = 128;
-			var overlaps = Physics.GetEntitiesInSphere( sourcePos, radius );
+			var overlaps = Entity.FindInSphere( sourcePos, radius );
 
 			foreach ( var overlap in overlaps )
 			{
@@ -105,7 +105,7 @@ namespace Instagib.Weapons
 				if ( !tr.Hit )
 					return;
 
-				RocketJump( tr.EndPos, tr.Normal );
+				RocketJump( tr.EndPosition, tr.Normal );
 			}
 
 			RocketEffects();
@@ -129,7 +129,7 @@ namespace Instagib.Weapons
 		{
 			using ( LagCompensation() )
 			{
-				bool InWater = Physics.TestPointContents( start, CollisionLayer.Water );
+				bool InWater = Map.Physics.IsPointWater( start );
 
 				var end = start + dir * dist;
 				var tr = Trace.Ray( start, end )
@@ -150,7 +150,7 @@ namespace Instagib.Weapons
 				if ( Prediction.FirstTime )
 				{
 					var impactParticles =
-						Particles.Create( "weapons/railgun/particles/railgun_impact.vpcf", tr.EndPos );
+						Particles.Create( "weapons/railgun/particles/railgun_impact.vpcf", tr.EndPosition );
 					impactParticles.SetForward( 0, tr.Normal );
 				}
 
@@ -165,7 +165,7 @@ namespace Instagib.Weapons
 					beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity,
 						"muzzle", false );
 
-					beamParticles?.SetPosition( 1, tr.EndPos );
+					beamParticles?.SetPosition( 1, tr.EndPosition );
 
 					float particleCount = tr.Distance / 128f;
 					beamParticles?.SetPosition( 2, particleCount );
@@ -174,7 +174,7 @@ namespace Instagib.Weapons
 				if ( !IsServer ) continue;
 				if ( !tr.Entity.IsValid() ) continue;
 
-				var damageInfo = DamageInfo.FromBullet( tr.EndPos, dir * 1000, 1000 )
+				var damageInfo = DamageInfo.FromBullet( tr.EndPosition, dir * 1000, 1000 )
 					.UsingTraceResult( tr )
 					.WithAttacker( Owner )
 					.WithWeapon( this );
@@ -208,7 +208,7 @@ namespace Instagib.Weapons
 		{
 			Host.AssertClient();
 
-			ViewModelEntity?.SetAnimBool( "fire", true );
+			ViewModelEntity?.SetAnimParameter( "fire", true );
 			CrosshairPanel?.CreateEvent( "onattack" );
 
 			if ( IsLocalPawn )
@@ -224,7 +224,7 @@ namespace Instagib.Weapons
 
 			Sound.FromEntity( "railgun_fire", this );
 
-			ViewModelEntity?.SetAnimBool( "fire", true );
+			ViewModelEntity?.SetAnimParameter( "fire", true );
 			CrosshairPanel?.CreateEvent( "onattack" );
 
 			if ( IsLocalPawn )

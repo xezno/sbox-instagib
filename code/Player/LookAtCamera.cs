@@ -3,7 +3,7 @@ using Sandbox;
 
 namespace Instagib
 {
-	public partial class LookAtCamera : Camera
+	public partial class LookAtCamera : CameraMode
 	{
 		/// <summary>
 		/// Origin of the camera
@@ -18,7 +18,7 @@ namespace Instagib
 		/// <summary>
 		/// Offset from the entity to look at
 		/// </summary>
-		[Net, Predicted] public Vector3 TargetOffset { get; set; } 
+		[Net, Predicted] public Vector3 TargetOffset { get; set; }
 
 		/// <summary>
 		/// Min fov when target is max distance away from origin
@@ -44,7 +44,7 @@ namespace Instagib
 
 		protected virtual Vector3 GetTargetPos()
 		{
-			return TargetEntity.IsValid() ? ( TargetEntity.Position + TargetOffset ) : Vector3.Zero;
+			return TargetEntity.IsValid() ? (TargetEntity.Position + TargetOffset) : Vector3.Zero;
 		}
 
 		public override void Activated()
@@ -66,7 +66,7 @@ namespace Instagib
 
 			lastTargetPos = targetPos;
 
-			var targetDelta = ( targetPos - Origin );
+			var targetDelta = (targetPos - Origin);
 			var targetDistance = targetDelta.Length;
 			var targetDirection = targetDelta.Normal;
 
@@ -76,7 +76,7 @@ namespace Instagib
 				((float)Math.Atan2( targetDirection.y, targetDirection.x )).RadianToDegree(),
 				0.0f ) );
 
-			var fovDelta = MinFovDistance > 0.0f ? ( targetDistance / MinFovDistance ) : 0.0f;
+			var fovDelta = MinFovDistance > 0.0f ? (targetDistance / MinFovDistance) : 0.0f;
 			FieldOfView = MaxFov.LerpTo( MinFov, fovDelta );
 		}
 	}

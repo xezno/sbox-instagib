@@ -26,7 +26,7 @@ namespace Instagib
 
 		public static string[] GetMaps()
 		{
-			var packageTask = Package.Fetch( Global.GameName, true ).ContinueWith( t =>
+			var packageTask = Package.Fetch( "alex.instagib", true ).ContinueWith( t =>
 			{
 				var package = t.Result;
 				return package.GameConfiguration.MapList.ToArray();
