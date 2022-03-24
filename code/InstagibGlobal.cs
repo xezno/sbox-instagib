@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Collections.Generic;
 
 namespace Instagib
 {
@@ -29,7 +30,7 @@ namespace Instagib
 			var packageTask = Package.Fetch( "alex.instagib", true ).ContinueWith( t =>
 			{
 				var package = t.Result;
-				return package.GameConfiguration.MapList.ToArray();
+				return package.GetMeta<List<string>>( "MapList" ).ToArray();
 			} );
 
 			return packageTask.Result;

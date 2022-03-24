@@ -16,7 +16,7 @@ namespace Instagib.GameStates
 			stateEnds = 15;
 
 			if ( InstagibGlobal.DebugMode )
-				stateEnds = 1000;
+				stateEnds = 15;
 		}
 
 		public override string StateTime()
@@ -45,7 +45,6 @@ namespace Instagib.GameStates
 				var sortedMapVotePairs = from entry in mapVotePairs orderby entry.Value descending select entry;
 				if ( sortedMapVotePairs.Count() == 0 )
 				{
-
 					Global.ChangeLevel( InstagibGlobal.GetMaps()[0] );
 				}
 
