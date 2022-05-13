@@ -18,7 +18,8 @@
   "Metadata": {
     "MapList": [
       "willow.utopia",
-      "alex.ctf_test"
+      "alex.ctf_test",
+      "facepunch.tup_yourit"
     ],
     "MinPlayers": 1,
     "MapSelect": 2,
