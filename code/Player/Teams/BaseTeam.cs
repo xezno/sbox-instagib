@@ -32,6 +32,12 @@ namespace Instagib.Teams
 
 		public override bool Equals( object obj )
 		{
+			if ( this is null )
+				return false;
+
+			if ( obj is null )
+				return false;
+
 			if ( obj is BaseTeam team )
 			{
 				return team.TeamId == TeamId;
@@ -40,7 +46,7 @@ namespace Instagib.Teams
 			return false;
 		}
 
-		public static bool operator ==( BaseTeam a, BaseTeam b ) => a != null && b != null && a.Equals( b );
-		public static bool operator !=( BaseTeam a, BaseTeam b ) => a != null && b != null && !a.Equals( b );
+		public static bool operator ==( BaseTeam a, BaseTeam b ) => a.Equals( b );
+		public static bool operator !=( BaseTeam a, BaseTeam b ) => !a.Equals( b );
 	}
 }

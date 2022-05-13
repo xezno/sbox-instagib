@@ -30,18 +30,27 @@ namespace Instagib.Entities
 		{
 			flag?.Delete();
 
+			Log.Trace( "SpawnFlag" );
+
 			flag = new FlagEntity();
 			flag.Position = Position;
 
 			// HACK? Needs revisiting if we ever need the flag for more than ctf
 			if ( Game.Instance.GameType is CtfGameType ctfGame )
 			{
+				Log.Trace( $"CTFGame: {FlagTeam}" );
 				if ( FlagTeam == Team.Blue )
+				{
 					flag.Team = ctfGame.BlueTeam;
+				}
 				else if ( FlagTeam == Team.Red )
+				{
 					flag.Team = ctfGame.RedTeam;
+				}
 				else
+				{
 					Log.Error( $"We don't have a team???" );
+				}
 			}
 		}
 
