@@ -214,5 +214,13 @@ namespace Instagib
 				attacker.OnDamageOther( To.Single( attacker ), info.Position, info.Damage );
 			}
 		}
+
+		public void ApplyForce( Vector3 force )
+		{
+			if ( Controller is PlayerController controller )
+			{
+				controller.Impulse += force;
+			}
+		}
 	}
 }

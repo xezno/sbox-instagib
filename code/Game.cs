@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Instagib.Entities;
 using Instagib.GameTypes;
 using Instagib.UI;
 using Sandbox;
@@ -43,6 +46,27 @@ namespace Instagib
 			}
 
 			Instance = this;
+		}
+
+		public override void MoveToSpawnpoint( Entity pawn )
+		{
+			List<Entity> spawnPointEntities = new();
+
+			Entity.All.OfType<SpawnPoint>().ToList().ForEach( x => spawnPointEntities.Add( x ) );
+			Entity.All.OfType<InstagibPlayerSpawn>().ToList().ForEach( x => spawnPointEntities.Add( x ) );
+
+			var spawnpoint = spawnPointEntities
+									.OrderBy( x => Guid.NewGuid() )     // order them by random
+									.FirstOrDefault();                  // take the first one
+
+			if ( spawnpoint == null )
+			{
+				Log.Error( $"Couldn't find spawnpoint for {pawn}!" );
+				return;
+			}
+
+			pawn.Transform = spawnpoint.Transform;
+			base.MoveToSpawnpoint( pawn );
 		}
 
 		public override void ClientJoined( Client cl )

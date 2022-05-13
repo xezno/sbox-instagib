@@ -42,6 +42,7 @@ namespace Instagib
 		public float AirSpeedLimit => 800f;
 		public float SpeedLimit => 600f;
 
+		[Net, Predicted] public Vector3 Impulse { get; set; }
 		[Net, Predicted] public bool CanMove { get; set; } = true;
 
 		/// <summary>
@@ -92,6 +93,13 @@ namespace Instagib
 		{
 			EyeLocalPosition = Vector3.Up * (EyeHeight * Pawn.Scale);
 			UpdateBBox();
+
+			if ( Impulse.Length > 0 )
+			{
+				ClearGroundEntity();
+				Velocity += Impulse;
+				Impulse = Vector3.Zero;
+			}
 
 			EyeLocalPosition += TraceOffset;
 			EyeRotation = Input.Rotation;
