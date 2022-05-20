@@ -32,13 +32,13 @@ namespace Instagib
 
 		[Net] public IList<MapVote> MapVotes { get; set; }
 
-		[ServerCmd( "vote_reset" )]
+		[ConCmd.Server( "vote_reset" )]
 		public static void VoteReset()
 		{
 			Game.Instance.MapVotes.Clear();
 		}
 
-		[ServerCmd( "vote_map" )]
+		[ConCmd.Server( "vote_map" )]
 		public static void VoteMap( int index )
 		{
 			var steamId = ConsoleSystem.Caller.PlayerId;
@@ -54,7 +54,7 @@ namespace Instagib
 			Log.Trace( $"Voted for {index}" );
 		}
 
-		[ServerCmd( "vote_fake" )]
+		[ConCmd.Server( "vote_fake" )]
 		public static void VoteFake( int index )
 		{
 			if ( !InstagibGlobal.DebugMode )

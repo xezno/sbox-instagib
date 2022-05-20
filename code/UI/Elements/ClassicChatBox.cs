@@ -32,7 +32,7 @@ public partial class ClassicChatBox : Panel
 	{
 		AddClass( "open" );
 		Input.Focus();
-		
+
 		foreach ( ClassicChatEntry message in Canvas.Children )
 		{
 			if ( message.HasClass( "hide" ) )
@@ -48,14 +48,14 @@ public partial class ClassicChatBox : Panel
 	{
 		RemoveClass( "open" );
 		Input.Blur();
-		
+
 		foreach ( ClassicChatEntry message in Canvas.Children )
 		{
 			if ( message.HasClass( "show" ) )
 			{
 				message.RemoveClass( "show" );
 				message.AddClass( "expired" );
-			}	
+			}
 		}
 
 		Canvas.TryScrollToBottom();
@@ -70,7 +70,7 @@ public partial class ClassicChatBox : Panel
 
 		if ( string.IsNullOrWhiteSpace( msg ) )
 			return;
-		
+
 		Say( msg );
 
 		Canvas.TryScrollToBottom();
@@ -92,7 +92,7 @@ public partial class ClassicChatBox : Panel
 		Canvas.TryScrollToBottom();
 	}
 
-	[ClientCmd( "chat_add", CanBeCalledFromServer = true )]
+	[ConCmd.Client( "chat_add", CanBeCalledFromServer = true )]
 	public static void AddChatEntry( string name, string message, string avatar = null )
 	{
 		Current?.AddEntry( name, message, avatar );
@@ -104,13 +104,13 @@ public partial class ClassicChatBox : Panel
 		}
 	}
 
-	[ClientCmd( "chat_addinfo", CanBeCalledFromServer = true )]
+	[ConCmd.Client( "chat_addinfo", CanBeCalledFromServer = true )]
 	public static void AddInformation( string message, string avatar = null, bool important = false )
 	{
 		Current?.AddEntry( null, message, avatar, important ? "information" : null );
 	}
 
-	[ServerCmd( "say" )]
+	[ConCmd.Server( "say" )]
 	public static void Say( string message )
 	{
 		Assert.NotNull( ConsoleSystem.Caller );

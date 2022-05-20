@@ -33,7 +33,7 @@ namespace Instagib.Weapons
 
 		public override bool CanPrimaryAttack()
 		{
-			if ( !Input.Pressed( InputButton.Attack1 ) )
+			if ( !Input.Pressed( InputButton.PrimaryAttack ) )
 				return false;
 
 			if ( Owner.Health <= 0 )
@@ -44,7 +44,7 @@ namespace Instagib.Weapons
 
 		public override bool CanSecondaryAttack()
 		{
-			if ( !Input.Pressed( InputButton.Attack2 ) )
+			if ( !Input.Pressed( InputButton.SecondaryAttack ) )
 				return false;
 
 			if ( Owner.Health <= 0 )
@@ -209,11 +209,11 @@ namespace Instagib.Weapons
 			Host.AssertClient();
 
 			ViewModelEntity?.SetAnimParameter( "fire", true );
-			CrosshairPanel?.CreateEvent( "onattack" );
 
 			if ( IsLocalPawn )
 			{
-				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 4.0f, 2.0f );
+				// TODO
+				// _ = new Sandbox.ScreenShake.Perlin( 0.5f, 4.0f, 2.0f );
 			}
 		}
 
@@ -225,11 +225,11 @@ namespace Instagib.Weapons
 			Sound.FromEntity( "railgun_fire", this );
 
 			ViewModelEntity?.SetAnimParameter( "fire", true );
-			CrosshairPanel?.CreateEvent( "onattack" );
 
 			if ( IsLocalPawn )
 			{
-				_ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 2.0f, 2.0f );
+				// TODO
+				// _ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 2.0f, 2.0f );
 			}
 		}
 

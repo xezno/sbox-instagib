@@ -31,7 +31,6 @@ namespace Instagib.UI
 				staticPanel.AddChild<ClassicChatBox>();
 				staticPanel.AddChild<Hitmarker>();
 				staticPanel.AddChild<MessagesPanel>();
-				staticPanel.AddChild<NameTags>();
 				staticPanel.AddChild<KillFeed>();
 
 				SetCurrentMenu( new MainMenu() );

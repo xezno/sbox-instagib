@@ -153,13 +153,22 @@ namespace Instagib
 			OnKilledMessage( (long)attackerClient.PlayerId, attackerClient.Name, (long)client.PlayerId, client.Name, "Railgun" );
 		}
 
+		/// <summary>
+		/// Called clientside from OnKilled on the server to add kill messages to the killfeed. 
+		/// </summary>
+		[ClientRpc]
+		public virtual void OnKilledMessage( long leftid, string left, long rightid, string right, string method )
+		{
+			KillFeed.Current.AddEntry( leftid, left, rightid, right, method );
+		}
+
 		[ClientRpc]
 		public void PlayerRespawnRpc()
 		{
 			InstagibHud.currentHud?.OnRespawn();
 		}
 
-		[ServerCmd( "recreatehud", Help = "Recreate hud object" )]
+		[ConCmd.Server( "recreatehud", Help = "Recreate hud object" )]
 		public static void RecreateHud()
 		{
 			hud.Delete();

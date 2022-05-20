@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Instagib.Entities
 {
 	[Library( "trigger_ig_jump_pad" )]
-	[Hammer.RenderFields]
-	[Hammer.EditorModel( "models/launch_pad/launch_pad.vmdl", FixedBounds = true )]
-	[Hammer.Line( "targetname", "targetentity" )]
+	[SandboxEditor.RenderFields]
+	[SandboxEditor.Model( Model = "models/launch_pad/launch_pad.vmdl" )]
+	[SandboxEditor.Line( "targetname", "targetentity" )]
 	[Display( Name = "Jump Pad" ), Category( "Instagib" ), Icon( "arrow_upward" )]
 	public partial class JumpPad : BaseTrigger
 	{

@@ -7,7 +7,7 @@ namespace Instagib
 	{
 		public const long AlexSteamId = 76561198128972602;
 
-		[ServerVar]
+		[ConVar.Server]
 		public static bool DebugMode { get; set; } = false;
 
 

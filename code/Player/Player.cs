@@ -22,7 +22,7 @@ namespace Instagib
 		public int CurrentStreak { get; set; }
 		public float CurrentDamageDealt { get; set; }
 
-		public Clothing.Container Clothing = new();
+		public ClothingContainer Clothing = new();
 
 		public Player()
 		{
@@ -94,7 +94,6 @@ namespace Instagib
 				{
 					speedLines ??= Particles.Create( "particles/speed_lines.vpcf" );
 					var perlinStrength = Velocity.Length.LerpInverse( 500, 700 ) * 0.5f;
-					_ = new Sandbox.ScreenShake.Perlin( 1.0f, 1.0f, perlinStrength, 2.0f * perlinStrength );
 				}
 				else if ( IsClient && Velocity.Length < 600 && speedLines != null )
 				{
@@ -183,7 +182,8 @@ namespace Instagib
 			strength /= strengthDist;
 			strength *= strengthMul;
 
-			_ = new Sandbox.ScreenShake.Perlin( 1f, 0.75f, strength );
+			// TODO
+			// _ = new Sandbox.ScreenShake.Perlin( 1f, 0.75f, strength );
 		}
 
 		[ClientRpc]
