@@ -1,6 +1,6 @@
 ﻿namespace OpenArena;
 
-[Library( "oa_crosshair_triangle" )]
+[Library( "gib_crosshair_triangle" )]
 public class TriangleCrosshair : ICrosshair
 {
 	void ICrosshair.RenderHud( TimeSince timeSinceAttack, Vector2 screenSize )

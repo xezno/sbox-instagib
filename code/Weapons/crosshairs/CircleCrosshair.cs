@@ -1,6 +1,6 @@
 ﻿namespace OpenArena;
 
-[Library( "oa_crosshair_circle" )]
+[Library( "gib_crosshair_circle" )]
 public class CircleCrosshair : ICrosshair
 {
 	void ICrosshair.RenderHud( TimeSince timeSinceAttack, Vector2 screenSize )
@@ -31,8 +31,8 @@ public class CircleCrosshair : ICrosshair
 		float interval = 360 / count;
 		for ( int i = 0; i < count; ++i )
 		{
-			float startAngle = gap + ( interval * i );
-			float endAngle = ( interval * ( i + 1 ) ) - gap;
+			float startAngle = gap + (interval * i);
+			float endAngle = (interval * (i + 1)) - gap;
 			draw.CircleEx( center, radius, radius - 1f, startAngle: startAngle, endAngle: endAngle );
 		}
 	}

@@ -3,7 +3,7 @@
 [Library]
 public abstract class BasePlayerController : PawnController
 {
-	[ConVar.Replicated( "oa_debug_playercontroller" )]
+	[ConVar.Replicated( "gib_debug_playercontroller" )]
 	public static bool Debug { get; set; } = false;
 
 	/// <summary>

@@ -1,6 +1,6 @@
 ﻿namespace OpenArena;
 
-[Library( "oa_jumppad" )]
+[Library( "gib_jumppad" )]
 [Title( "Jump Pad" ), Icon( "arrow_upward" ), Category( "World" )]
 [Line( "targetname", "TargetEntity" )]
 [HammerEntity]
@@ -32,9 +32,9 @@ public partial class JumpPad : PredictedTrigger
 		if ( player.Controller is not QuakeWalkController walkController )
 			return;
 
-		var direction = ( target.Position - walkController.Position ).Normal;
+		var direction = (target.Position - walkController.Position).Normal;
 
-		var impulse = ( direction * Force ) + ( Vector3.Up * VerticalForce );
+		var impulse = (direction * Force) + (Vector3.Up * VerticalForce);
 		walkController.ApplyImpulse( impulse );
 
 		base.PredictedTouch( player );

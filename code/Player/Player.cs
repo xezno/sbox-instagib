@@ -3,7 +3,7 @@
 partial class Player
 {
 	[Net] private bool IsInvincible { get; set; }
-	[ConVar.Replicated( "oa_debug_player" )] public static bool Debug { get; set; }
+	[ConVar.Replicated( "gib_debug_player" )] public static bool Debug { get; set; }
 	private Announcer Announcer { get; set; }
 
 	public override void ClientSpawn()

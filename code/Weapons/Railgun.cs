@@ -1,7 +1,7 @@
 ﻿namespace OpenArena;
 
 [Title( "Instagib Railgun" ), Icon( "sports_martial_arts" )]
-[Library( "oa_weapon_railgun" )]
+[Library( "gib_weapon_railgun" )]
 public partial class Railgun : BaseCarriable
 {
 	protected TimeSince TimeSinceDeployed { get; private set; }
@@ -19,7 +19,7 @@ public partial class Railgun : BaseCarriable
 	{
 		base.CreateHudElements();
 
-		Crosshair = TypeLibrary.Create<ICrosshair>( "oa_crosshair_dot" );
+		Crosshair = TypeLibrary.Create<ICrosshair>( "gib_crosshair_dot" );
 	}
 
 	public override void CreateViewModel()

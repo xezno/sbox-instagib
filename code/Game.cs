@@ -25,7 +25,7 @@ public partial class ArenaGame : Sandbox.Game
 		}
 	}
 
-	[ConCmd.Admin( "oa_set_gamemode" )]
+	[ConCmd.Admin( "gib_set_gamemode" )]
 	public static void SetGamemode( string gamemodeLibraryName )
 	{
 		var game = Current as ArenaGame;

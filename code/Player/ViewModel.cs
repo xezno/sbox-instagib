@@ -2,7 +2,7 @@
 
 public class ViewModel : BaseViewModel
 {
-	[ConVar.Replicated( "oa_debug_viewmodel" )] public static bool Debug { get; set; }
+	[ConVar.Replicated( "gib_debug_viewmodel" )] public static bool Debug { get; set; }
 
 	private const float DefaultFov = 50f;
 

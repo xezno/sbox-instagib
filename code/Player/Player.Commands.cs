@@ -2,7 +2,7 @@
 
 partial class Player
 {
-	[ConCmd.Admin( "oa_godmode" )]
+	[ConCmd.Admin( "gib_godmode" )]
 	public static void GodMode()
 	{
 		var caller = ConsoleSystem.Caller;
