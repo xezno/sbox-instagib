@@ -1,6 +1,6 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
-public class ArenaEvent
+public class InstagibEvent
 {
 	public class Player
 	{
@@ -9,7 +9,7 @@ public class ArenaEvent
 		/// </summary>
 		public class Kill : EventAttribute
 		{
-			public const string Name = "arenaevent.player.kill";
+			public const string Name = "instagibevent.player.kill";
 
 			public Kill() : base( Name ) { }
 		}
@@ -19,7 +19,7 @@ public class ArenaEvent
 		/// </summary>
 		public class Death : EventAttribute
 		{
-			public const string Name = "arenaevent.player.death";
+			public const string Name = "instagibevent.player.death";
 
 			public Death() : base( Name ) { }
 		}
@@ -29,7 +29,7 @@ public class ArenaEvent
 		/// </summary>
 		public class DidDamage : EventAttribute
 		{
-			public const string Name = "arenaevent.player.diddamage";
+			public const string Name = "instagibevent.player.diddamage";
 
 			public DidDamage() : base( Name ) { }
 		}

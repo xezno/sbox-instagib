@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 partial class Player
 {
@@ -129,14 +129,14 @@ partial class Player
 	public void RpcOnKill( int victimIdent )
 	{
 		var victim = Entity.All.OfType<Player>().FirstOrDefault( x => x.NetworkIdent == victimIdent );
-		Event.Run( ArenaEvent.Player.Kill.Name, victim, LastDamageInfo );
+		Event.Run( InstagibEvent.Player.Kill.Name, victim, LastDamageInfo );
 	}
 
 	[ClientRpc]
 	public void RpcOnDeath( int attackerIdent )
 	{
 		var attacker = Entity.All.OfType<Player>().FirstOrDefault( x => x.NetworkIdent == attackerIdent );
-		Event.Run( ArenaEvent.Player.Death.Name, attacker, LastDamageInfo );
+		Event.Run( InstagibEvent.Player.Death.Name, attacker, LastDamageInfo );
 	}
 
 	[ClientRpc]
@@ -154,7 +154,7 @@ partial class Player
 		// TODO(AG) : Am I fucking something up or does SetPitch not work
 		Sound.FromScreen( "hit" ).SetRandomPitch( pitch, pitch );
 
-		Event.Run( ArenaEvent.Player.DidDamage.Name, position, damageAmount );
+		Event.Run( InstagibEvent.Player.DidDamage.Name, position, damageAmount );
 	}
 
 	public void RenderHud( Vector2 screenSize )

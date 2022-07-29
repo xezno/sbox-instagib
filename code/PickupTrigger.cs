@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 /// <summary>
 /// A utilty class. Add as a child to your pickupable entities to expand

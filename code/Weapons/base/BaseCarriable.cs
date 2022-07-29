@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 /// <summary>
 /// An entity that can be carried in the player's inventory and hands.

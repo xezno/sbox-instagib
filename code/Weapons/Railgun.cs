@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 [Title( "Instagib Railgun" ), Icon( "sports_martial_arts" )]
 [Library( "gib_weapon_railgun" )]

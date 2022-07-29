@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 [Library]
 public abstract class BasePlayerController : PawnController

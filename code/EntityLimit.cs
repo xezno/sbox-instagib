@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 /// <summary>
 /// A class that limits the amount of entities.

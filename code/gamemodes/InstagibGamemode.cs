@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 [Library( "gib_gamemode_instagib" )]
 public class InstagibGamemode : BaseGamemode

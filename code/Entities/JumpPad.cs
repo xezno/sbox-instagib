@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 [Library( "gib_jumppad" )]
 [Title( "Jump Pad" ), Icon( "arrow_upward" ), Category( "World" )]

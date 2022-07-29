@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 public partial class Hitmarker : Panel
 {
@@ -11,7 +11,7 @@ public partial class Hitmarker : Panel
 		StyleSheet.Load( "/ui/hud/Hitmarker.scss" );
 	}
 
-	[ArenaEvent.Player.DidDamage]
+	[InstagibEvent.Player.DidDamage]
 	public void OnDidDamage( Vector3 position, float amount )
 	{
 		currentHitmarkerInstance?.Delete();

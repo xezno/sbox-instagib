@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class Player : AnimatedEntity

@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 //
 // This isn't exactly like the Quake movement controller

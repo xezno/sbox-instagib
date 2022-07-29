@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 [UseTemplate]
 public class KillMessages : Panel
@@ -18,7 +18,7 @@ public class KillMessages : Panel
 		}
 	}
 
-	[ArenaEvent.Player.Kill]
+	[InstagibEvent.Player.Kill]
 	public void OnKill( Player victim, DamageInfo damageInfo )
 	{
 		var message = new Message( victim.Client.Name );

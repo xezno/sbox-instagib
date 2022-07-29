@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 public class SpectateRagdollCamera : CameraMode
 {
@@ -42,6 +42,6 @@ public class SpectateRagdollCamera : CameraMode
 		var player = Local.Client;
 		if ( player == null ) return Vector3.Zero;
 
-		return Input.Rotation.Forward * ( -130 * 1 ) + Vector3.Up * ( 20 * 1 );
+		return Input.Rotation.Forward * (-130 * 1) + Vector3.Up * (20 * 1);
 	}
 }

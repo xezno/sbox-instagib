@@ -1,14 +1,14 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 [Library( "gib_info_target" )]
 [HammerEntity]
 [EditorModel( "models/editor/info_target.vmdl" )]
 public class PredictedTarget : Entity
 {
-    public override void Spawn()
-    {
-        base.Spawn();
+	public override void Spawn()
+	{
+		base.Spawn();
 
-        Transmit = TransmitType.Always;
-    }
+		Transmit = TransmitType.Always;
+	}
 }

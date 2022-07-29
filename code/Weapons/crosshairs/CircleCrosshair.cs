@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 [Library( "gib_crosshair_circle" )]
 public class CircleCrosshair : ICrosshair

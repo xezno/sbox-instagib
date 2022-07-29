@@ -1,6 +1,6 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
-partial class ArenaGame
+partial class InstagibGame
 {
 	public static void Explode( Vector3 position, float damage = 100, Entity owner = null )
 	{
@@ -28,7 +28,7 @@ partial class ArenaGame
 			if ( tr.Hit && tr.Entity != ent )
 				continue;
 
-			var dir = ( overlap.Position - position ).Normal;
+			var dir = (overlap.Position - position).Normal;
 			dir = dir.WithZ( 1 ).Normal; // Shoot up into the air
 
 			var dist = Vector3.DistanceBetween( position, overlap.Position + ent.CollisionBounds.Center );

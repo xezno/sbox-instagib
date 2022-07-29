@@ -1,10 +1,10 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 partial class Player
 {
-	[ClientRpc]
-	void BecomeGibsOnClient( Vector3 position )
-	{
-		_ = Particles.Create( "particles/gib.vpcf", position );
-	}
+    [ClientRpc]
+    void BecomeGibsOnClient( Vector3 position )
+    {
+        _ = Particles.Create( "particles/gib.vpcf", position );
+    }
 }

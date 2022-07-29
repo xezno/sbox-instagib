@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 public class DamageNumbers : Panel
 {
@@ -26,8 +26,8 @@ public class DamageNumbers : Panel
 
 			_ = TransitionOut();
 
-			var rand = ( Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random ) * 0.25f;
-			Velocity = ( rand.Normal * 500 ).WithY( -500 );
+			var rand = (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * 0.25f;
+			Velocity = (rand.Normal * 500).WithY( -500 );
 			timeAlive = 0;
 		}
 
@@ -48,7 +48,7 @@ public class DamageNumbers : Panel
 
 			Style.Left = Length.Pixels( screenPos.x + Position.x );
 			Style.Top = Length.Pixels( screenPos.y + Position.y );
-			Style.Opacity = 1.0f - ( timeAlive * 2 );
+			Style.Opacity = 1.0f - (timeAlive * 2);
 		}
 
 		async Task TransitionOut()
@@ -58,7 +58,7 @@ public class DamageNumbers : Panel
 		}
 	}
 
-	[ArenaEvent.Player.DidDamage]
+	[InstagibEvent.Player.DidDamage]
 	public void AddNumbers( Vector3 pos, float amount )
 	{
 		var numberElem = new DamageNumber( pos, amount );

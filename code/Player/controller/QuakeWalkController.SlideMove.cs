@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 partial class QuakeWalkController
 {
@@ -12,7 +12,7 @@ partial class QuakeWalkController
 		{
 			endVelocity = Velocity;
 			endVelocity.z -= Gravity * Time.Delta * 0.5f;
-			Velocity = Velocity.WithZ( ( Velocity.z + endVelocity.z ) * 0.5f );
+			Velocity = Velocity.WithZ( (Velocity.z + endVelocity.z) * 0.5f );
 			LogToScreen( $"SlideMove: {Velocity} -> {endVelocity}" );
 
 			if ( GroundPlane )
@@ -92,7 +92,7 @@ partial class QuakeWalkController
 		Vector3 up = new Vector3( 0, 0, 1 );
 
 		// never step up when you still have up velocity
-		if ( Velocity.z > 0 && ( trace.Fraction == 1.0f || trace.Normal.Dot( up ) < 0.7f ) )
+		if ( Velocity.z > 0 && (trace.Fraction == 1.0f || trace.Normal.Dot( up ) < 0.7f) )
 			return;
 
 		up = startPos;

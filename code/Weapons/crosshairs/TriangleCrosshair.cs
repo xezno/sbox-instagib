@@ -1,4 +1,4 @@
-﻿namespace OpenArena;
+﻿namespace Instagib;
 
 [Library( "gib_crosshair_triangle" )]
 public class TriangleCrosshair : ICrosshair

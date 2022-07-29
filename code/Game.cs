@@ -10,13 +10,13 @@ global using System.Collections;
 global using System.Collections.Generic;
 global using System.ComponentModel.DataAnnotations;
 
-namespace OpenArena;
+namespace Instagib;
 
-public partial class ArenaGame : Sandbox.Game
+public partial class InstagibGame : Sandbox.Game
 {
 	[Net] public BaseGamemode Gamemode { get; set; }
 
-	public ArenaGame()
+	public InstagibGame()
 	{
 		if ( IsServer )
 		{
@@ -28,7 +28,7 @@ public partial class ArenaGame : Sandbox.Game
 	[ConCmd.Admin( "gib_set_gamemode" )]
 	public static void SetGamemode( string gamemodeLibraryName )
 	{
-		var game = Current as ArenaGame;
+		var game = Current as InstagibGame;
 		if ( game == null )
 			return;
 

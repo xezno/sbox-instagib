@@ -1,15 +1,15 @@
 ﻿using Sandbox.Hooks;
 
-namespace OpenArena;
+namespace Instagib;
 
-public partial class ArenaChatBox : Panel
+public partial class InstagibChatBox : Panel
 {
-	public static ArenaChatBox Instance { get; private set; }
+	public static InstagibChatBox Instance { get; private set; }
 
 	public Panel Canvas { get; protected set; }
 	public TextEntry Input { get; protected set; }
 
-	public ArenaChatBox()
+	public InstagibChatBox()
 	{
 		Instance = this;
 
