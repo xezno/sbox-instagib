@@ -18,6 +18,8 @@ public class ViewModel : BaseViewModel
 	private float OffsetLerpRate = 10f;
 	private float FovLerpRate = 25f;
 
+	private float Kickback = 0f;
+
 	private Vector3 ViewmodelPosition => new Vector3( 8, -8, -10 );
 
 	// ============================================================
@@ -52,8 +54,15 @@ public class ViewModel : BaseViewModel
 
 		Offset = Offset.LerpTo( TargetOffset, OffsetLerpRate * Time.Delta );
 		Position += -Offset * Rotation;
-
 		Position += ViewmodelPosition * Rotation;
+		Position += Rotation.Backward * Kickback;
+
+		Kickback = Kickback.LerpTo( 0.0f, Time.Delta * 10f );
+	}
+
+	public void OnFire()
+	{
+		Kickback += 32f;
 	}
 
 	private void BuildWalkEffects( ref CameraSetup camSetup )

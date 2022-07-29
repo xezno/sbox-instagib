@@ -104,6 +104,8 @@ public partial class Railgun : BaseCarriable
 		{
 			var fireSound = Path.GetFileNameWithoutExtension( "railgun_fire" );
 			PlaySound( fireSound );
+
+			ViewModelEntity?.OnFire();
 		}
 	}
 
@@ -147,14 +149,13 @@ public partial class Railgun : BaseCarriable
 
 		var tr = Trace.Ray( start, end )
 				.UseHitboxes()
-				.WithAllTags( "solid" )
+				.WithAnyTags( "solid", "player" )
 				.WithoutTags( "debris", "water" )
 				.Ignore( Owner )
 				.Ignore( this )
 				.Size( radius )
 				.Run();
 
-		DebugOverlay.TraceResult( tr, 5f );
 		return tr;
 	}
 

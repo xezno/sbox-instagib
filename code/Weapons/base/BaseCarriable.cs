@@ -6,7 +6,7 @@
 [Title( "Carriable" ), Icon( "luggage" )]
 public class BaseCarriable : AnimatedEntity
 {
-	public BaseViewModel ViewModelEntity { get; protected set; }
+	public ViewModel ViewModelEntity { get; protected set; }
 
 	public override void Spawn()
 	{
