@@ -1,0 +1,24 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	data = 
+	{
+		UIName = "Railgun"
+		UIDescription = "My Cool Weapon"
+		InventorySlot = 6
+		LibraryName = "oa_weapon_railgun"
+		CrosshairLibraryName = "oa_crosshair_dot"
+		AutoFire = false
+		Damage = 75
+		FireRate = 1
+		DeployTime = 1
+		TTK = "2000ms (+ 1000ms deploy time)"
+		Spread = 0.1
+		SpreadRandomness = 0.1
+		ShotCount = "3,3"
+		WorldModel = resource:"weapons/rust_shotgun/rust_shotgun.vmdl"
+		ViewModel = resource:"weapons/rust_shotgun/v_rust_shotgun.vmdl"
+		FireSound = resource:"sounds/weapons/railgun_shoot.sound"
+		MuzzleFlashParticles = resource:"particles/pistol_muzzleflash.vpcf"
+		TracerParticles = resource:"particles/beam.vpcf"
+	}
+}

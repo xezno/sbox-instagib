@@ -1,93 +1,59 @@
-﻿using System;
-using Instagib.UI;
-using Sandbox;
+﻿namespace OpenArena;
 
-namespace Instagib
+partial class Player
 {
-	public partial class Player
+	private float TargetFov { get; set; }
+	private float Fov { get; set; }
+	private float WalkBob { get; set; }
+
+	private float ZoomSpeed => 25.0f;
+
+	// TODO: conditions for zooming
+	public bool IsZooming => Input.Down( InputButton.SecondaryAttack );
+
+	public override void PostCameraSetup( ref CameraSetup setup )
 	{
-		//
-		// Dynamic hud / camera
-		//
-		private Vector3 lastCameraPos = Vector3.Zero;
-		private Rotation lastCameraRot = Rotation.Identity;
-		private float lastHudOffset;
+		var defaultFieldOfView = setup.FieldOfView;
 
-		public override void PostCameraSetup( ref CameraSetup setup )
+		//
+		// Camera zoom
+		//
+		if ( IsZooming )
+			TargetFov = 50;
+		else
+			TargetFov = -1;
+
+		//
+		// Apply desired FOV over time
+		//
+		float targetFov = TargetFov;
+
+		// Make sure we're applying an fov... if we're not,
+		// revert to the default camera FOV
+		if ( targetFov <= 0 )
+			targetFov = defaultFieldOfView;
+
+		Fov = Fov.LerpTo( targetFov, ZoomSpeed * Time.Delta );
+		setup.FieldOfView = Fov;
+
+		//
+		// Fire PostCameraSetup on active weapon so that it can do any custom stuff too
+		//
+		if ( ActiveChild != null )
 		{
-			base.PostCameraSetup( ref setup );
-
-			if ( lastCameraRot == Rotation.Identity )
-				lastCameraRot = setup.Rotation;
-
-			var angleDiff = Rotation.Difference( lastCameraRot, setup.Rotation );
-			var angleDiffDegrees = angleDiff.Angle();
-			var allowance = 10.0f;
-
-			if ( angleDiffDegrees > allowance )
-				lastCameraRot = Rotation.Lerp( lastCameraRot, setup.Rotation, 1.0f - (allowance / angleDiffDegrees) );
-
-			if ( setup.Viewer != null )
-				AddCameraEffects( ref setup );
+			ActiveChild.PostCameraSetup( ref setup );
 		}
 
-		float walkBob = 0;
-		float lean = 0;
-		float fov = 0;
+		//
+		// View bobbing
+		//
+		var speed = Velocity.Length;
+		float t = speed.LerpInverse( 0, 310 );
 
-		private void AddCameraEffects( ref CameraSetup setup )
-		{
-			var speed = Velocity.Length.LerpInverse( 0, 320 );
-			var forwardspeed = Velocity.Normal.Dot( setup.Rotation.Forward );
+		if ( GroundEntity != null )
+			WalkBob += Time.Delta * 20.0f * t;
 
-			var left = setup.Rotation.Left;
-			var up = setup.Rotation.Up;
-
-			if ( GroundEntity != null )
-			{
-				walkBob += Time.Delta * 25.0f * speed;
-			}
-
-			setup.Position += up * MathF.Sin( walkBob ) * speed * 2;
-			setup.Position += left * MathF.Sin( walkBob * 0.6f ) * speed * 1;
-
-			// Camera lean
-			var leanMax = 0.015f;
-			var leanMul = 0.005f;
-			var leanSmooth = 15.0f;
-
-			lean = lean.LerpTo( Velocity.Dot( setup.Rotation.Right ) * leanMul, Time.Delta * leanSmooth );
-			lean.Clamp( -leanMax, leanMax );
-
-			var appliedLean = lean;
-			appliedLean += MathF.Sin( walkBob ) * speed * 0.2f;
-			setup.Rotation *= Rotation.From( 0, 0, appliedLean ) * PlayerSettings.ViewTiltMultiplier;
-
-			speed = (speed - 0.7f).Clamp( 0, 1 ) * 3.0f;
-
-			fov = fov.LerpTo( speed * 20 * MathF.Abs( forwardspeed ), Time.Delta * 2.0f );
-
-			setup.FieldOfView += fov;
-
-			var panelTransform = new Sandbox.UI.PanelTransform();
-			panelTransform.AddRotation( 0, 0, lean * -0.2f );
-
-			var zOffset = (lastCameraPos - setup.Position).z * 4f;
-			zOffset = zOffset.Clamp( -16f, 16f );
-			zOffset = lastHudOffset.LerpTo( zOffset, 25.0f * Time.Delta );
-
-			panelTransform.AddTranslateY( zOffset );
-
-			lastHudOffset = zOffset;
-
-			if ( InstagibHud.parallaxPanel != null )
-			{
-				InstagibHud.parallaxPanel.Style.Transform = panelTransform;
-				InstagibHud.parallaxPanel.Style.Dirty();
-			}
-
-			lastCameraPos = setup.Position;
-		}
-
+		var offset = Bobbing.CalculateOffset( WalkBob, t, 2.0f ) * setup.Rotation;
+		setup.Position += offset;
 	}
 }

@@ -1,226 +1,167 @@
-﻿using Sandbox;
-using System.Linq;
-using Instagib.UI;
-using Event = Sandbox.Event;
-using Instagib.Weapons;
-using Sandbox.Component;
+﻿namespace OpenArena;
 
-namespace Instagib
+partial class Player
 {
-	public partial class Player : Sandbox.Player
+	[Net] private bool IsInvincible { get; set; }
+	[ConVar.Replicated( "oa_debug_player" )] public static bool Debug { get; set; }
+	private Announcer Announcer { get; set; }
+
+	public override void ClientSpawn()
 	{
-		[Net, Local] private TimeSince TimeSinceSpawn { get; set; }
-		public bool IsSpawnProtected => TimeSinceSpawn < 3;
+		base.ClientSpawn();
 
-		private Particles speedLines;
-
-		private DamageInfo lastDamageInfo;
-
-		//
-		// Stats used for medals
-		//
-		public int CurrentStreak { get; set; }
-		public float CurrentDamageDealt { get; set; }
-
-		public ClothingContainer Clothing = new();
-
-		public Player()
+		if ( IsLocalPawn )
 		{
-			Inventory = new BaseInventory( this );
+			Announcer = new();
 		}
+	}
 
-		public Player( Client cl ) : this()
+	public override void Simulate( Client cl )
+	{
+		if ( LifeState == LifeState.Dead )
+			return;
+
+		Health = Health.Clamp( 0, 150 );
+
+		if ( Health > 100 )
+			Health -= Time.Delta;
+
+		Corpse?.Delete();
+
+		Controller?.Simulate( cl, this, Animator );
+		SimulateActiveChild( cl, ActiveChild );
+		TickPlayerUse();
+
+		if ( Input.Pressed( InputButton.View ) )
 		{
-			Clothing.LoadFromClient( cl );
+			if ( CameraMode is FirstPersonCamera )
+				CameraMode = new ThirdPersonCamera();
+			else
+				CameraMode = new FirstPersonCamera();
 		}
+	}
 
-		public override void Spawn()
+	public override void FrameSimulate( Client cl )
+	{
+		base.FrameSimulate( cl );
+
+		Controller?.FrameSimulate( cl, this, Animator );
+
+		if ( Debug )
 		{
-			base.Spawn();
-			EnableLagCompensation = true;
+			DebugOverlay.ScreenText( "[PLAYER]\n" +
+				$"ActiveChild:                 {ActiveChild}\n" +
+				$"LastActiveChild:             {LastActiveChild}\n" +
+				$"Health:                      {Health}\n" +
+				$"God:                         {IsInvincible}",
+				new Vector2( 60, 150 ) );
 		}
+	}
 
-		public override void Respawn()
+	public override void TakeDamage( DamageInfo info )
+	{
+		LastDamageInfo = info;
+
+		if ( IsInvincible && info.Attacker.IsValid() )
+			return;
+
+		float newHealth = Health - info.Damage;
+
+		base.TakeDamage( info );
+
+		// Do a few things if this killed the player
+		if ( LifeState == LifeState.Dead )
 		{
-			Event.Run( "playerRespawn" );
+			// Tell ourselves that we died
+			RpcOnDeath( To.Single( this ), info.Attacker?.NetworkIdent ?? -1 );
 
-			SetModel( "models/citizen/citizen.vmdl" );
-
-			Controller = new PlayerController();
-			Animator = new StandardPlayerAnimator();
-			CameraMode = new FirstPersonCamera();
-
-			EnableAllCollisions = true;
-			EnableDrawing = true;
-			EnableHideInFirstPerson = true;
-			EnableShadowInFirstPerson = true;
-			Transmit = TransmitType.Always;
-
-			Tags.Add( "player" );
-
-			Clothing.DressEntity( this );
-
-			Inventory.DeleteContents();
-			Inventory.Add( new Railgun(), true );
-
-			CurrentStreak = 0;
-			CurrentDamageDealt = 0;
-			TimeSinceSpawn = 0;
-
-			base.Respawn();
-		}
-
-		public override void Simulate( Client cl )
-		{
-			base.Simulate( cl );
-			SimulateActiveChild( cl, ActiveChild );
-
-			var glow = Components.GetOrCreate<Glow>();
-
-			if ( Position.z < -2500 )
+			// Tell attacker that they killed us
+			if ( info.Attacker != null && info.Attacker.Client != null && info.Attacker != this )
 			{
-				TakeDamage( DamageInfo.Generic( 10000 ) );
+				RpcOnKill( To.Single( info.Attacker ), this.NetworkIdent );
+
+				info.Attacker.Client.AddInt( "kills" );
 			}
 
-			if ( cl == Local.Client )
+			// Gibbing & ragdolling
+			bool shouldGib = newHealth <= -50;
+
+			if ( info.Flags.HasFlag( DamageFlags.AlwaysGib ) )
+				shouldGib = true;
+
+			if ( info.Flags.HasFlag( DamageFlags.DoNotGib ) )
+				shouldGib = false;
+
+			if ( shouldGib )
 			{
-				if ( IsClient )
-					glow.Active = false;
+				// Sometimes we might not get a damage position (i.e. if it was through
+				// an explosive or trigger) so we'll take the player's position and move
+				// up a little bit to make things still look okay
+				if ( info.Position == Vector3.Zero )
+					info.Position = Position + new Vector3( 0, 0, 32 );
 
-				//
-				// Speed lines
-				//
-				if ( IsClient && Velocity.Length > 500 )
-				{
-					speedLines ??= Particles.Create( "particles/speed_lines.vpcf" );
-					var perlinStrength = Velocity.Length.LerpInverse( 500, 700 ) * 0.5f;
-				}
-				else if ( IsClient && Velocity.Length < 600 && speedLines != null )
-				{
-					speedLines?.Destroy();
-					speedLines = null;
-				}
-
-				return;
+				BecomeGibsOnClient( To.Everyone, info.Position );
 			}
-
-			if ( IsClient )
+			else
 			{
-				glow.Active = true;
-				glow.RangeMin = -32;
-				glow.RangeMax = 4096;
+				BecomeRagdollOnClient( To.Everyone );
 			}
 		}
-
-		[Event.Tick.Client]
-		public void OnClientTick()
+		else
 		{
-			// Outlines are per-client. They can be disabled and recolored at each clients' will
-			// Note that this isn't synced between clients at all
-
-			if ( IsServer )
-				return;
-
-			var hsvColor = Color.Red.ToHsv();
-
-			if ( IsFriendly( Local.Client ) )
-				hsvColor = Color.Cyan.ToHsv();
-
-			hsvColor.Value = 1.0f;
-			hsvColor.Saturation = 1.0f;
-
-			var glow = Components.GetOrCreate<Glow>();
-			glow.Color = hsvColor.ToColor();
+			this.ProceduralHitReaction( info );
 		}
 
-		public override void OnKilled()
+		// Tell attacker that they did damage to us
+		if ( IsServer && info.Attacker != this )
 		{
-			base.OnKilled();
-
-			Velocity = Vector3.Zero;
-
-			CameraMode = new LookAtCamera();
-			var lookAtCamera = CameraMode as LookAtCamera;
-
-			lookAtCamera.TargetEntity = LastAttacker;
-			lookAtCamera.Origin = EyePosition;
-			lookAtCamera.Rotation = EyeRotation;
-			lookAtCamera.TargetOffset = Vector3.Up * 64f;
-
-			Inventory.DeleteContents();
-
-			EnableDrawing = false;
-			EnableAllCollisions = false;
-
-			GibParticles( To.Everyone, Position + (Vector3.Up * (8)) );
-			ShakeScreen( To.Everyone, Position );
-
-			var childrenCopy = Children.ToList();
-			foreach ( var child in childrenCopy )
-			{
-				if ( !child.Tags.Has( "clothes" ) ) continue;
-				if ( child is not ModelEntity e ) continue;
-
-				e.Delete();
-			}
+			RpcDamageDealt( To.Single( info.Attacker ),
+				LifeState == LifeState.Dead, info.Position, info.Damage, NetworkIdent );
 		}
+	}
 
-		[ClientRpc]
-		private void GibParticles( Vector3 position )
+	public bool CanMove()
+	{
+		return true;
+	}
+
+	[ClientRpc]
+	public void RpcOnKill( int victimIdent )
+	{
+		var victim = Entity.All.OfType<Player>().FirstOrDefault( x => x.NetworkIdent == victimIdent );
+		Event.Run( ArenaEvent.Player.Kill.Name, victim, LastDamageInfo );
+	}
+
+	[ClientRpc]
+	public void RpcOnDeath( int attackerIdent )
+	{
+		var attacker = Entity.All.OfType<Player>().FirstOrDefault( x => x.NetworkIdent == attackerIdent );
+		Event.Run( ArenaEvent.Player.Death.Name, attacker, LastDamageInfo );
+	}
+
+	[ClientRpc]
+	public void RpcDamageDealt( bool isKill, Vector3 position, float damageAmount, int victimNetworkId )
+	{
+		var victim = All.OfType<Player>().First( x => x.NetworkIdent == victimNetworkId );
+		Log.Trace( $"We did damage to {victim}" );
+
+		if ( isKill )
+			PlaySound( "kill" );
+
+		float t = damageAmount.LerpInverse( 0.0f, 100.0f );
+		float pitch = MathX.LerpTo( 1.0f, 1.25f, t );
+
+		// TODO(AG) : Am I fucking something up or does SetPitch not work
+		Sound.FromScreen( "hit" ).SetRandomPitch( pitch, pitch );
+
+		Event.Run( ArenaEvent.Player.DidDamage.Name, position, damageAmount );
+	}
+
+	public void RenderHud( Vector2 screenSize )
+	{
+		if ( ActiveChild is Railgun railgun )
 		{
-			_ = Particles.Create( "particles/gib_blood.vpcf", position );
-			Sound.FromWorld( "gibbing", position );
-		}
-
-		[ClientRpc]
-		private void ShakeScreen( Vector3 position )
-		{
-			float strengthMul = 10f;
-			float strengthDist = 512f;
-
-			float strength = strengthDist - Local.Pawn.Position.Distance( position ).Clamp( 0, strengthDist );
-			strength /= strengthDist;
-			strength *= strengthMul;
-
-			// TODO
-			// _ = new Sandbox.ScreenShake.Perlin( 1f, 0.75f, strength );
-		}
-
-		[ClientRpc]
-		public void OnDamageOther( Vector3 pos, float amount )
-		{
-			using ( Prediction.Off() )
-			{
-				Log.Trace( "Playing kill sound" );
-				PlaySound( "kill" );
-				Hitmarker.CurrentHitmarker.OnHit();
-			}
-		}
-
-		public override void TakeDamage( DamageInfo info )
-		{
-			if ( IsSpawnProtected || info.Flags.HasFlag( DamageFlags.PhysicsImpact ) )
-				return;
-
-			if ( IsFriendly( info.Attacker ) )
-				return;
-
-			lastDamageInfo = info;
-
-			base.TakeDamage( info );
-
-			if ( info.Attacker is Player attacker )
-			{
-				attacker.OnDamageOther( To.Single( attacker ), info.Position, info.Damage );
-			}
-		}
-
-		public void ApplyForce( Vector3 force )
-		{
-			if ( Controller is PlayerController controller )
-			{
-				controller.Impulse += force;
-			}
+			railgun.RenderHud( screenSize );
 		}
 	}
 }

@@ -1,44 +1,42 @@
-﻿using Sandbox;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿namespace OpenArena;
 
-namespace Instagib.Entities
+[Library( "oa_jumppad" )]
+[Title( "Jump Pad" ), Icon( "arrow_upward" ), Category( "World" )]
+[Line( "targetname", "TargetEntity" )]
+[HammerEntity]
+public partial class JumpPad : PredictedTrigger
 {
-	[Library( "trigger_ig_jump_pad" )]
-	[SandboxEditor.RenderFields]
-	[SandboxEditor.Model( Model = "models/launch_pad/launch_pad.vmdl" )]
-	[SandboxEditor.Line( "targetname", "targetentity" )]
-	[Display( Name = "Jump Pad" ), Category( "Instagib" ), Icon( "arrow_upward" )]
-	public partial class JumpPad : BaseTrigger
+	[Net, Property, FGDType( "target_destination" )]
+	public string TargetEntity { get; set; } = "";
+
+	[Net, Property]
+	public float VerticalForce { get; set; } = 256f;
+
+	[Net, Property]
+	public float Force { get; set; } = 1024f;
+
+	public override void Spawn()
 	{
-		[Net, Property, FGDType( "target_destination" )] public string TargetEntity { get; set; } = "";
-		[Net, Property] public float VerticalBoost { get; set; } = 200f;
-		[Net, Property] public float Force { get; set; } = 1000f;
+		base.Spawn();
 
-		public override void Spawn()
-		{
-			if ( Force == 0f )
-			{
-				Force = 1000f;
-			}
+		Transmit = TransmitType.Always;
+	}
 
-			base.Spawn();
-		}
+	public override void PredictedTouch( Player player )
+	{
+		var target = Entity.All.FirstOrDefault( x => x.Name == TargetEntity );
 
-		public override void Touch( Entity other )
-		{
-			if ( !other.IsServer ) return;
-			if ( other is not Instagib.Player pl ) return;
-			var target = FindByName( TargetEntity );
+		if ( !target.IsValid() )
+			return;
 
-			if ( target.IsValid() )
-			{
-				var direction = (target.Position - other.Position).Normal;
-				pl.ApplyForce( new Vector3( 0f, 0f, VerticalBoost ) );
-				pl.ApplyForce( direction * Force );
-			}
+		if ( player.Controller is not QuakeWalkController walkController )
+			return;
 
-			base.Touch( other );
-		}
+		var direction = ( target.Position - walkController.Position ).Normal;
+
+		var impulse = ( direction * Force ) + ( Vector3.Up * VerticalForce );
+		walkController.ApplyImpulse( impulse );
+
+		base.PredictedTouch( player );
 	}
 }

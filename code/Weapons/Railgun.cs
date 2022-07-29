@@ -1,256 +1,173 @@
-﻿using System;
-using System.Collections.Generic;
-using Sandbox;
-using Trace = Sandbox.Trace;
+﻿namespace OpenArena;
 
-namespace Instagib.Weapons
+[Title( "Instagib Railgun" ), Icon( "sports_martial_arts" )]
+[Library( "oa_weapon_railgun" )]
+public partial class Railgun : BaseCarriable
 {
-	[Library( "railgun" )]
-	partial class Railgun : BaseWeapon
+	protected TimeSince TimeSinceDeployed { get; private set; }
+	protected ICrosshair Crosshair { get; set; }
+
+	public override void Spawn()
 	{
-		public ViewModel ViewModel => (ViewModelEntity as ViewModel) ?? default;
+		base.Spawn();
 
-		public override string ViewModelPath => "weapons/railgun/models/railgun.vmdl";
-		public override float PrimaryRate => 0.75f;
-		public override float SecondaryRate => 2f;
+		SetModel( "weapons/railgun/models/railgun.vmdl" );
+		Tags.Add( "weapon" );
+	}
 
-		private Particles beamParticles;
-		public bool IsZooming { get; private set; }
+	public override void CreateHudElements()
+	{
+		base.CreateHudElements();
 
-		public override void Reload() { }
+		Crosshair = TypeLibrary.Create<ICrosshair>( "oa_crosshair_dot" );
+	}
 
-		public override void Spawn()
-		{
-			base.Spawn();
-			SetModel( "weapons/railgun/models/railgun.vmdl" );
-		}
+	public override void CreateViewModel()
+	{
+		Host.AssertClient();
 
-		public override void SimulateAnimator( PawnAnimator anim )
-		{
-			base.SimulateAnimator( anim );
-			anim.SetAnimParameter( "holdtype", 3 );
-		}
+		if ( string.IsNullOrEmpty( "weapons/railgun/models/railgun.vmdl" ) )
+			return;
 
-		public override bool CanPrimaryAttack()
-		{
-			if ( !Input.Pressed( InputButton.PrimaryAttack ) )
-				return false;
+		ViewModelEntity = new ViewModel();
+		ViewModelEntity.Position = Position;
+		ViewModelEntity.Owner = Owner;
+		ViewModelEntity.EnableViewmodelRendering = true;
+		ViewModelEntity.SetModel( "weapons/railgun/models/railgun.vmdl" );
+	}
 
-			if ( Owner.Health <= 0 )
-				return false;
+	public override void ActiveStart( Entity ent )
+	{
+		base.ActiveStart( ent );
 
-			return base.CanPrimaryAttack();
-		}
+		(ViewModelEntity as AnimatedEntity)?.SetAnimParameter( "deploy", true );
+		TimeSinceDeployed = 0;
+	}
 
-		public override bool CanSecondaryAttack()
-		{
-			if ( !Input.Pressed( InputButton.SecondaryAttack ) )
-				return false;
+	[Net, Predicted]
+	public TimeSince TimeSinceAttack { get; set; }
 
-			if ( Owner.Health <= 0 )
-				return false;
+	public override void Simulate( Client player )
+	{
+		if ( !Owner.IsValid() )
+			return;
 
-			return base.CanSecondaryAttack();
-		}
-
-		private void RocketJump( Vector3 pos, Vector3 normal )
-		{
-			ViewModel?.OnFire();
-
-			var sourcePos = pos;
-			var radius = 128;
-			var overlaps = Entity.FindInSphere( sourcePos, radius );
-
-			foreach ( var overlap in overlaps )
-			{
-				if ( overlap is not ModelEntity ent || !ent.IsValid() ) continue;
-				if ( ent != Owner ) continue;
-				if ( ent.LifeState != LifeState.Alive || !ent.PhysicsBody.IsValid() || ent.IsWorld ) continue;
-
-				var dir = normal.Normal;
-				var dist = dir.Length;
-
-				if ( dist > radius ) continue;
-
-				var distanceFactor = 1.0f - Math.Clamp( dist / radius, 0, 1 );
-				distanceFactor *= 0.5f;
-				var force = distanceFactor * ent.PhysicsBody.Mass;
-
-				if ( ent.GroundEntity != null )
-				{
-					ent.GroundEntity = null;
-					if ( ent is Player { Controller: PlayerController playerController } )
-						playerController.ClearGroundEntity();
-				}
-
-				ent.ApplyAbsoluteImpulse( dir * force );
-			}
-
-			using ( Prediction.Off() )
-			{
-				Particles.Create( "particles/explosion.vpcf", pos );
-				PlaySound( "rocket_jump" );
-			}
-		}
-
-		public override void AttackSecondary()
-		{
-			base.AttackSecondary();
-
-			var pos = Owner.EyePosition;
-			var dir = Owner.EyeRotation.Forward;
-
-			foreach ( var tr in TraceBullet( pos, dir, 1f, 256f ) )
-			{
-				if ( !tr.Hit )
-					return;
-
-				RocketJump( tr.EndPosition, tr.Normal );
-			}
-
-			RocketEffects();
-		}
-
-		public override void AttackPrimary()
-		{
-			ViewModel?.OnFire();
-
-			TimeSincePrimaryAttack = 0;
-
-			using ( Prediction.Off() )
-			{
-				Owner.Client.AddInt( "totalShots" );
-			}
-
-			Shoot( Owner.EyePosition, Owner.EyeRotation.Forward );
-		}
-
-		public IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 dir, float radius = 2.0f, float dist = 100000f )
+		if ( CanPrimaryAttack() )
 		{
 			using ( LagCompensation() )
 			{
-				bool InWater = Map.Physics.IsPointWater( start );
-
-				var end = start + dir * dist;
-				var tr = Trace.Ray( start, end )
-					.HitLayer( CollisionLayer.Water, !InWater )
-					.Ignore( Owner )
-					.Ignore( this )
-					.Size( radius )
-					.Run();
-
-				yield return tr;
+				TimeSinceAttack = 0;
+				AttackPrimary();
 			}
 		}
+	}
 
-		private void Shoot( Vector3 pos, Vector3 dir )
+	public virtual bool CanPrimaryAttack()
+	{
+		bool isFiring = Input.Pressed( InputButton.PrimaryAttack );
+
+		if ( !Owner.IsValid() || !isFiring ) return false;
+
+		var rate = 0.75f;
+		if ( rate <= 0 ) return true;
+
+		return TimeSinceAttack > (1 / rate);
+	}
+
+	public virtual void AttackPrimary()
+	{
+		ShootBullet();
+	}
+
+	public virtual void ShootBullet()
+	{
+		var tr = TraceBullet();
+
+		//
+		// Bullet damage etc.
+		//
+		if ( tr.Hit )
 		{
-			foreach ( var tr in TraceBullet( pos, dir, 8f, 8192f ) )
+			tr.Surface.DoBulletImpact( tr );
+			if ( tr.Entity.IsValid() && !tr.Entity.IsWorld )
 			{
-				if ( Prediction.FirstTime )
-				{
-					var impactParticles =
-						Particles.Create( "weapons/railgun/particles/railgun_impact.vpcf", tr.EndPosition );
-					impactParticles.SetForward( 0, tr.Normal );
-				}
-
-				if ( tr.Entity is not Player )
-				{
-					tr.Surface.DoBulletImpact( tr );
-				}
-
-				// Particles
-				{
-					beamParticles?.Destroy( true );
-					beamParticles = Particles.Create( "weapons/railgun/particles/railgun_beam.vpcf", EffectEntity,
-						"muzzle", false );
-
-					beamParticles?.SetPosition( 1, tr.EndPosition );
-
-					float particleCount = tr.Distance / 128f;
-					beamParticles?.SetPosition( 2, particleCount );
-				}
-
-				if ( !IsServer ) continue;
-				if ( !tr.Entity.IsValid() ) continue;
-
-				var damageInfo = DamageInfo.FromBullet( tr.EndPosition, dir * 1000, 1000 )
-					.UsingTraceResult( tr )
-					.WithAttacker( Owner )
-					.WithWeapon( this );
-
-				tr.Entity.TakeDamage( damageInfo );
-			}
-
-			ShootEffects();
-		}
-
-		public override void Simulate( Client owner )
-		{
-			base.Simulate( owner );
-
-			IsZooming = Input.Down( InputButton.Run );
-			GrappleSimulate( owner );
-		}
-
-		public override void BuildInput( InputBuilder owner )
-		{
-			if ( IsZooming )
-			{
-				// Set input sensitivity
-				owner.ViewAngles = Angles.Lerp( owner.OriginalViewAngles, owner.ViewAngles,
-					PlayerSettings.ZoomedFov / PlayerSettings.Fov );
+				tr.Entity.TakeDamage( CreateDamageInfo( tr ) );
 			}
 		}
 
-		[ClientRpc]
-		public virtual void RocketEffects()
+		//
+		// Shoot effects
+		//
+		CreateShootEffects( tr.Direction, tr.EndPosition );
+
+		using ( Prediction.Off() )
 		{
-			Host.AssertClient();
-
-			ViewModelEntity?.SetAnimParameter( "fire", true );
-
-			if ( IsLocalPawn )
-			{
-				// TODO
-				// _ = new Sandbox.ScreenShake.Perlin( 0.5f, 4.0f, 2.0f );
-			}
+			var fireSound = Path.GetFileNameWithoutExtension( "railgun_fire" );
+			PlaySound( fireSound );
 		}
+	}
 
-		[ClientRpc]
-		public virtual void ShootEffects()
-		{
-			Host.AssertClient();
+	protected virtual void CreateShootEffects( Vector3 direction, Vector3 endPosition )
+	{
+		Entity effectEntity = IsLocalPawn ? ViewModelEntity : this;
 
-			Sound.FromEntity( "railgun_fire", this );
+		var muzzleTransform = (effectEntity as ModelEntity)?.GetAttachment( "muzzle" ) ?? default;
+		var startPosition = muzzleTransform.Position;
 
-			ViewModelEntity?.SetAnimParameter( "fire", true );
+		var tracerParticles = Particles.Create( "particles/beam.vpcf", startPosition );
+		tracerParticles.SetForward( 0, direction );
+		tracerParticles.SetPosition( 1, endPosition );
 
-			if ( IsLocalPawn )
-			{
-				// TODO
-				// _ = new Sandbox.ScreenShake.Perlin( 0.5f, 1.0f, 2.0f, 2.0f );
-			}
-		}
+		ViewModelEntity?.SetAnimParameter( "fire", true );
+		PlaySound( "railgun_fire" );
+	}
 
-		public override void CreateViewModel()
-		{
-			Host.AssertClient();
+	protected virtual DamageInfo CreateDamageInfo( TraceResult tr )
+	{
+		var damageInfo = DamageInfo
+			.FromBullet( tr.EndPosition, tr.Direction * 32, 100 )
+			.WithAttacker( Owner )
+			.WithBone( tr.Bone );
 
-			if ( string.IsNullOrEmpty( ViewModelPath ) )
-				return;
+		damageInfo.Flags |= DamageFlags.AlwaysGib;
 
-			ViewModelEntity = new ViewModel();
-			ViewModelEntity.Position = Position;
-			ViewModelEntity.Owner = Owner;
-			ViewModelEntity.EnableViewmodelRendering = true;
-			ViewModelEntity.SetModel( ViewModelPath );
-		}
+		return damageInfo;
+	}
 
-		public override void DestroyViewModel()
-		{
-			ViewModelEntity?.Delete();
-			ViewModelEntity = null;
-		}
+	public virtual TraceResult TraceBullet()
+	{
+		using var _ = LagCompensation();
+
+		Vector3 start = Owner.EyePosition;
+		Vector3 end = Owner.EyePosition + Owner.EyeRotation.Forward * 8192f;
+
+		float radius = 2.0f;
+
+		bool inWater = Map.Physics.IsPointWater( start );
+
+		var tr = Trace.Ray( start, end )
+				.UseHitboxes()
+				.WithAllTags( "solid" )
+				.WithoutTags( "debris", "water" )
+				.Ignore( Owner )
+				.Ignore( this )
+				.Size( radius )
+				.Run();
+
+		DebugOverlay.TraceResult( tr, 5f );
+		return tr;
+	}
+
+	public override Sound PlaySound( string soundName, string attachment )
+	{
+		if ( Owner.IsValid() )
+			return Owner.PlaySound( soundName, attachment );
+
+		return base.PlaySound( soundName, attachment );
+	}
+
+	public virtual void RenderHud( Vector2 screenSize )
+	{
+		Crosshair?.RenderHud( TimeSinceAttack, screenSize );
 	}
 }

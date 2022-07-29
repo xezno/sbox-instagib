@@ -1,0 +1,46 @@
+﻿@import "/ui/_Theme.scss";
+
+rootpanel {
+    transition: opacity 150ms ease;
+
+    &.devcamera {
+        opacity: 0;
+    }
+}
+
+text, label {
+    font-family: $font;
+}
+
+icon, iconpanel {
+    font-family: MaterialIcons;
+}
+
+text.big, label.big {
+    font-size: 96px;
+}
+
+text.medium, label.medium {
+    font-size: 48px;
+}
+
+text.small, label.small {
+    font-size: 24px;
+}
+
+.bottom {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: $safe-area-x;
+    right: $safe-area-x;
+    bottom: $safe-area-y;
+}
+
+chatbox {
+    text, label {
+        font-family: Roboto;
+        font-weight: 600;
+    }
+}
