@@ -45,7 +45,6 @@ public partial class Railgun : BaseCarriable
 	}
 
 	[Net, Predicted] public TimeSince TimeSincePrimaryAttack { get; set; }
-	[Net, Predicted] public TimeSince TimeSinceSecondaryAttack { get; set; }
 
 	public override void Simulate( Client player )
 	{
@@ -58,15 +57,6 @@ public partial class Railgun : BaseCarriable
 			{
 				TimeSincePrimaryAttack = 0;
 				AttackPrimary();
-			}
-		}
-
-		if ( CanSecondaryAttack() )
-		{
-			using ( LagCompensation() )
-			{
-				TimeSinceSecondaryAttack = 0;
-				AttackSecondary();
 			}
 		}
 	}
@@ -174,75 +164,6 @@ public partial class Railgun : BaseCarriable
 			return Owner.PlaySound( soundName, attachment );
 
 		return base.PlaySound( soundName, attachment );
-	}
-
-	public bool CanSecondaryAttack()
-	{
-		bool isFiring = Input.Pressed( InputButton.SecondaryAttack );
-
-		if ( !Owner.IsValid() || !isFiring ) return false;
-
-		var rate = 1.0f;
-		if ( rate <= 0 ) return true;
-
-		return TimeSinceSecondaryAttack > (1 / rate);
-	}
-
-	private void RocketJump( Vector3 pos, Vector3 normal )
-	{
-		ViewModelEntity?.OnFire();
-
-		if ( !IsServer )
-			return;
-
-		var sourcePos = pos;
-		var radius = 64f;
-
-		if ( Owner.Position.Distance( pos ) < radius )
-		{
-			var player = Owner as Player;
-			var targetPos = player.PhysicsBody.MassCenter;
-			var dir = (targetPos - sourcePos).Normal;
-			var dist = dir.Length;
-
-			var distaceMul = 1.0f - Math.Clamp( dist / radius, 0, 1 );
-			var force = 600f * distaceMul;
-
-			if ( player.Controller is QuakeWalkController quakeWalkController )
-			{
-				player.GroundEntity = null;
-				quakeWalkController.GroundEntity = null;
-			}
-
-			player.Velocity += Vector3.Reflect( dir.WithZ( -32 ), normal ).Normal * force;
-		}
-
-		using ( Prediction.Off() )
-		{
-			var boostParticles = Particles.Create( "particles/boost.vpcf", pos );
-			boostParticles.SetForward( 0, normal );
-			PlaySound( "rocket_jump" );
-		}
-	}
-
-	public void AttackSecondary()
-	{
-		var start = Owner.EyePosition;
-		var end = start + Owner.EyeRotation.Forward * 256f;
-
-		var tr = Trace.Ray( start, end )
-				.UseHitboxes()
-				.WithAnyTags( "solid", "player" )
-				.WithoutTags( "debris", "water" )
-				.Ignore( Owner )
-				.Ignore( this )
-				.Size( 1f )
-				.Run();
-
-		if ( !tr.Hit )
-			return;
-
-		RocketJump( tr.EndPosition, tr.Normal );
 	}
 
 	public virtual void RenderHud( Vector2 screenSize )
