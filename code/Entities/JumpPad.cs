@@ -40,3 +40,9 @@ public partial class JumpPad : PredictedTrigger
 		base.PredictedTouch( player );
 	}
 }
+
+//
+// Jumppad that works with Boomer maps
+//
+[Library( "shooter_jumppad" )]
+public class BoomerCompatibleJumpPad : JumpPad { }
