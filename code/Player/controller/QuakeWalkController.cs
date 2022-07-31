@@ -20,14 +20,13 @@ public partial class QuakeWalkController : BasePlayerController
 	private TraceResult GroundTrace { get; set; }
 	private Unstuck Unstuck { get; set; }
 	private Duck Duck { get; set; }
-
-	private bool JumpQueued { get; set; }
-	private TimeSince TimeSinceJumpQueued { get; set; }
+	private bool CanDoubleJump { get; set; }
 
 	public QuakeWalkController()
 	{
 		Duck = new( this );
 		Unstuck = new Unstuck( this );
+		CanDoubleJump = true;
 	}
 
 	public void ApplyImpulse( Vector3 impulse )
@@ -108,27 +107,23 @@ public partial class QuakeWalkController : BasePlayerController
 
 		// set groundentity
 		TraceToGround();
-		if ( GroundEntity == null )
+
+		// dashing
+		if ( !ApplyDash() )
 		{
-			if ( Input.Pressed( InputButton.Jump ) )
+			if ( CheckJump() || GroundEntity == null )
 			{
-				JumpQueued = true;
-				TimeSinceJumpQueued = 0;
+				// gravity start
+				Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
+
+				// jumped away or in air
+				AirMove();
 			}
-		}
-
-		if ( CheckJump() || GroundEntity == null )
-		{
-			// gravity start
-			Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
-
-			// jumped away or in air
-			AirMove();
-		}
-		else
-		{
-			// walking on ground
-			WalkMove();
+			else
+			{
+				// walking on ground
+				WalkMove();
+			}
 		}
 
 		// stick to ground
@@ -148,9 +143,7 @@ public partial class QuakeWalkController : BasePlayerController
 				$"Vel length:                  {Velocity.Length}\n" +
 				$"Position:                    {Position}\n" +
 				$"GroundEntity:                {GroundEntity}\n" +
-				$"JumpMode:                    {JumpMode}\n" +
-				$"JumpQueued:                  {JumpQueued}\n" +
-				$"TimeSinceJumpQueued:         {TimeSinceJumpQueued}\n" +
+				$"CanDoubleJump:               {CanDoubleJump}\n" +
 				$"TouchingTriggers:            {string.Join( ',', TouchingTriggers.Select( x => x.Name ) )}",
 				new Vector2( 360, 150 ), Time.Delta * 2.0f );
 
@@ -256,37 +249,95 @@ public partial class QuakeWalkController : BasePlayerController
 		}
 	}
 
-	private bool CheckJump()
+	private bool IsDashing { get; set; }
+	private Vector3 DashStart { get; set; }
+	private Vector3 DashEnd { get; set; }
+	private float DashProgress { get; set; }
+
+	private Vector3 GetDashDirection()
 	{
-		if ( GroundEntity == null )
-			return false;
+		var dir = GetWishDirection();
 
-		switch ( JumpMode )
+		if ( dir.Length.AlmostEqual( 0 ) )
 		{
-			case JumpModes.AutoBhop:
-				if ( !Input.Down( InputButton.Jump ) )
-					return false;
-				break;
-
-			case JumpModes.QueueJump:
-				if ( !(JumpQueued && TimeSinceJumpQueued < 0.5f) )
-				{
-					if ( !Input.Pressed( InputButton.Jump ) )
-						return false;
-				}
-				break;
-
-			case JumpModes.Vanilla:
-				if ( !Input.Pressed( InputButton.Jump ) )
-					return false;
-				break;
+			dir = Pawn.EyeRotation.Forward;
 		}
 
-		JumpQueued = false;
+		dir = dir.WithZ( 0 ).Normal;
+
+		return dir;
+	}
+
+	private bool ApplyDash()
+	{
+		// AG: this probably isn't a great way to do dashing
+		// (we're just setting the position manually) but
+		// it's consistent enough to be used here
+
+		if ( Input.Pressed( InputButton.Run ) )
+		{
+			var dir = GetDashDirection();
+			var startPos = Position;
+			var endPos = startPos + dir * DashDistance;
+
+			var tr = TraceBBox( startPos, endPos );
+
+			DashStart = tr.StartPosition;
+			DashEnd = tr.EndPosition;
+
+			DebugOverlay.Sphere( DashStart, 4f, Color.Green, 5f, false );
+			DebugOverlay.Sphere( DashEnd, 4f, Color.Red, 5f, false );
+
+			DashProgress = 0f;
+
+			IsDashing = true;
+		}
+
+		if ( IsDashing )
+		{
+			DashProgress += Time.Delta * 10f;
+			Position = DashStart.LerpTo( DashEnd, DashProgress );
+
+			if ( DashProgress >= 1.0f )
+			{
+				IsDashing = false;
+				Velocity = (DashEnd - DashStart).Normal * Velocity.Length;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private bool CheckJump()
+	{
+		if ( GroundEntity == null && !CanDoubleJump )
+			return false;
 
 		float jumpVel = JumpVelocity;
+
+		if ( GroundEntity != null )
+		{
+			if ( !Input.Down( InputButton.Jump ) )
+				return false;
+		}
+		else if ( CanDoubleJump )
+		{
+			if ( !Input.Pressed( InputButton.Jump ) )
+				return false;
+
+			jumpVel *= 1.25f;
+			CanDoubleJump = false;
+
+			var boostParticles = Particles.Create( "particles/boost.vpcf", this.Position );
+			boostParticles.SetForward( 0, Vector3.Up );
+		}
+
 		if ( Duck.IsActive )
+		{
 			jumpVel *= 0.75f;
+		}
 
 		Velocity = Velocity.WithZ( jumpVel );
 
@@ -529,6 +580,7 @@ public partial class QuakeWalkController : BasePlayerController
 		{
 			GroundPlane = true;
 			Walking = true;
+			CanDoubleJump = true;
 		}
 
 		GroundEntity = ent;

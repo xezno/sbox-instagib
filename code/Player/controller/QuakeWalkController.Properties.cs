@@ -40,10 +40,10 @@ partial class QuakeWalkController
 	public static float MaxWalkAngle { get; set; } = 45f;
 
 	[ConVar.Replicated( "gib_stepsize" )]
-	public static float StepSize { get; set; } = 18;
+	public static float StepSize { get; set; } = 18f;
 
 	[ConVar.Replicated( "gib_jumpvelocity" )]
-	public static float JumpVelocity { get; set; } = 270;
+	public static float JumpVelocity { get; set; } = 350f;
 
 	[ConVar.Replicated( "gib_overclip" )]
 	public static float Overclip { get; set; } = 1.001f;
@@ -51,15 +51,8 @@ partial class QuakeWalkController
 	[ConVar.Replicated( "gib_speedlimit" )]
 	public static float SpeedLimit { get; set; } = -1f;
 
-	public enum JumpModes
-	{
-		AutoBhop,
-		QueueJump,
-		Vanilla
-	}
-
-	[ConVar.Replicated( "gib_jumpmode" )]
-	public static JumpModes JumpMode { get; set; } = JumpModes.AutoBhop;
+	[ConVar.Replicated( "gib_dashdistance" )]
+	public static float DashDistance { get; set; } = 256f;
 
 	public enum AccelModes
 	{
