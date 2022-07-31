@@ -18,6 +18,8 @@ public class InstagibGamemode : BaseGamemode
 		{
 			Owner = player
 		};
+
+		player.ActiveChild.SetParent( player, true );
 	}
 
 	protected override void CheckRespawning()
