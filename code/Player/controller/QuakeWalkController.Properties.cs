@@ -19,7 +19,7 @@ partial class QuakeWalkController
 	public static float Acceleration { get; set; } = 10.0f;
 
 	[ConVar.Replicated( "gib_airacceleration" )]
-	public static float AirAcceleration { get; set; } = 10.0f;
+	public static float AirAcceleration { get; set; } = 100.0f;
 
 	[ConVar.Replicated( "gib_friction" )]
 	public static float Friction { get; set; } = 6.0f;
@@ -49,7 +49,7 @@ partial class QuakeWalkController
 	public static float Overclip { get; set; } = 1.001f;
 
 	[ConVar.Replicated( "gib_speedlimit" )]
-	public static float SpeedLimit { get; set; } = 750f;
+	public static float SpeedLimit { get; set; } = -1f;
 
 	public enum JumpModes
 	{

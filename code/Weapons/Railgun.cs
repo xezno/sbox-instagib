@@ -196,7 +196,7 @@ public partial class Railgun : BaseCarriable
 			return;
 
 		var sourcePos = pos;
-		var radius = 128;
+		var radius = 64f;
 
 		if ( Owner.Position.Distance( pos ) < radius )
 		{
@@ -205,9 +205,8 @@ public partial class Railgun : BaseCarriable
 			var dir = (targetPos - sourcePos).Normal;
 			var dist = dir.Length;
 
-			var distanceFactor = 1.0f - Math.Clamp( dist / radius, 0, 1 );
-			distanceFactor *= 0.5f;
-			var force = distanceFactor * player.PhysicsBody.Mass;
+			var distaceMul = 1.0f - Math.Clamp( dist / radius, 0, 1 );
+			var force = 600f * distaceMul;
 
 			if ( player.Controller is QuakeWalkController quakeWalkController )
 			{
@@ -220,7 +219,8 @@ public partial class Railgun : BaseCarriable
 
 		using ( Prediction.Off() )
 		{
-			Particles.Create( "particles/explosion/barrel_explosion/explosion_barrel.vpcf", pos );
+			var boostParticles = Particles.Create( "particles/boost.vpcf", pos );
+			boostParticles.SetForward( 0, normal );
 			PlaySound( "rocket_jump" );
 		}
 	}
