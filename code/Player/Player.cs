@@ -30,7 +30,8 @@ partial class Player
 
 		Controller?.Simulate( cl, this, Animator );
 		SimulateActiveChild( cl, ActiveChild );
-		TickPlayerUse();
+		SimulateGrapple( cl );
+		SimulatePlayerUse( cl );
 
 		if ( Input.Pressed( InputButton.View ) )
 		{
