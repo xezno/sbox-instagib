@@ -21,14 +21,10 @@ partial class Player
 		if ( LifeState == LifeState.Dead )
 			return;
 
-		Health = Health.Clamp( 0, 150 );
-
-		if ( Health > 100 )
-			Health -= Time.Delta;
-
 		Corpse?.Delete();
 
 		Controller?.Simulate( cl, this, Animator );
+		SimulateCheckOutOfBounds( cl );
 		SimulateActiveChild( cl, ActiveChild );
 		SimulatePlayerUse( cl );
 		// SimulateGrapple( cl );
@@ -40,6 +36,15 @@ partial class Player
 			else
 				CameraMode = new FirstPersonCamera();
 		}
+	}
+
+	private void SimulateCheckOutOfBounds( Client cl )
+	{
+		if ( !IsServer )
+			return;
+
+		if ( Position.z < -1000 )
+			TakeDamage( DamageInfo.Generic( 10000f ) );
 	}
 
 	public override void FrameSimulate( Client cl )
