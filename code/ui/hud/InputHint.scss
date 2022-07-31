@@ -1,0 +1,42 @@
+@import "/UI/_Theme.scss";
+
+.input-hint {
+    align-items: center;
+    padding: 4px;
+    flex-direction: row-reverse;
+
+    .glyph {
+        height: 100%;
+        box-shadow: 0 0 4px rgba( black, 0.25 );
+        border-radius: 8px;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+    .glyph-wrapper {
+        margin-left: 16px;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .action {
+        font-size: 20px;
+        font-family: $font;
+        color: white;
+        text-align: right;
+        text-shadow: 0 0 4px rgba( black, 0.25 );
+        flex-grow: 1;
+    }
+
+    &.noaction {
+        .action {
+            display: none;
+        }
+    }
+
+    &.active {
+        .glyph {
+            background-image-tint: black;
+        }
+    }
+}

@@ -44,3 +44,10 @@ chatbox {
         font-weight: 600;
     }
 }
+
+controls {
+    position: absolute;
+    right: $safe-area-x;
+    bottom: $safe-area-y;
+    flex-direction: column;
+}
