@@ -27,7 +27,6 @@ partial class Player
 		SimulateCheckOutOfBounds( cl );
 		SimulateActiveChild( cl, ActiveChild );
 		SimulatePlayerUse( cl );
-		// SimulateGrapple( cl );
 
 		if ( Input.Pressed( InputButton.View ) )
 		{
