@@ -83,6 +83,14 @@ public partial class QuakeWalkController : BasePlayerController
 		EyeRotation = Input.Rotation;
 		EyeLocalPosition = Vector3.Up * (EyeHeight * Pawn.Scale);
 
+		if ( SpeedLimit > 0f )
+		{
+			if ( Velocity.Length > SpeedLimit )
+			{
+				Velocity = Velocity.Normal * SpeedLimit;
+			}
+		}
+
 		// debug line reset
 		line = 0;
 

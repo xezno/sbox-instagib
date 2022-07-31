@@ -48,6 +48,9 @@ partial class QuakeWalkController
 	[ConVar.Replicated( "gib_overclip" )]
 	public static float Overclip { get; set; } = 1.001f;
 
+	[ConVar.Replicated( "gib_speedlimit" )]
+	public static float SpeedLimit { get; set; } = 750f;
+
 	public enum JumpModes
 	{
 		AutoBhop,
