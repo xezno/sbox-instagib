@@ -285,12 +285,16 @@ public partial class QuakeWalkController : BasePlayerController
 			DashStart = tr.StartPosition;
 			DashEnd = tr.EndPosition;
 
-			DebugOverlay.Sphere( DashStart, 4f, Color.Green, 5f, false );
-			DebugOverlay.Sphere( DashEnd, 4f, Color.Red, 5f, false );
-
 			DashProgress = 0f;
 
 			IsDashing = true;
+
+			if ( Host.IsClient )
+			{
+				var dashParticles = Particles.Create( "particles/speed_lines.vpcf", this.Position );
+				dashParticles.SetEntity( 0, Pawn, Pawn.Transform.PointToLocal( tr.EndPosition ) + Vector3.Up * 64f );
+				dashParticles.SetEntity( 1, Pawn, Pawn.Transform.PointToLocal( tr.EndPosition + dir * 512f ) + Vector3.Up * 64f );
+			}
 		}
 
 		if ( IsDashing )
