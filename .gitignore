@@ -15,3 +15,5 @@ textures/world/
 materials/world/
 
 .vs/
+*.*_c
+
