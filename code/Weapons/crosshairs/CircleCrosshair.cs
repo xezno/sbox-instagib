@@ -18,12 +18,12 @@ public class CircleCrosshair : ICrosshair
 		//
 		// Animation / easing
 		//
-		float t = timeSinceAttack.Relative.LerpInverse( 0, 0.5f );
+		float t = timeSinceAttack.Relative.LerpInverse( 0, 1.5f );
 		t = Easing.EaseOut( t );
 
 		draw.Color = Color.White.WithAlpha( t );
 		radius *= 2.0f.LerpTo( 1.0f, t );
-		gap *= 2.0f.LerpTo( 1.0f, t );
+		gap *= 2.0f.LerpTo( 0.0f, t );
 
 		//
 		// Circle crosshair
@@ -35,5 +35,8 @@ public class CircleCrosshair : ICrosshair
 			float endAngle = (interval * (i + 1)) - gap;
 			draw.CircleEx( center, radius, radius - 1f, startAngle: startAngle, endAngle: endAngle );
 		}
+
+		// Dot
+		draw.Circle( center, 1f );
 	}
 }

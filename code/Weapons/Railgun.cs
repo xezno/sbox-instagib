@@ -19,7 +19,7 @@ public partial class Railgun : BaseCarriable
 	{
 		base.CreateHudElements();
 
-		Crosshair = TypeLibrary.Create<ICrosshair>( "gib_crosshair_dot" );
+		Crosshair = TypeLibrary.Create<ICrosshair>( "gib_crosshair_circle" );
 	}
 
 	public override void CreateViewModel()
