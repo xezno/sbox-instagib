@@ -79,10 +79,12 @@ partial class Player
 		{
 			// Tell ourselves that we died
 			RpcOnDeath( To.Single( this ), info.Attacker?.NetworkIdent ?? -1 );
+			InstagibGame.UpdateLeaderboard( Client, -1 );
 
 			// Tell attacker that they killed us
 			if ( info.Attacker != null && info.Attacker.Client != null && info.Attacker != this )
 			{
+				InstagibGame.UpdateLeaderboard( info.Attacker.Client, 1 );
 				RpcOnKill( To.Single( info.Attacker ), this.NetworkIdent );
 
 				info.Attacker.Client.AddInt( "kills" );

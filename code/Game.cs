@@ -52,6 +52,30 @@ public partial class InstagibGame : Sandbox.Game
 		client.Pawn = pawn;
 	}
 
+	[ConCmd.Admin( "gib_wipe_leaderboard" )]
+	public static void WipeLeaderboard()
+	{
+		var leaderBoard = GameServices.Leaderboard.Query( Global.GameIdent, skip: 10 ).Result;
+		foreach ( var entry in leaderBoard.Entries )
+		{
+			var result = GameServices.SubmitScore( entry.PlayerId, -entry.Rating ).Result;
+			Log.Info( $" Reset score of {entry.DisplayName}" );
+			Log.Info( result );
+		}
+	}
+
+	public static async void UpdateLeaderboard( Client client, int delta )
+	{
+		Host.AssertServer();
+
+		GameServices.RecordEvent( client, $"K/D Delta change {delta}", delta );
+
+		var matchingScores = await GameServices.Leaderboard.Query( Global.GameIdent, client.PlayerId );
+		var currentScore = matchingScores.Entries.Select( x => x.Rating ).FirstOrDefault( 0 );
+
+		await GameServices.SubmitScore( client.PlayerId, currentScore + delta );
+	}
+
 	public override void RenderHud()
 	{
 		base.RenderHud();
