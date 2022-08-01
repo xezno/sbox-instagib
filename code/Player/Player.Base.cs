@@ -22,6 +22,19 @@ public partial class Player : AnimatedEntity
 	public TimeSince TimeSinceDied { get; private set; }
 	private TimeSince timeSinceLastFootstep = 0;
 
+	private ClothingContainer clothingContainer;
+
+	public Player()
+	{
+
+	}
+
+	public Player( Client cl ) : this()
+	{
+		clothingContainer = new ClothingContainer();
+		clothingContainer.LoadFromClient( cl );
+	}
+
 	public override void Spawn()
 	{
 		EnableLagCompensation = true;
@@ -51,6 +64,13 @@ public partial class Player : AnimatedEntity
 
 		CreateHull();
 		ResetInterpolation();
+
+		Dress();
+	}
+
+	private void Dress()
+	{
+		clothingContainer.DressEntity( this );
 	}
 
 	public override void OnKilled()

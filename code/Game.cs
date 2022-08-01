@@ -47,7 +47,7 @@ public partial class InstagibGame : Sandbox.Game
 		base.ClientJoined( client );
 
 		// Create a pawn for this client to play with
-		var pawn = new Player();
+		var pawn = new Player( client );
 		Gamemode.RespawnPlayer( pawn );
 		client.Pawn = pawn;
 	}
