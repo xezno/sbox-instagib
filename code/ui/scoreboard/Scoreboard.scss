@@ -52,7 +52,8 @@
         .entry {
             margin-bottom: 2px;
             padding: 5px 10px;
-            color: #fff;
+            color: white;
+            border-radius: 5px;
 
             &.me {
                 background-color: $accent;

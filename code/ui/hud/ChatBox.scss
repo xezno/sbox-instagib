@@ -7,7 +7,7 @@ InstagibChatBox {
     flex-direction: column;
     width: 500px;
     font-size: 20px;
-    border-radius: 2px;
+    border-radius: 5px;
     pointer-events: none;
     padding: 5px;
 
@@ -21,8 +21,7 @@ InstagibChatBox {
         width: 100%;
         position: absolute;
         bottom: 0;
-        border-radius: 0 0px 2px 2px;
-        border-radius: 2px;
+        border-radius: 5px;
 
         text {
             font-size: 20px;
@@ -59,7 +58,7 @@ ChatEntry {
     transform: scale( 1 );
     width: 100%;
     align-items: center;
-    border-radius: 2px;
+    border-radius: 5px;
     text-shadow: 2px 2px 0px rgba( black, 0.5 );
 
     &:intro {
