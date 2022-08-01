@@ -6,7 +6,7 @@ public class FirstPersonCamera : Sandbox.FirstPersonCamera
 	{
 		base.Update();
 
-		ZNear = 10;
+		ZNear = 5;
 		ZFar = 10000;
 	}
 }
