@@ -320,7 +320,10 @@ public partial class QuakeWalkController : BasePlayerController
 				var dashParticles = Particles.Create( "particles/speed_lines.vpcf", Pawn.Transform.PointToLocal( tr.EndPosition ) + Vector3.Up * 64f );
 
 				if ( dashParticles != null )
+				{
+					dashParticles.SetEntity( 0, Pawn, Pawn.Transform.PointToLocal( tr.EndPosition ) + Vector3.Up * 64f );
 					dashParticles.SetEntity( 1, Pawn, Pawn.Transform.PointToLocal( tr.EndPosition + dir * 512f ) + Vector3.Up * 64f );
+				}
 			}
 		}
 
