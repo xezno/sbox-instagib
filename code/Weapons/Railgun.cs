@@ -101,9 +101,6 @@ public partial class Railgun : BaseCarriable
 
 		using ( Prediction.Off() )
 		{
-			var fireSound = Path.GetFileNameWithoutExtension( "railgun_fire" );
-			PlaySound( fireSound );
-
 			ViewModelEntity?.OnFire();
 		}
 	}
