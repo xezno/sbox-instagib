@@ -112,6 +112,9 @@ public partial class Railgun : BaseCarriable
 	{
 		Entity effectEntity = IsLocalPawn ? ViewModelEntity : this;
 
+		if ( !effectEntity.IsValid() )
+			return;
+
 		var muzzleTransform = (effectEntity as ModelEntity)?.GetAttachment( "muzzle" ) ?? default;
 		var startPosition = muzzleTransform.Position;
 

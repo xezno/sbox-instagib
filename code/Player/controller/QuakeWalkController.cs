@@ -315,7 +315,7 @@ public partial class QuakeWalkController : BasePlayerController
 
 			IsDashing = true;
 
-			if ( Host.IsClient )
+			if ( Pawn.IsClient )
 			{
 				var dashParticles = Particles.Create( "particles/speed_lines.vpcf", this.Position );
 				dashParticles.SetEntity( 0, Pawn, Pawn.Transform.PointToLocal( tr.EndPosition ) + Vector3.Up * 64f );
