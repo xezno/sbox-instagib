@@ -60,3 +60,16 @@ public partial class InputHint : Panel
 		}
 	}
 }
+
+public static class InputHintConstructor
+{
+	public static InputHint InputHint( this PanelCreator self, InputButton button, string text )
+	{
+		var control = self.panel.AddChild<InputHint>();
+
+		control.SetButton( button );
+		control.SetContent( text );
+
+		return control;
+	}
+}
