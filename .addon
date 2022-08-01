@@ -18,16 +18,19 @@
   "Metadata": {
     "MapList": [
       "gumby.mapstagib",
-      "alex.ctf_test",
-      "facepunch.tup_yourit"
+      "facepunch.tup_yourit",
+      "facepunch.bm_dockyard"
     ],
     "MinPlayers": 1,
     "MapSelect": "Tagged",
-    "RankType": "Increment",
+    "RankType": "None",
     "PerMapRanking": false,
-    "LeaderboardType": "Ascending",
+    "LeaderboardType": "None",
     "GameNetworkType": "Multiplayer",
     "MaxPlayers": 32,
-    "GameCategory": "None"
+    "GameCategory": "Shooter",
+    "ControlModes": {
+      "Keyboard": true
+    }
   }
 }
