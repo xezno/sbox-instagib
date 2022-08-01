@@ -22,11 +22,12 @@
       "facepunch.tup_yourit"
     ],
     "MinPlayers": 1,
-    "MapSelect": 2,
-    "RankType": 0,
+    "MapSelect": "Tagged",
+    "RankType": "Increment",
     "PerMapRanking": false,
-    "LeaderboardType": 0,
-    "GameNetworkType": 0,
-    "MaxPlayers": 32
+    "LeaderboardType": "Ascending",
+    "GameNetworkType": "Multiplayer",
+    "MaxPlayers": 32,
+    "GameCategory": "None"
   }
 }
