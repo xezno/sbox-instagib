@@ -20,7 +20,7 @@ partial class Player
 		// Camera zoom
 		//
 		if ( IsZooming )
-			FovScale = 0.75f;
+			FovScale = 0.5f;
 
 		//
 		// Dash zoom
