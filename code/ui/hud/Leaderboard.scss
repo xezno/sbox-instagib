@@ -1,0 +1,50 @@
+﻿@import "/ui/_Theme.scss";
+
+.leaderboard {
+    position: absolute;
+    top: $safe-area-y;
+    left: 50%;
+    flex-direction: column;
+    width: 400px;
+    font-size: 20px;
+    transform: translate( -50% );
+}
+
+.leaderboard-entry {
+    flex-grow: 1;
+    background-color: $accent;
+    margin: 2px 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 20px;
+    border-radius: 5px;
+
+    .leaderboard-entry-name {
+        flex-grow: 1;
+        font-weight: 700;
+    }
+
+    .leaderboard-entry-avatar {
+        border-radius: 100%;
+        width: 32px;
+        aspect-ratio: 1;
+        margin: 0 8px;
+    }
+
+    .leaderboard-entry-place {
+        width: 30px;
+        padding-right: 20px;
+        margin-right: 5px;
+        border-right: 1px solid rgba( black, 0.5 );
+    }
+
+    .leaderboard-entry-score {
+        width: 30px;
+        padding-left: 20px;
+        margin-left: 5px;
+        border-left: 1px solid rgba( black, 0.5 );
+    }
+
+    label {
+    }
+}

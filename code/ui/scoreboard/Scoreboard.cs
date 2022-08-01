@@ -4,6 +4,20 @@ public class Scoreboard : Sandbox.UI.Scoreboard<ScoreboardEntry>
 {
 	private RealTimeSince timeSinceSorted;
 
+	public Scoreboard()
+	{
+		AddControls();
+	}
+
+	protected void AddControls()
+	{
+		var controls = new Panel( this, "controls" );
+		controls.Add.InputHint( InputButton.PrimaryAttack, "Fire" );
+		controls.Add.InputHint( InputButton.SecondaryAttack, "Zoom" );
+		controls.Add.InputHint( InputButton.Run, "Dash" );
+		controls.Add.InputHint( InputButton.Jump, "Jump / Double Jump" );
+	}
+
 	protected override void AddHeader()
 	{
 		Header = Add.Panel( "header" );
