@@ -64,5 +64,7 @@ class LeaderboardEntry : Panel
 		avatar.SetTexture( $"avatar:{client.PlayerId}" );
 		name.Text = client.Name;
 		score.Text = $"{client.GetInt( "kills" )}";
+
+		SetClass( "me", client.IsOwnedByLocalClient );
 	}
 }
