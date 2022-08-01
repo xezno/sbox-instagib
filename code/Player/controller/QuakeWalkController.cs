@@ -260,6 +260,7 @@ public partial class QuakeWalkController : BasePlayerController
 	[Net, Predicted] private float DashProgress { get; set; }
 	[Net, Predicted] private float DashRecharge { get; set; }
 	[Net, Predicted] public int DashesLeft { get; set; }
+	[Net, Predicted] private TimeSince TimeSinceLastDash { get; set; }
 
 	private Vector3 GetDashDirection()
 	{
@@ -277,7 +278,7 @@ public partial class QuakeWalkController : BasePlayerController
 
 	private void RechargeDashes()
 	{
-		if ( GroundEntity == null )
+		if ( TimeSinceLastDash < 1 )
 			return;
 
 		if ( DashesLeft >= DashCount )
@@ -330,6 +331,7 @@ public partial class QuakeWalkController : BasePlayerController
 		if ( IsDashing )
 		{
 			DashRecharge = 0;
+			TimeSinceLastDash = 0;
 			DashProgress += Time.Delta * 10f;
 			Position = DashStart.LerpTo( DashEnd, DashProgress );
 
