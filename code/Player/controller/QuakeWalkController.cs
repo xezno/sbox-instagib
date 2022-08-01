@@ -317,9 +317,10 @@ public partial class QuakeWalkController : BasePlayerController
 
 			if ( Pawn.IsClient )
 			{
-				var dashParticles = Particles.Create( "particles/speed_lines.vpcf", this.Position );
-				dashParticles.SetEntity( 0, Pawn, Pawn.Transform.PointToLocal( tr.EndPosition ) + Vector3.Up * 64f );
-				dashParticles.SetEntity( 1, Pawn, Pawn.Transform.PointToLocal( tr.EndPosition + dir * 512f ) + Vector3.Up * 64f );
+				var dashParticles = Particles.Create( "particles/speed_lines.vpcf", Pawn.Transform.PointToLocal( tr.EndPosition ) + Vector3.Up * 64f );
+
+				if ( dashParticles != null )
+					dashParticles.SetEntity( 1, Pawn, Pawn.Transform.PointToLocal( tr.EndPosition + dir * 512f ) + Vector3.Up * 64f );
 			}
 		}
 
@@ -362,7 +363,9 @@ public partial class QuakeWalkController : BasePlayerController
 			CanDoubleJump = false;
 
 			var boostParticles = Particles.Create( "particles/boost.vpcf", this.Position );
-			boostParticles.SetForward( 0, Vector3.Up );
+
+			if ( boostParticles != null )
+				boostParticles.SetForward( 0, Vector3.Up );
 		}
 
 		if ( Duck.IsActive )
