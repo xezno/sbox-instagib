@@ -8,7 +8,7 @@ public partial class KillFeed : Panel
 	{
 		Current = this;
 
-		StyleSheet.Load( "/ui/killfeed/KillFeed.scss" );
+		StyleSheet.Load( "/ui/hud/killfeed/KillFeed.scss" );
 	}
 
 	[InstagibEvent.Game.Kill]
