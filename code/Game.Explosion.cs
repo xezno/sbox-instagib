@@ -42,7 +42,7 @@ partial class InstagibGame
 				force *= 1.5f;
 				damageFrac *= 0.3f;
 
-				if ( owner is Player { Controller: WalkController { Duck.IsActive: true } } )
+				if ( owner is Player { Controller.Duck.IsActive: true } )
 				{
 					force *= 1.5f;
 				}
@@ -50,8 +50,8 @@ partial class InstagibGame
 
 			// Clear ground entity
 			ent.GroundEntity = null;
-			if ( ent is Player { Controller: WalkController playerController } )
-				playerController.ClearGroundEntity();
+			if ( ent is Player player )
+				player.Controller.GroundEntity = null;
 
 			// Apply impulse & damage
 			ent.ApplyAbsoluteImpulse( dir * force );

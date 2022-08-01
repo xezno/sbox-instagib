@@ -15,18 +15,21 @@ public partial class QuakeWalkController : BasePlayerController
 
 	[Net, Predicted] private Vector3 Impulse { get; set; }
 
-	private bool Walking { get; set; }
-	private bool GroundPlane { get; set; }
+	[Net, Predicted] private bool Walking { get; set; }
+	[Net, Predicted] private bool GroundPlane { get; set; }
+	[Net, Predicted] private bool CanDoubleJump { get; set; }
+
+	public Unstuck Unstuck { get; set; }
+	public Duck Duck { get; set; }
 	private TraceResult GroundTrace { get; set; }
-	private Unstuck Unstuck { get; set; }
-	private Duck Duck { get; set; }
-	private bool CanDoubleJump { get; set; }
 
 	public QuakeWalkController()
 	{
 		Duck = new( this );
 		Unstuck = new Unstuck( this );
+
 		CanDoubleJump = true;
+		DashesLeft = DashCount;
 	}
 
 	public void ApplyImpulse( Vector3 impulse )
@@ -144,6 +147,8 @@ public partial class QuakeWalkController : BasePlayerController
 				$"Position:                    {Position}\n" +
 				$"GroundEntity:                {GroundEntity}\n" +
 				$"CanDoubleJump:               {CanDoubleJump}\n" +
+				$"DashesLeft:                  {DashesLeft}\n" +
+				$"DashRecharge:                {DashRecharge}\n" +
 				$"TouchingTriggers:            {string.Join( ',', TouchingTriggers.Select( x => x.Name ) )}",
 				new Vector2( 360, 150 ), Time.Delta * 2.0f );
 
@@ -249,10 +254,12 @@ public partial class QuakeWalkController : BasePlayerController
 		}
 	}
 
-	private bool IsDashing { get; set; }
-	private Vector3 DashStart { get; set; }
-	private Vector3 DashEnd { get; set; }
-	private float DashProgress { get; set; }
+	[Net, Predicted] public bool IsDashing { get; set; }
+	[Net, Predicted] private Vector3 DashStart { get; set; }
+	[Net, Predicted] private Vector3 DashEnd { get; set; }
+	[Net, Predicted] private float DashProgress { get; set; }
+	[Net, Predicted] private float DashRecharge { get; set; }
+	[Net, Predicted] public int DashesLeft { get; set; }
 
 	private Vector3 GetDashDirection()
 	{
@@ -268,13 +275,31 @@ public partial class QuakeWalkController : BasePlayerController
 		return dir;
 	}
 
+	private void RechargeDashes()
+	{
+		if ( GroundEntity == null )
+			return;
+
+		if ( DashesLeft >= DashCount )
+			return;
+
+		DashRecharge += Time.Delta;
+
+		if ( DashRecharge > 1 )
+		{
+			DashesLeft++;
+			DashRecharge = 0;
+		}
+	}
+
 	private bool ApplyDash()
 	{
+		RechargeDashes();
+
 		// AG: this probably isn't a great way to do dashing
 		// (we're just setting the position manually) but
 		// it's consistent enough to be used here
-
-		if ( Input.Pressed( InputButton.Run ) )
+		if ( Input.Pressed( InputButton.Run ) && DashesLeft > 0 )
 		{
 			var dir = GetDashDirection();
 			var startPos = Position;
@@ -286,6 +311,7 @@ public partial class QuakeWalkController : BasePlayerController
 			DashEnd = tr.EndPosition;
 
 			DashProgress = 0f;
+			DashesLeft--;
 
 			IsDashing = true;
 
@@ -299,6 +325,7 @@ public partial class QuakeWalkController : BasePlayerController
 
 		if ( IsDashing )
 		{
+			DashRecharge = 0;
 			DashProgress += Time.Delta * 10f;
 			Position = DashStart.LerpTo( DashEnd, DashProgress );
 

@@ -54,6 +54,9 @@ partial class QuakeWalkController
 	[ConVar.Replicated( "gib_dashdistance" )]
 	public static float DashDistance { get; set; } = 256f;
 
+	[ConVar.Replicated( "gib_dashes" )]
+	public static int DashCount { get; set; } = 3;
+
 	public enum AccelModes
 	{
 		Quake2,

@@ -3,7 +3,7 @@
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class Player : AnimatedEntity
 {
-	[Net, Predicted] public PawnController Controller { get; set; }
+	[Net, Predicted] public QuakeWalkController Controller { get; set; }
 	[Net, Predicted] public PawnAnimator Animator { get; set; }
 	[Net, Predicted] public Entity ActiveChild { get; set; }
 	[Net] public float Shields { get; set; }

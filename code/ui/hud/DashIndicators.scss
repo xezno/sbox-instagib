@@ -1,0 +1,22 @@
+﻿@import "/ui/_Theme.scss";
+
+.dash-indicators {
+    width: 100px;
+    height: 2px;
+    position: absolute;
+    bottom: 250px;
+    left: 50%;
+    transform: translate( -50% );
+}
+
+.dash-indicator {
+    flex-grow: 1;
+    margin: 0 4px;
+    background-color: $accent;
+    box-shadow: 0 2px 2px rgba( black, 0.25 );
+    opacity: 0.1;
+
+    &.active {
+        opacity: 1;
+    }
+}
