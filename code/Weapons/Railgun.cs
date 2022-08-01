@@ -1,6 +1,6 @@
 ﻿namespace Instagib;
 
-[Title( "Instagib Railgun" ), Icon( "sports_martial_arts" )]
+[Title( "Railgun" ), Icon( "sports_martial_arts" )]
 [Library( "gib_weapon_railgun" )]
 public partial class Railgun : BaseCarriable
 {
@@ -128,7 +128,8 @@ public partial class Railgun : BaseCarriable
 		var damageInfo = DamageInfo
 			.FromBullet( tr.EndPosition, tr.Direction * 32, 100 )
 			.WithAttacker( Owner )
-			.WithBone( tr.Bone );
+			.WithBone( tr.Bone )
+			.WithWeapon( this );
 
 		damageInfo.Flags |= DamageFlags.AlwaysGib;
 

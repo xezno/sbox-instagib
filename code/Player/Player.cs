@@ -77,6 +77,15 @@ partial class Player
 		// Do a few things if this killed the player
 		if ( LifeState == LifeState.Dead )
 		{
+			// Add to kill feed
+			RpcKillFeed( To.Everyone,
+				info.Attacker?.Client.PlayerId ?? 0,
+				info.Attacker?.Client.Name ?? "",
+				Client?.PlayerId ?? 0,
+				Client?.Name ?? "",
+				DisplayInfo.For( info.Weapon ).Name ?? "died"
+			);
+
 			// Tell ourselves that we died
 			RpcOnDeath( To.Single( this ), info.Attacker?.NetworkIdent ?? -1 );
 			InstagibGame.UpdateLeaderboard( Client, -1 );
@@ -130,6 +139,28 @@ partial class Player
 	public bool CanMove()
 	{
 		return true;
+	}
+
+	[ConCmd.Server( "gib_test_killfeed" )]
+	public static void TestKillfeed()
+	{
+		var player = ConsoleSystem.Caller.Pawn as Player;
+		player.RpcKillFeed( To.Everyone,
+			0,
+			"Alex",
+			0,
+			"Alex",
+			"Railgun"
+		);
+	}
+
+	[ClientRpc]
+	public void RpcKillFeed( long attackerPlayerId, string attackerName, long victimSteamId, string victimName, string method )
+	{
+		var killData = new KillData( attackerPlayerId, attackerName, victimSteamId, victimName, method );
+		Event.Run( InstagibEvent.Game.Kill.Name, killData );
+
+		Log.Trace( $"RPC: {killData}" );
 	}
 
 	[ClientRpc]
