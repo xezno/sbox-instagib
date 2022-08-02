@@ -148,7 +148,7 @@ public partial class Railgun : BaseCarriable
 		var tr = Trace.Ray( start, end )
 				.UseHitboxes()
 				.WithAnyTags( "solid", "player" )
-				.WithoutTags( "debris", "water" )
+				.WithoutTags( "debris", "water", "clothing" )
 				.Ignore( Owner )
 				.Ignore( this )
 				.Size( radius )
