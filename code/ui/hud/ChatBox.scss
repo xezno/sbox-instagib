@@ -15,7 +15,6 @@ InstagibChatBox {
         opacity: 0;
         color: white;
         padding: 10px 15px;
-        backdrop-filter: brightness( 0.5 );
         flex-shrink: 0;
         flex-grow: 0;
         width: 100%;
@@ -38,7 +37,8 @@ InstagibChatBox {
 
     &.open {
         pointer-events: all;
-        background-color: black;
+        background-color: $background;
+        backdrop-filter: $backdrop-filter;
 
         textentry {
             opacity: 1;
