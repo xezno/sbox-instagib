@@ -7,7 +7,7 @@ partial class Player
 
 	private Particles grappleParticles;
 
-	private float PullStrength => 64f;
+	private float PullStrength => 16f;
 	private float BoostStrength => 4f;
 	private float AntiVelocityScale => 1f;
 	private float MaxDistance => 1500f;
@@ -68,8 +68,6 @@ partial class Player
 			.Run();
 
 		calcEndPos = tr.EndPosition;
-
-		DebugOverlay.TraceResult( tr, 5f );
 
 		return tr;
 	}

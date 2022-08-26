@@ -219,7 +219,7 @@ public partial class Railgun : BaseCarriable
 			var dist = dir.Length;
 
 			var distaceMul = 1.0f - Math.Clamp( dist / radius, 0, 1 );
-			var force = 600f * distaceMul;
+			var force = 400f * distaceMul;
 
 			if ( player.Controller is QuakeWalkController quakeWalkController )
 			{
@@ -227,7 +227,7 @@ public partial class Railgun : BaseCarriable
 				quakeWalkController.GroundEntity = null;
 			}
 
-			player.Velocity += Vector3.Reflect( dir.WithZ( -32 ), normal ).Normal * force;
+			player.Velocity += Vector3.Reflect( dir.WithZ( -16 ), normal ).Normal * force;
 		}
 
 		using ( Prediction.Off() )
