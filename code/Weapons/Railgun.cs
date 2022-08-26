@@ -103,6 +103,17 @@ public partial class Railgun : BaseCarriable
 		{
 			ViewModelEntity?.OnFire();
 		}
+
+		//
+		// Attack knockback
+		//
+		if ( IsServer )
+		{
+			if ( Owner is Player player )
+			{
+				player.Controller.ApplyImpulse( Owner.EyeRotation.Backward * 256f );
+			}
+		}
 	}
 
 	protected virtual void CreateShootEffects( Vector3 direction, Vector3 endPosition )
