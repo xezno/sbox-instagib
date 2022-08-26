@@ -44,5 +44,5 @@ public partial class JumpPad : PredictedTrigger
 //
 // Jumppad that works with Boomer maps
 //
-[Library( "shooter_jumppad" )]
+[Library( "boomer_jumppad" )]
 public class BoomerCompatibleJumpPad : JumpPad { }
