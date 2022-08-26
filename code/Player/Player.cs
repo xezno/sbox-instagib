@@ -26,7 +26,7 @@ partial class Player
 		Controller?.Simulate( cl, this, Animator );
 		SimulateCheckOutOfBounds( cl );
 		SimulateActiveChild( cl, ActiveChild );
-		SimulatePlayerUse( cl );
+		SimulateGrapple( cl );
 
 		if ( Input.Pressed( InputButton.View ) )
 		{

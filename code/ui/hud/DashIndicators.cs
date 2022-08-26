@@ -13,6 +13,8 @@ public class DashIndicators : Panel
 		{
 			CreateDashPanel( i );
 		}
+
+		BindClass( "visible", () => InstagibGame.SelectedMoveSet == InstagibGame.MoveSet.Modern );
 	}
 
 	private void CreateDashPanel( int index )

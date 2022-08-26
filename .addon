@@ -31,6 +31,31 @@
     "GameCategory": "Shooter",
     "ControlModes": {
       "Keyboard": true
+    },
+    "GameSettings": {
+      "gib_moveset": {
+        "DisplayType": "Choice",
+        "Choices": [
+          {
+            "Value": "Classic",
+            "Name": "Classic"
+          },
+          {
+            "Value": "Modern",
+            "Name": "Modern / Boomer"
+          }
+        ],
+        "ConVarName": "gib_moveset",
+        "DisplayName": "Movement Kit",
+        "DefaultValue": "Classic"
+      },
+      "gib_grapples_enabled": {
+        "DisplayType": "Boolean",
+        "Choices": [],
+        "ConVarName": "gib_grapples_enabled",
+        "DisplayName": "Enable Grapples?",
+        "DefaultValue": "false"
+      }
     }
   }
 }

@@ -11,6 +11,8 @@ public class Leaderboard : Panel
 
 		StyleSheet.Load( "/ui/hud/Leaderboard.scss" );
 
+		Add.Label( "Playing to 69", "playing-to" );
+
 		leader = new( this );
 		local = new( this );
 	}

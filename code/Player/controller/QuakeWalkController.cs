@@ -67,14 +67,7 @@ public partial class QuakeWalkController : BasePlayerController
 	{
 		if ( Impulse.Length > 0 )
 		{
-			// HACK: Cancel out Z velocity so that gravity doesn't affect any impulse added
-			// Velocity = Velocity.WithZ( 0 );
-
-			// HACK:
-			// Apply impulse directly (rather than additively) so that we go in the direction
-			// that the impulse wanted (prevents players doing stupid shit like launching
-			// themselves off the map because they weren't paying enough attention)
-			Velocity = Impulse;
+			Velocity += Impulse;
 			Impulse = Vector3.Zero;
 			SetGroundEntity( null );
 		}
@@ -295,6 +288,9 @@ public partial class QuakeWalkController : BasePlayerController
 
 	private bool ApplyDash()
 	{
+		if ( InstagibGame.SelectedMoveSet != InstagibGame.MoveSet.Modern )
+			return false;
+
 		RechargeDashes();
 
 		// AG: this probably isn't a great way to do dashing
@@ -366,6 +362,9 @@ public partial class QuakeWalkController : BasePlayerController
 		}
 		else if ( CanDoubleJump )
 		{
+			if ( InstagibGame.SelectedMoveSet != InstagibGame.MoveSet.Modern )
+				return false;
+
 			if ( !Input.Pressed( InputButton.Jump ) )
 				return false;
 

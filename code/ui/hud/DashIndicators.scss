@@ -7,6 +7,11 @@
     bottom: 250px;
     left: 50%;
     transform: translate( -50% );
+    opacity: 0;
+
+    &.visible {
+        opacity: 1;
+    }
 }
 
 .dash-indicator {
@@ -15,6 +20,7 @@
     background-color: white;
     box-shadow: 0 2px 2px rgba( black, 0.25 );
     opacity: 0.1;
+    box-shadow: 0 2px 2px rgba( black, 0.25 );
 
     &.active {
         opacity: 1;

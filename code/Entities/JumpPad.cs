@@ -35,7 +35,7 @@ public partial class JumpPad : PredictedTrigger
 		var direction = (target.Position - walkController.Position).Normal;
 
 		var impulse = (direction * Force) + (Vector3.Up * VerticalForce);
-		walkController.ApplyImpulse( impulse );
+		walkController.ApplyImpulse( impulse * 0.5f );
 
 		base.PredictedTouch( player );
 	}
