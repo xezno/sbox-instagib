@@ -303,13 +303,8 @@ public partial class QuakeWalkController : BasePlayerController
 		if ( Input.Pressed( InputButton.Run ) && DashesLeft > 0 )
 		{
 			var dir = GetDashDirection();
-			var startPos = Position;
-			var endPos = startPos + dir * DashDistance;
-
-			var tr = TraceBBox( startPos, endPos );
-
-			DashStart = tr.StartPosition;
-			DashEnd = tr.EndPosition;
+			DashStart = Position;
+			DashEnd = DashStart + dir * DashDistance;
 
 			DashProgress = 0f;
 			DashesLeft--;
@@ -318,12 +313,12 @@ public partial class QuakeWalkController : BasePlayerController
 
 			if ( Pawn.IsClient )
 			{
-				var dashParticles = Particles.Create( "particles/speed_lines.vpcf", Pawn.Transform.PointToLocal( tr.EndPosition ) + Vector3.Up * 64f );
+				var dashParticles = Particles.Create( "particles/speed_lines.vpcf", Pawn.Transform.PointToLocal( DashEnd ) + Vector3.Up * 64f );
 
 				if ( dashParticles != null )
 				{
-					dashParticles.SetEntity( 0, Pawn, Pawn.Transform.PointToLocal( tr.EndPosition ) + Vector3.Up * 64f );
-					dashParticles.SetEntity( 1, Pawn, Pawn.Transform.PointToLocal( tr.EndPosition + dir * 512f ) + Vector3.Up * 64f );
+					dashParticles.SetEntity( 0, Pawn, Pawn.Transform.PointToLocal( DashEnd ) + Vector3.Up * 64f );
+					dashParticles.SetEntity( 1, Pawn, Pawn.Transform.PointToLocal( DashEnd + dir * 512f ) + Vector3.Up * 64f );
 				}
 			}
 		}
@@ -333,12 +328,22 @@ public partial class QuakeWalkController : BasePlayerController
 			DashRecharge = 0;
 			TimeSinceLastDash = 0;
 			DashProgress += Time.Delta * 10f;
-			Position = DashStart.LerpTo( DashEnd, DashProgress );
 
-			if ( DashProgress >= 1.0f )
+			var targetPos = DashStart.LerpTo( DashEnd, DashProgress );
+			var tr = TraceBBox( Position, targetPos );
+
+			// If the trace hit something, bail out early cos we'll probably
+			// end up getting stuck in a wall otherwise
+			if ( tr.Hit || DashProgress > 1.0f )
 			{
 				IsDashing = false;
-				Velocity = (DashEnd - DashStart).Normal * Velocity.Length;
+
+				if ( !tr.Hit ) // Means we can nicely slide off anything we hit
+					Velocity = (DashEnd - DashStart).Normal * Velocity.Length;
+			}
+			else
+			{
+				Position = tr.EndPosition;
 			}
 
 			return true;
