@@ -22,7 +22,7 @@
       "facepunch.bm_dockyard"
     ],
     "MinPlayers": 1,
-    "MapSelect": "Tagged",
+    "MapSelect": "Unrestricted",
     "RankType": "None",
     "PerMapRanking": false,
     "LeaderboardType": "None",
