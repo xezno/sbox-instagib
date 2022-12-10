@@ -3,22 +3,20 @@
 [Library( "gib_crosshair_dot" )]
 public class DotCrosshair : ICrosshair
 {
-	void ICrosshair.RenderHud( TimeSince timeSinceAttack, Vector2 screenSize )
+	void ICrosshair.RenderHud( TimeSince timeSinceAttack )
 	{
-		var draw = Render.Draw2D;
-		var center = screenSize / 2.0f;
+		var center = Screen.Size / 2.0f;
 
 		//
 		// Properties
 		//
-		draw.Color = Color.White;
 
 		float t = timeSinceAttack.Relative.LerpInverse( 0, 0.5f );
 		t = Easing.EaseOut( t );
 
-		draw.Color = draw.Color.WithAlpha( t );
+		var color = Color.White.WithAlpha( t );
 
 		// Dot
-		draw.Circle( center, 1f );
+		GraphicsX.Circle( center, color, 1f );
 	}
 }

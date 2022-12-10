@@ -23,18 +23,11 @@ partial class Player
 
 		Corpse?.Delete();
 
-		Controller?.Simulate( cl, this, Animator );
+		Controller?.Simulate( cl, this );
 		SimulateCheckOutOfBounds( cl );
 		SimulateActiveChild( cl, ActiveChild );
 		SimulateGrapple( cl );
-
-		if ( Input.Pressed( InputButton.View ) )
-		{
-			if ( CameraMode is FirstPersonCamera )
-				CameraMode = new ThirdPersonCamera();
-			else
-				CameraMode = new FirstPersonCamera();
-		}
+		SimulateAnimation( Controller );
 	}
 
 	private void SimulateCheckOutOfBounds( Client cl )
@@ -50,7 +43,9 @@ partial class Player
 	{
 		base.FrameSimulate( cl );
 
-		Controller?.FrameSimulate( cl, this, Animator );
+		SimulateCamera();
+
+		Controller?.FrameSimulate( cl, this );
 
 		if ( Debug )
 		{
@@ -79,49 +74,32 @@ partial class Player
 		{
 			// Add to kill feed
 			RpcKillFeed( To.Everyone,
-				info.Attacker?.Client.PlayerId ?? 0,
+				info.Attacker?.Client.SteamId ?? 0,
 				info.Attacker?.Client.Name ?? "",
-				Client?.PlayerId ?? 0,
+				Client?.SteamId ?? 0,
 				Client?.Name ?? "",
 				DisplayInfo.For( info.Weapon ).Name ?? "died"
 			);
 
 			// Tell ourselves that we died
 			RpcOnDeath( To.Single( this ), info.Attacker?.NetworkIdent ?? -1 );
-			InstagibGame.UpdateLeaderboard( Client, -1 );
 
 			// Tell attacker that they killed us
 			if ( info.Attacker != null && info.Attacker.Client != null && info.Attacker != this )
 			{
-				InstagibGame.UpdateLeaderboard( info.Attacker.Client, 1 );
 				RpcOnKill( To.Single( info.Attacker ), this.NetworkIdent );
 
 				info.Attacker.Client.AddInt( "kills" );
 			}
 
-			// Gibbing & ragdolling
-			bool shouldGib = newHealth <= -50;
+			// Sometimes we might not get a damage position (i.e. if it was through
+			// an explosive or trigger) so we'll take the player's position and move
+			// up a little bit to make things still look okay
+			if ( info.Position == Vector3.Zero )
+				info.Position = Position + new Vector3( 0, 0, 32 );
 
-			if ( info.Flags.HasFlag( DamageFlags.AlwaysGib ) )
-				shouldGib = true;
-
-			if ( info.Flags.HasFlag( DamageFlags.DoNotGib ) )
-				shouldGib = false;
-
-			if ( shouldGib )
-			{
-				// Sometimes we might not get a damage position (i.e. if it was through
-				// an explosive or trigger) so we'll take the player's position and move
-				// up a little bit to make things still look okay
-				if ( info.Position == Vector3.Zero )
-					info.Position = Position + new Vector3( 0, 0, 32 );
-
-				BecomeGibsOnClient( To.Everyone, info.Position );
-			}
-			else
-			{
-				BecomeRagdollOnClient( To.Everyone );
-			}
+			// Gibbing
+			BecomeGibsOnClient( To.Everyone, info.Position );
 		}
 		else
 		{
@@ -195,11 +173,11 @@ partial class Player
 		Event.Run( InstagibEvent.Player.DidDamage.Name, position, damageAmount );
 	}
 
-	public void RenderHud( Vector2 screenSize )
+	public void RenderHud()
 	{
 		if ( ActiveChild is Railgun railgun )
 		{
-			railgun.RenderHud( screenSize );
+			railgun.RenderHud();
 		}
 	}
 }

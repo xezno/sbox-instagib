@@ -13,7 +13,7 @@ public class PredictedTrigger : BaseTrigger
 		EnableTouchPersists = true;
 	}
 
-	[Event.Frame]
+	[Event.Client.Frame]
 	public void OnFrame()
 	{
 		if ( !DrawBounds )

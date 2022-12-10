@@ -17,7 +17,7 @@ public partial class KillFeed : Panel
 		Log.Trace( $"KillFeed: {killData}" );
 
 		var e = Current.AddChild<KillFeedEntry>();
-		e.SetClass( "me", killData.AttackerPlayerID == (Local.Client?.PlayerId) || killData.VictimPlayerID == (Local.Client?.PlayerId) );
+		e.SetClass( "me", killData.AttackerPlayerID == (Local.Client?.SteamId) || killData.VictimPlayerID == (Local.Client?.SteamId) );
 
 		e.Left.Text = killData.AttackerName;
 		e.Method.Text = killData.Method;

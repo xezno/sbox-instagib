@@ -57,7 +57,6 @@ partial class InstagibGame
 			ent.ApplyAbsoluteImpulse( dir * force );
 			ent.TakeDamage( DamageInfo.Generic( damage * damageFrac )
 									  .WithAttacker( owner )
-									  .WithFlag( DamageFlags.AlwaysGib )
 									  .WithPosition( ent.Position + ent.CollisionBounds.Center ) );
 		}
 

@@ -1,6 +1,4 @@
-﻿using Sandbox.Hooks;
-
-namespace Instagib;
+﻿namespace Instagib;
 
 public partial class InstagibChatBox : Panel
 {
@@ -23,13 +21,12 @@ public partial class InstagibChatBox : Panel
 		Input.AddEventListener( "onblur", () => Close() );
 		Input.AcceptsFocus = true;
 		Input.AllowEmojiReplace = true;
-
-		Chat.OnOpenChat += Open;
 	}
 
 	void Open()
 	{
 		AddClass( "open" );
+
 		Input.Focus();
 
 		foreach ( ChatEntry message in Canvas.Children )
@@ -121,6 +118,6 @@ public partial class InstagibChatBox : Panel
 		string className = "";
 
 		Log.Info( $"{ConsoleSystem.Caller}: {message}" );
-		AddChatEntry( To.Everyone, ConsoleSystem.Caller.Name, message, $"avatar:{ConsoleSystem.Caller.PlayerId}", className );
+		AddChatEntry( To.Everyone, ConsoleSystem.Caller.Name, message, $"avatar:{ConsoleSystem.Caller.SteamId}", className );
 	}
 }

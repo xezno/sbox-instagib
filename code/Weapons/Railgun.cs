@@ -121,7 +121,7 @@ public partial class Railgun : BaseCarriable
 		{
 			if ( Owner is Player player )
 			{
-				player.Controller.ApplyImpulse( Owner.EyeRotation.Backward * 256f );
+				player.Controller.ApplyImpulse( -Owner.AimRay.Forward * 256f );
 			}
 		}
 	}
@@ -152,21 +152,14 @@ public partial class Railgun : BaseCarriable
 			.WithBone( tr.Bone )
 			.WithWeapon( this );
 
-		damageInfo.Flags |= DamageFlags.AlwaysGib;
-
 		return damageInfo;
 	}
 
 	public virtual TraceResult TraceBullet()
 	{
-		Vector3 start = Owner.EyePosition;
-		Vector3 end = Owner.EyePosition + Owner.EyeRotation.Forward * 8192f;
-
 		float radius = 2.0f;
 
-		bool inWater = Map.Physics.IsPointWater( start );
-
-		var tr = Trace.Ray( start, end )
+		var tr = Trace.Ray( Owner.AimRay, 8192f )
 				.UseHitboxes()
 				.WithAnyTags( "solid", "player" )
 				.WithoutTags( "debris", "water", "clothing" )
@@ -240,10 +233,7 @@ public partial class Railgun : BaseCarriable
 
 	public void AttackSecondary()
 	{
-		var start = Owner.EyePosition;
-		var end = start + Owner.EyeRotation.Forward * 256f;
-
-		var tr = Trace.Ray( start, end )
+		var tr = Trace.Ray( AimRay, 256f )
 				.UseHitboxes()
 				.WithAnyTags( "solid", "player" )
 				.WithoutTags( "debris", "water" )
@@ -258,15 +248,15 @@ public partial class Railgun : BaseCarriable
 		RocketJump( tr.EndPosition, tr.Normal );
 	}
 
-	public virtual void RenderHud( Vector2 screenSize )
+	public virtual void RenderHud()
 	{
-		Crosshair?.RenderHud( TimeSincePrimaryAttack, screenSize );
+		Crosshair?.RenderHud( TimeSincePrimaryAttack );
 	}
 
-	public override void SimulateAnimator( PawnAnimator anim )
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
 	{
-		anim.SetAnimParameter( "holdtype", 3 );
-		anim.SetAnimParameter( "aim_body_weight", 1.0f );
-		anim.SetAnimParameter( "holdtype_handedness", 0 );
+		base.SimulateAnimator( anim );
+
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.Shotgun;
 	}
 }

@@ -37,11 +37,6 @@ public partial class QuakeWalkController : BasePlayerController
 		Impulse += impulse;
 	}
 
-	public override void FrameSimulate()
-	{
-		EyeRotation = Input.Rotation;
-	}
-
 	public virtual void SetBBox( Vector3 mins, Vector3 maxs )
 	{
 		if ( this.mins == mins && this.maxs == maxs )
@@ -75,9 +70,6 @@ public partial class QuakeWalkController : BasePlayerController
 
 	public override void Simulate()
 	{
-		EyeRotation = Input.Rotation;
-		EyeLocalPosition = Vector3.Up * (EyeHeight * Pawn.Scale);
-
 		if ( SpeedLimit > 0f )
 		{
 			if ( Velocity.Length > SpeedLimit )
@@ -261,7 +253,7 @@ public partial class QuakeWalkController : BasePlayerController
 
 		if ( dir.Length.AlmostEqual( 0 ) )
 		{
-			dir = Pawn.EyeRotation.Forward;
+			dir = Pawn.AimRay.Forward;
 		}
 
 		dir = dir.WithZ( 0 ).Normal;
@@ -408,8 +400,13 @@ public partial class QuakeWalkController : BasePlayerController
 
 	private Vector3 GetWishDirection()
 	{
-		float fMove = Input.Forward;
-		float sMove = Input.Left;
+		if ( Pawn is not Player player )
+			return 0;
+
+		var vMove = player.InputDirection * player.ViewAngles.ToRotation();
+
+		float fMove = vMove.x;
+		float sMove = vMove.y;
 
 		Vector3 forward = EyeRotation.Forward.WithZ( 0 );
 		Vector3 left = EyeRotation.Left.WithZ( 0 );

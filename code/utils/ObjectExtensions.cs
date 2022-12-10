@@ -2,6 +2,6 @@
 {
 	public static string GetLibraryName( this object obj )
 	{
-		return TypeLibrary.GetDescription( obj.GetType() )?.GetAttribute<LibraryAttribute>()?.Name ?? "none";
+		return TypeLibrary.GetType( obj.GetType() )?.GetAttribute<LibraryAttribute>()?.Name ?? "none";
 	}
 }

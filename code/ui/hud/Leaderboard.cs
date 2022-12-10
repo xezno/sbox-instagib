@@ -63,7 +63,7 @@ class LeaderboardEntry : Panel
 		Style.Display = DisplayMode.Flex;
 
 		place.Text = $"{client.GetPlacement()}";
-		avatar.SetTexture( $"avatar:{client.PlayerId}" );
+		avatar.SetTexture( $"avatar:{client.SteamId}" );
 		name.Text = client.Name;
 		score.Text = $"{client.GetInt( "kills" )}";
 

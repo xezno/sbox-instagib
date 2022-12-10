@@ -3,10 +3,9 @@
 [Library( "gib_crosshair_circle" )]
 public class CircleCrosshair : ICrosshair
 {
-	void ICrosshair.RenderHud( TimeSince timeSinceAttack, Vector2 screenSize )
+	void ICrosshair.RenderHud( TimeSince timeSinceAttack )
 	{
-		var draw = Render.Draw2D;
-		var center = screenSize / 2.0f;
+		var center = Screen.Size / 2.0f;
 
 		//
 		// Properties
@@ -21,7 +20,7 @@ public class CircleCrosshair : ICrosshair
 		float t = timeSinceAttack.Relative.LerpInverse( 0, 1.5f );
 		t = Easing.EaseOut( t );
 
-		draw.Color = Color.White.WithAlpha( t );
+		var color = Color.White.WithAlpha( t );
 		radius *= 2.0f.LerpTo( 1.0f, t );
 		gap *= 2.0f.LerpTo( 0.0f, t );
 
@@ -33,10 +32,11 @@ public class CircleCrosshair : ICrosshair
 		{
 			float startAngle = gap + (interval * i);
 			float endAngle = (interval * (i + 1)) - gap;
-			draw.CircleEx( center, radius, radius - 1f, startAngle: startAngle, endAngle: endAngle );
+
+			GraphicsX.Circle( center, radius, radius - 1f, color, startAngle: startAngle, endAngle: endAngle );
 		}
 
 		// Dot
-		draw.Circle( center, 1f );
+		GraphicsX.Circle( center, color, 1f );
 	}
 }

@@ -11,9 +11,15 @@ partial class Player
 	// TODO: conditions for zooming
 	public bool IsZooming => Input.Down( InputButton.SecondaryAttack );
 
-	public override void PostCameraSetup( ref CameraSetup setup )
+	private void SimulateCamera()
 	{
-		var defaultFieldOfView = setup.FieldOfView;
+		Camera.Rotation = ViewAngles.ToRotation();
+		Camera.Position = EyePosition;
+		Camera.FirstPersonViewer = this;
+		Camera.ZNear = 1f;
+		Camera.ZFar = 5000.0f;
+
+		var defaultFieldOfView = Screen.CreateVerticalFieldOfView( Local.UserPreference.FieldOfView );
 		FovScale = 1.0f;
 
 		//
@@ -32,13 +38,7 @@ partial class Player
 		// Apply desired FOV over time
 		//
 		Fov = Fov.LerpTo( FovScale * defaultFieldOfView, ZoomSpeed * Time.Delta );
-		setup.FieldOfView = Fov;
-
-		//
-		// Fire PostCameraSetup on active weapon so that it can do any custom stuff too
-		//
-		if ( ActiveChild != null )
-			ActiveChild.PostCameraSetup( ref setup );
+		Camera.FieldOfView = Fov;
 
 		//
 		// View bobbing
@@ -49,7 +49,7 @@ partial class Player
 		if ( GroundEntity != null )
 			WalkBob += Time.Delta * 20.0f * t;
 
-		var offset = Bobbing.CalculateOffset( WalkBob, t, 2.0f ) * setup.Rotation;
-		setup.Position += offset;
+		var offset = Bobbing.CalculateOffset( WalkBob, t, 2.0f ) * Camera.Rotation;
+		Camera.Position += offset;
 	}
 }

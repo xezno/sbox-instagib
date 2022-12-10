@@ -24,17 +24,17 @@ public class ViewModel : BaseViewModel
 
 	// ============================================================
 
-	public override void PostCameraSetup( ref CameraSetup camSetup )
+	public override void PlaceViewmodel()
 	{
-		base.PostCameraSetup( ref camSetup );
+		base.PlaceViewmodel();
 
-		TargetRotation = Rotation.Lerp( TargetRotation, camSetup.Rotation, 33f * Time.Delta );
-		Rotation = Rotation.Lerp( camSetup.Rotation, TargetRotation, 0.1f );
+		TargetRotation = Rotation.Lerp( TargetRotation, Camera.Rotation, 33f * Time.Delta );
+		Rotation = Rotation.Lerp( Camera.Rotation, TargetRotation, 0.1f );
 
 		TargetFov = DefaultFov;
 
-		BuildWalkEffects( ref camSetup );
-		ApplyEffects( ref camSetup );
+		BuildWalkEffects();
+		ApplyEffects();
 
 		if ( Debug )
 		{
@@ -47,10 +47,9 @@ public class ViewModel : BaseViewModel
 		}
 	}
 
-	private void ApplyEffects( ref CameraSetup camSetup )
+	private void ApplyEffects()
 	{
 		Fov = Fov.LerpTo( TargetFov, FovLerpRate * Time.Delta );
-		camSetup.ViewModel.FieldOfView = Fov;
 
 		Offset = Offset.LerpTo( TargetOffset, OffsetLerpRate * Time.Delta );
 		Position += -Offset * Rotation;
@@ -58,6 +57,8 @@ public class ViewModel : BaseViewModel
 		Position += Rotation.Backward * Kickback;
 
 		Kickback = Kickback.LerpTo( 0.0f, Time.Delta * 10f );
+
+		Camera.Main.SetViewModelCamera( Fov );
 	}
 
 	public void OnFire()
@@ -65,7 +66,7 @@ public class ViewModel : BaseViewModel
 		Kickback += 32f;
 	}
 
-	private void BuildWalkEffects( ref CameraSetup camSetup )
+	private void BuildWalkEffects()
 	{
 		if ( Owner is Player player )
 		{
@@ -76,7 +77,7 @@ public class ViewModel : BaseViewModel
 				WalkBob += Time.Delta * 20.0f * t;
 
 			float factor = 2.0f;
-			TargetOffset = Bobbing.CalculateOffset( WalkBob, t, factor ) * camSetup.Rotation;
+			TargetOffset = Bobbing.CalculateOffset( WalkBob, t, factor ) * Camera.Rotation;
 			TargetOffset += new Vector3( t, 0, t / 2f ) * factor;
 
 			if ( player.IsZooming )

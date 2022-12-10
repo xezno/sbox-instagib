@@ -33,11 +33,11 @@ public class BaseCarriable : AnimatedEntity
 		EnableDrawing = false;
 	}
 
-	public virtual void SimulateAnimator( PawnAnimator anim )
+	public virtual void SimulateAnimator( CitizenAnimationHelper anim )
 	{
-		anim.SetAnimParameter( "holdtype", 1 );
-		anim.SetAnimParameter( "aim_body_weight", 1.0f );
-		anim.SetAnimParameter( "holdtype_handedness", 0 );
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.Pistol;
+		anim.AimBodyWeight = 1.0f;
+		anim.Handedness = 0;
 	}
 
 	public virtual void OnCarryDrop( Entity dropper )
@@ -58,15 +58,6 @@ public class BaseCarriable : AnimatedEntity
 	public virtual void ActiveStart( Entity ent )
 	{
 		EnableDrawing = true;
-
-		if ( ent is Player player )
-		{
-			var animator = player.Animator;
-			if ( animator != null )
-			{
-				SimulateAnimator( animator );
-			}
-		}
 
 		//
 		// If we're the local player (clientside) create viewmodel

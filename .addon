@@ -3,6 +3,7 @@
   "Type": "game",
   "Org": "alex",
   "Ident": "instagib",
+  "Tags": "",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
@@ -14,7 +15,6 @@
   ],
   "HasCode": true,
   "CodePath": "code",
-  "RootNamespace": "Instagib",
   "Metadata": {
     "MapList": [
       "gumby.mapstagib",
@@ -56,6 +56,36 @@
         "DisplayName": "Enable Grapples?",
         "DefaultValue": "false"
       }
-    }
+    },
+    "DefaultLeaderboards": null,
+    "PackageSettings": [
+      {
+        "DisplayType": "Choice",
+        "Choices": [
+          {
+            "Value": "Classic",
+            "Name": "Classic"
+          },
+          {
+            "Value": "Modern",
+            "Name": "Modern"
+          }
+        ],
+        "ConVarName": "gib_moveset",
+        "DisplayName": "Move set",
+        "DefaultValue": "Modern",
+        "Description": "",
+        "Group": "Movement"
+      },
+      {
+        "DisplayType": "Boolean",
+        "Choices": [],
+        "ConVarName": "gib_grapples_enabled",
+        "DisplayName": "Grapples Enabled?",
+        "DefaultValue": "true",
+        "Description": "",
+        "Group": "Movement"
+      }
+    ]
   }
 }
