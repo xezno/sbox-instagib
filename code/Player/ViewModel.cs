@@ -28,6 +28,13 @@ public class ViewModel : BaseViewModel
 	{
 		base.PlaceViewmodel();
 
+		// Shit way of hiding viewmodel
+		if ( Owner.LifeState != LifeState.Alive )
+		{
+			Position = new Vector3( 1000000 );
+			return;
+		}
+
 		TargetRotation = Rotation.Lerp( TargetRotation, Camera.Rotation, 33f * Time.Delta );
 		Rotation = Rotation.Lerp( Camera.Rotation, TargetRotation, 0.1f );
 

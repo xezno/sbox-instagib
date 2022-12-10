@@ -13,6 +13,14 @@ partial class Player
 
 	private void SimulateCamera()
 	{
+		if ( LifeState != LifeState.Alive )
+		{
+			var direction = (Position - Camera.Position).Normal;
+			Camera.Rotation = Rotation.Slerp( Camera.Rotation, Rotation.LookAt( direction ), Time.Delta );
+
+			return;
+		}
+
 		Camera.Rotation = ViewAngles.ToRotation();
 		Camera.Position = EyePosition;
 		Camera.FirstPersonViewer = this;
