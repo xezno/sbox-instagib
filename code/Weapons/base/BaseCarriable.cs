@@ -25,7 +25,7 @@ public class BaseCarriable : AnimatedEntity
 
 	public virtual void OnCarryStart( Entity carrier )
 	{
-		if ( IsClient ) return;
+		if ( Game.IsClient ) return;
 
 		SetParent( carrier, true );
 		Owner = carrier;
@@ -42,7 +42,7 @@ public class BaseCarriable : AnimatedEntity
 
 	public virtual void OnCarryDrop( Entity dropper )
 	{
-		if ( IsClient ) return;
+		if ( Game.IsClient ) return;
 
 		SetParent( null );
 		Owner = null;
@@ -85,7 +85,7 @@ public class BaseCarriable : AnimatedEntity
 
 		EnableDrawing = false;
 
-		if ( IsClient )
+		if ( Game.IsClient )
 		{
 			DestroyViewModel();
 			DestroyHudElements();
@@ -96,7 +96,7 @@ public class BaseCarriable : AnimatedEntity
 	{
 		base.OnDestroy();
 
-		if ( IsClient && ViewModelEntity.IsValid() )
+		if ( Game.IsClient && ViewModelEntity.IsValid() )
 		{
 			DestroyViewModel();
 			DestroyHudElements();

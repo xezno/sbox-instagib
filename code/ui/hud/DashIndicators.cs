@@ -24,7 +24,7 @@ public class DashIndicators : Panel
 
 		dashPanel.BindClass( "active", () =>
 		{
-			if ( Local.Pawn is not Player { Controller: QuakeWalkController quakeWalkController } )
+			if ( Game.LocalPawn is not Player { Controller: QuakeWalkController quakeWalkController } )
 				return false;
 
 			return quakeWalkController.DashesLeft > index;

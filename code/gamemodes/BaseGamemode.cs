@@ -27,10 +27,10 @@ public partial class BaseGamemode : BaseNetworkable
 		if ( Debug )
 		{
 			var pos = new Vector2( 350, 450 );
-			if ( Host.IsServer )
+			if ( Game.IsServer )
 				pos.y += 100;
 
-			var realm = Host.IsServer ? "Server" : "Client";
+			var realm = Game.IsServer ? "Server" : "Client";
 
 			DebugOverlay.ScreenText( $"[GAMEMODE]\n" +
 				$"Realm:                       {realm}\n" +

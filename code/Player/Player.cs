@@ -16,7 +16,7 @@ partial class Player
 		}
 	}
 
-	public override void Simulate( Client cl )
+	public override void Simulate( IClient cl )
 	{
 		if ( LifeState == LifeState.Dead )
 			return;
@@ -30,16 +30,16 @@ partial class Player
 		SimulateAnimation( Controller );
 	}
 
-	private void SimulateCheckOutOfBounds( Client cl )
+	private void SimulateCheckOutOfBounds( IClient cl )
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		if ( Position.z < -1000 )
 			TakeDamage( DamageInfo.Generic( 10000f ) );
 	}
 
-	public override void FrameSimulate( Client cl )
+	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
 
@@ -107,7 +107,7 @@ partial class Player
 		}
 
 		// Tell attacker that they did damage to us
-		if ( IsServer && info.Attacker != this )
+		if ( Game.IsServer && info.Attacker != this )
 		{
 			RpcDamageDealt( To.Single( info.Attacker ),
 				LifeState == LifeState.Dead, info.Position, info.Damage, NetworkIdent );

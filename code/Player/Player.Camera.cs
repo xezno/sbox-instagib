@@ -27,7 +27,7 @@ partial class Player
 		Camera.ZNear = 1f;
 		Camera.ZFar = 5000.0f;
 
-		var defaultFieldOfView = Screen.CreateVerticalFieldOfView( Local.UserPreference.FieldOfView );
+		var defaultFieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView );
 		FovScale = 1.0f;
 
 		//

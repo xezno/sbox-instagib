@@ -1,4 +1,6 @@
-﻿namespace Instagib;
+﻿using Sandbox.Diagnostics;
+
+namespace Instagib;
 
 public partial class InstagibChatBox : Panel
 {
@@ -94,7 +96,7 @@ public partial class InstagibChatBox : Panel
 		Instance?.AddEntry( name, message, avatar, className );
 
 		// Only log clientside if we're not the listen server host
-		if ( !Global.IsListenServer )
+		if ( !Game.IsListenServer )
 		{
 			Log.Info( $"{name}: {message}" );
 		}

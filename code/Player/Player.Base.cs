@@ -39,7 +39,7 @@ public partial class Player : AnimatedEntity
 
 	}
 
-	public Player( Client cl ) : this()
+	public Player( IClient cl ) : this()
 	{
 		clothingContainer = new ClothingContainer();
 		clothingContainer.LoadFromClient( cl );
@@ -133,7 +133,7 @@ public partial class Player : AnimatedEntity
 		if ( LifeState != LifeState.Alive )
 			return;
 
-		if ( !IsClient )
+		if ( !Game.IsClient )
 			return;
 
 		if ( timeSinceLastFootstep < 0.2f )
@@ -159,7 +159,7 @@ public partial class Player : AnimatedEntity
 
 	public override void StartTouch( Entity other )
 	{
-		if ( IsClient ) return;
+		if ( Game.IsClient ) return;
 
 		if ( other is PickupTrigger )
 		{
@@ -168,7 +168,7 @@ public partial class Player : AnimatedEntity
 		}
 	}
 
-	public virtual void SimulateActiveChild( Client cl, Entity child )
+	public virtual void SimulateActiveChild( IClient cl, Entity child )
 	{
 		if ( LastActiveChild != ActiveChild )
 		{
@@ -214,7 +214,7 @@ public partial class Player : AnimatedEntity
 		animHelper.AimAngle = rotation;
 		animHelper.FootShuffle = shuffle;
 		animHelper.DuckLevel = MathX.Lerp( animHelper.DuckLevel, controller.HasTag( "ducked" ) ? 1 : 0, Time.Delta * 10.0f );
-		animHelper.VoiceLevel = (Host.IsClient && Client.IsValid()) ? Client.TimeSinceLastVoice < 0.5f ? Client.VoiceLevel : 0.0f : 0.0f;
+		animHelper.VoiceLevel = (Game.IsClient && Client.IsValid()) ? Client.Voice.LastHeard < 0.5f ? Client.Voice.CurrentLevel : 0.0f : 0.0f;
 		animHelper.IsGrounded = GroundEntity != null;
 		animHelper.IsSitting = controller.HasTag( "sitting" );
 		animHelper.IsNoclipping = controller.HasTag( "noclip" );

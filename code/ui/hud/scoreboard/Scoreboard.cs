@@ -11,7 +11,7 @@ public partial class Scoreboard : Panel
 	private RealTimeSince timeSinceSorted;
 
 	public Panel Canvas { get; protected set; }
-	Dictionary<Client, ScoreboardEntry> Rows = new();
+	Dictionary<IClient, ScoreboardEntry> Rows = new();
 
 	public Panel Header { get; protected set; }
 
@@ -27,11 +27,11 @@ public partial class Scoreboard : Panel
 	}
 	protected void AddControls()
 	{
-		var controls = new Panel( this, "controls" );
-		controls.Add.InputHint( InputButton.PrimaryAttack, "Fire" );
-		controls.Add.InputHint( InputButton.SecondaryAttack, "Zoom" );
-		controls.Add.InputHint( InputButton.Run, "Dash" );
-		controls.Add.InputHint( InputButton.Jump, "Jump / Double Jump" );
+		// var controls = new Panel( this, "controls" );
+		// controls.Add.InputHint( InputButton.PrimaryAttack, "Fire" );
+		// controls.Add.InputHint( InputButton.SecondaryAttack, "Zoom" );
+		// controls.Add.InputHint( InputButton.Run, "Dash" );
+		// controls.Add.InputHint( InputButton.Jump, "Jump / Double Jump" );
 	}
 
 	public override void Tick()
@@ -46,13 +46,13 @@ public partial class Scoreboard : Panel
 		//
 		// Clients that were added
 		//
-		foreach ( var client in Client.All.Except( Rows.Keys ) )
+		foreach ( var client in Game.Clients.Except( Rows.Keys ) )
 		{
 			var entry = AddClient( client );
 			Rows[client] = entry;
 		}
 
-		foreach ( var client in Rows.Keys.Except( Client.All ) )
+		foreach ( var client in Rows.Keys.Except( Game.Clients ) )
 		{
 			if ( Rows.TryGetValue( client, out var row ) )
 			{
@@ -87,7 +87,7 @@ public partial class Scoreboard : Panel
 		Header.Add.Label( "Ping", "ping" );
 	}
 
-	protected virtual ScoreboardEntry AddClient( Client entry )
+	protected virtual ScoreboardEntry AddClient( IClient entry )
 	{
 		var p = Canvas.AddChild<ScoreboardEntry>();
 		p.Client = entry;

@@ -7,10 +7,10 @@ public partial class Player
 	/// <summary>
 	/// This should be called somewhere in your player's tick to allow them to use entities
 	/// </summary>
-	protected virtual void SimulatePlayerUse( Client cl )
+	protected virtual void SimulatePlayerUse( IClient cl )
 	{
 		// This is serverside only
-		if ( !Host.IsServer ) return;
+		if ( !Game.IsServer ) return;
 
 		// Turn prediction off
 		using ( Prediction.Off() )

@@ -24,7 +24,7 @@ public partial class Railgun : BaseCarriable
 
 	public override void CreateViewModel()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		if ( string.IsNullOrEmpty( "weapons/railgun/models/railgun.vmdl" ) )
 			return;
@@ -47,7 +47,7 @@ public partial class Railgun : BaseCarriable
 	[Net, Predicted] public TimeSince TimeSincePrimaryAttack { get; set; }
 	[Net, Predicted] public TimeSince TimeSinceSecondaryAttack { get; set; }
 
-	public override void Simulate( Client player )
+	public override void Simulate( IClient player )
 	{
 		if ( !Owner.IsValid() )
 			return;
@@ -117,7 +117,7 @@ public partial class Railgun : BaseCarriable
 		//
 		// Attack knockback
 		//
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			if ( Owner is Player player )
 			{
@@ -198,7 +198,7 @@ public partial class Railgun : BaseCarriable
 	{
 		ViewModelEntity?.OnFire();
 
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		var sourcePos = pos;

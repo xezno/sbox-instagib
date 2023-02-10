@@ -26,10 +26,10 @@ public class Leaderboard : Panel
 
 		leader.SetPlayer( leaderClient );
 
-		if ( leaderClient == Local.Client )
+		if ( leaderClient == Game.LocalClient )
 			local.SetPlayer( orderedClients.Skip( 1 ).FirstOrDefault() );
 		else
-			local.SetPlayer( Local.Client );
+			local.SetPlayer( Game.LocalClient );
 	}
 }
 
@@ -52,7 +52,7 @@ class LeaderboardEntry : Panel
 		Parent = parent;
 	}
 
-	public void SetPlayer( Client client )
+	public void SetPlayer( IClient client )
 	{
 		if ( client == null )
 		{

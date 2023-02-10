@@ -28,7 +28,7 @@ public partial class InstagibGame : Sandbox.GameManager
 
 	public InstagibGame()
 	{
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			_ = new Hud();
 			Gamemode = new InstagibGamemode();
@@ -46,13 +46,13 @@ public partial class InstagibGame : Sandbox.GameManager
 		Log.Trace( $"Setting gamemode to {game.Gamemode}" );
 	}
 
-	public override void Simulate( Client cl )
+	public override void Simulate( IClient cl )
 	{
 		Gamemode?.Simulate();
 		base.Simulate( cl );
 	}
 
-	public override void ClientJoined( Client client )
+	public override void ClientJoined( IClient client )
 	{
 		base.ClientJoined( client );
 
@@ -66,7 +66,7 @@ public partial class InstagibGame : Sandbox.GameManager
 	{
 		base.RenderHud();
 
-		if ( Local.Pawn is not Player player )
+		if ( Game.LocalPawn is not Player player )
 			return;
 
 		player.RenderHud();

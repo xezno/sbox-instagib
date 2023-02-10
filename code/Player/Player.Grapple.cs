@@ -22,7 +22,7 @@ partial class Player
 		}
 	}
 
-	public void SimulateGrapple( Client cl )
+	public void SimulateGrapple( IClient cl )
 	{
 		if ( !InstagibGame.GrapplesEnabled )
 			return;
@@ -90,7 +90,7 @@ partial class Player
 		{
 			ClearGroundEntity();
 
-			if ( IsServer )
+			if ( Game.IsServer )
 			{
 				GrappleTarget = calcEndPos;
 
@@ -113,7 +113,7 @@ partial class Player
 
 	private void DeleteParticles()
 	{
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			grappleParticles?.Destroy( true );
 		}

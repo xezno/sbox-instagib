@@ -28,7 +28,7 @@ public class InstagibGamemode : BaseGamemode
 		{
 			if ( player.LifeState == LifeState.Dead )
 			{
-				if ( player.TimeSinceDied > 3 && Host.IsServer )
+				if ( player.TimeSinceDied > 3 && Game.IsServer )
 				{
 					RespawnPlayer( player );
 				}

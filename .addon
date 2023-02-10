@@ -11,7 +11,9 @@
     "/fonts/*",
     "/code/ui/*",
     "/code/ui/elements/*",
-    "/code/ui/menus/*"
+    "/code/ui/menus/*",
+    "/ui/*",
+    "/ui/misc/*"
   ],
   "HasCode": true,
   "CodePath": "code",
@@ -86,6 +88,17 @@
         "Description": "",
         "Group": "Movement"
       }
-    ]
+    ],
+    "Summary": "Short for \u0022instant giblets\u0022, referring to a one-hit kill where the victim is turned into giblets.",
+    "Description": "\uD83D\uDD2B \uD835\uDE04\uD835\uDDF5\uD835\uDDEE\uD835\uDE01 \uD835\uDDF6\uD835\uDE00 \uD835\uDDF6\uD835\uDDFB\uD835\uDE00\uD835\uDE01\uD835\uDDEE\uD835\uDDF4\uD835\uDDF6\uD835\uDDEF?\nInstagib is short for \u0022instant giblets\u0022, referring to a one-hit kill where the victim is turned into giblets.\n\n\u2728 \uD835\uDDF6\uD835\uDDFB\uD835\uDE00\uD835\uDE01\uD835\uDDEE\uD835\uDDF4\uD835\uDDF6\uD835\uDDEF \uD835\uDDF5\uD835\uDDEE\uD835\uDE00 \uD835\uDDEF\uD835\uDDF2\uD835\uDDF2\uD835\uDDFB \uD835\uDE02\uD835\uDDFD\uD835\uDDF1\uD835\uDDEE\uD835\uDE01\uD835\uDDF2\uD835\uDDF1!\nInstagib is currently undergoing a re-write. A lot of things have been changed, improved, or removed. Please hold tight while I get everything sorted! For a list of features - both added and planned - see here: https://github.com/xezno/sbox-instagib/issues/16\n\n\u2754 \uD835\uDDFE\uD835\uDE02\uD835\uDDF2\uD835\uDE00\uD835\uDE01\uD835\uDDF6\uD835\uDDFC\uD835\uDDFB\uD835\uDE00 / \uD835\uDDF0\uD835\uDDFC\uD835\uDDFB\uD835\uDDF0\uD835\uDDF2\uD835\uDDFF\uD835\uDDFB\uD835\uDE00\nIf you have any suggestions, bug reports, or questions, then please DM @xezno#0001 on Discord.",
+    "Public": true,
+    "CsProjName": "",
+    "ReplaceTags": "classic instagib shooter quake boomershooter retro",
+    "Compiler": {
+      "RootNamespace": "Sandbox",
+      "DefineConstants": "SANDBOX;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;",
+      "ReleaseMode": "Release"
+    }
   }
 }
