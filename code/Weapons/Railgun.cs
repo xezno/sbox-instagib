@@ -113,17 +113,6 @@ public partial class Railgun : BaseCarriable
 		{
 			ViewModelEntity?.OnFire();
 		}
-
-		//
-		// Attack knockback
-		//
-		if ( Game.IsServer )
-		{
-			if ( Owner is Player player )
-			{
-				player.Controller.ApplyImpulse( -Owner.AimRay.Forward * 256f );
-			}
-		}
 	}
 
 	protected virtual void CreateShootEffects( Vector3 direction, Vector3 endPosition )
@@ -181,10 +170,7 @@ public partial class Railgun : BaseCarriable
 
 	public bool CanSecondaryAttack()
 	{
-		if ( InstagibGame.SelectedMoveSet != InstagibGame.MoveSet.Classic )
-			return false;
-
-		bool isFiring = Input.Pressed( InputButton.Run );
+		bool isFiring = Input.Pressed( InputButton.SecondaryAttack );
 
 		if ( !Owner.IsValid() || !isFiring ) return false;
 

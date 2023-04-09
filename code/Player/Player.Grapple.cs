@@ -64,7 +64,8 @@ partial class Player
 		var tr = Trace.Ray( startPos, endPos )
 			.Ignore( this )
 			.WorldAndEntities()
-			.WithoutTags( "player" )
+			.WithTag( "solid" )
+			.WithoutTags( "player", "skybox" )
 			.Run();
 
 		calcEndPos = tr.EndPosition;

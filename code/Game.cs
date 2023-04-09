@@ -12,15 +12,6 @@ namespace Instagib;
 
 public partial class InstagibGame : Sandbox.GameManager
 {
-	public enum MoveSet
-	{
-		Classic,
-		Modern
-	}
-
-	[ConVar.Replicated( "gib_moveset" )]
-	public static MoveSet SelectedMoveSet { get; set; }
-
 	[ConVar.Replicated( "gib_grapples_enabled" )]
 	public static bool GrapplesEnabled { get; set; }
 

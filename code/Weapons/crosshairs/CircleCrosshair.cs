@@ -10,9 +10,9 @@ public class CircleCrosshair : ICrosshair
 		//
 		// Properties
 		//
-		float radius = 16f;
+		float radius = 8f;
 		int count = 3;
-		float gap = 20;
+		float gap = 16f;
 
 		//
 		// Animation / easing
@@ -20,7 +20,7 @@ public class CircleCrosshair : ICrosshair
 		float t = timeSinceAttack.Relative.LerpInverse( 0, 1.5f );
 		t = Easing.EaseOut( t );
 
-		var color = Color.White.WithAlpha( t );
+		var color = Color.White.WithAlpha( t < 1 ? 0.1f : 1 );
 		radius *= 2.0f.LerpTo( 1.0f, t );
 		gap *= 2.0f.LerpTo( 0.0f, t );
 

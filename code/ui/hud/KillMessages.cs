@@ -1,13 +1,19 @@
 ﻿namespace Instagib;
 
-[UseTemplate]
 public class KillMessages : Panel
 {
 	class Message : Panel
 	{
 		public Message( string victimName )
 		{
-			Add.Label( $"You fragged {victimName}", "small" );
+			Add.Panel( "background" );
+
+			string text = $"You fragged {victimName}";
+
+			if ( Game.Random.Next( 0, 100 ) == 69 )
+				text = $"You shagged {victimName}";
+
+			Add.Label( text, "small" );
 			_ = LiveFor( 3.0f );
 		}
 
@@ -16,6 +22,11 @@ public class KillMessages : Panel
 			await Task.DelaySeconds( seconds );
 			this.Delete();
 		}
+	}
+
+	public KillMessages()
+	{
+		StyleSheet.Load( "/ui/hud/KillMessages.scss" );
 	}
 
 	[InstagibEvent.Player.Kill]

@@ -17,7 +17,6 @@ public partial class QuakeWalkController : BasePlayerController
 
 	[Net, Predicted] private bool Walking { get; set; }
 	[Net, Predicted] private bool GroundPlane { get; set; }
-	[Net, Predicted] private bool CanDoubleJump { get; set; }
 
 	public Unstuck Unstuck { get; set; }
 	public Duck Duck { get; set; }
@@ -27,9 +26,6 @@ public partial class QuakeWalkController : BasePlayerController
 	{
 		Duck = new( this );
 		Unstuck = new Unstuck( this );
-
-		CanDoubleJump = true;
-		DashesLeft = DashCount;
 	}
 
 	public void ApplyImpulse( Vector3 impulse )
@@ -96,22 +92,18 @@ public partial class QuakeWalkController : BasePlayerController
 		// set groundentity
 		TraceToGround();
 
-		// dashing
-		if ( !ApplyDash() )
+		if ( CheckJump() || GroundEntity == null )
 		{
-			if ( CheckJump() || GroundEntity == null )
-			{
-				// gravity start
-				Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
+			// gravity start
+			Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
 
-				// jumped away or in air
-				AirMove();
-			}
-			else
-			{
-				// walking on ground
-				WalkMove();
-			}
+			// jumped away or in air
+			AirMove();
+		}
+		else
+		{
+			// walking on ground
+			WalkMove();
 		}
 
 		// stick to ground
@@ -131,7 +123,6 @@ public partial class QuakeWalkController : BasePlayerController
 				$"Vel length:                  {Velocity.Length}\n" +
 				$"Position:                    {Position}\n" +
 				$"GroundEntity:                {GroundEntity}\n" +
-				$"CanDoubleJump:               {CanDoubleJump}\n" +
 				$"DashesLeft:                  {DashesLeft}\n" +
 				$"DashRecharge:                {DashRecharge}\n" +
 				$"TouchingTriggers:            {string.Join( ',', TouchingTriggers.Select( x => x.Name ) )}",
@@ -278,71 +269,9 @@ public partial class QuakeWalkController : BasePlayerController
 		}
 	}
 
-	private bool ApplyDash()
-	{
-		if ( InstagibGame.SelectedMoveSet != InstagibGame.MoveSet.Modern )
-			return false;
-
-		RechargeDashes();
-
-		// AG: this probably isn't a great way to do dashing
-		// (we're just setting the position manually) but
-		// it's consistent enough to be used here
-		if ( Input.Pressed( InputButton.Run ) && DashesLeft > 0 )
-		{
-			var dir = GetDashDirection();
-			DashStart = Position;
-			DashEnd = DashStart + dir * DashDistance;
-
-			DashProgress = 0f;
-			DashesLeft--;
-
-			IsDashing = true;
-
-			if ( Game.IsClient )
-			{
-				var dashParticles = Particles.Create( "particles/speed_lines.vpcf", Pawn.Transform.PointToLocal( DashEnd ) + Vector3.Up * 64f );
-
-				if ( dashParticles != null )
-				{
-					dashParticles.SetEntity( 0, Pawn, Pawn.Transform.PointToLocal( DashEnd ) + Vector3.Up * 64f );
-					dashParticles.SetEntity( 1, Pawn, Pawn.Transform.PointToLocal( DashEnd + dir * 512f ) + Vector3.Up * 64f );
-				}
-			}
-		}
-
-		if ( IsDashing )
-		{
-			DashRecharge = 0;
-			TimeSinceLastDash = 0;
-			DashProgress += Time.Delta * 10f;
-
-			var targetPos = DashStart.LerpTo( DashEnd, DashProgress );
-			var tr = TraceBBox( Position, targetPos );
-
-			// If the trace hit something, bail out early cos we'll probably
-			// end up getting stuck in a wall otherwise
-			if ( tr.Hit || DashProgress > 1.0f )
-			{
-				IsDashing = false;
-
-				if ( !tr.Hit ) // Means we can nicely slide off anything we hit
-					Velocity = (DashEnd - DashStart).Normal * Velocity.Length;
-			}
-			else
-			{
-				Position = tr.EndPosition;
-			}
-
-			return true;
-		}
-
-		return false;
-	}
-
 	private bool CheckJump()
 	{
-		if ( GroundEntity == null && !CanDoubleJump )
+		if ( GroundEntity == null )
 			return false;
 
 		float jumpVel = JumpVelocity;
@@ -351,22 +280,6 @@ public partial class QuakeWalkController : BasePlayerController
 		{
 			if ( !Input.Down( InputButton.Jump ) )
 				return false;
-		}
-		else if ( CanDoubleJump )
-		{
-			if ( InstagibGame.SelectedMoveSet != InstagibGame.MoveSet.Modern )
-				return false;
-
-			if ( !Input.Pressed( InputButton.Jump ) )
-				return false;
-
-			jumpVel *= 1.25f;
-			CanDoubleJump = false;
-
-			var boostParticles = Particles.Create( "particles/boost.vpcf", this.Position );
-
-			if ( boostParticles != null )
-				boostParticles.SetForward( 0, Vector3.Up );
 		}
 
 		if ( Duck.IsActive )
@@ -620,7 +533,6 @@ public partial class QuakeWalkController : BasePlayerController
 		{
 			GroundPlane = true;
 			Walking = true;
-			CanDoubleJump = true;
 		}
 
 		GroundEntity = ent;

@@ -24,6 +24,25 @@ killmessages {
         transition: all 150ms ease;
         height: 30px;
 
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            animation-name: Pulse;
+            animation-duration: 4s;
+            animation-iteration-count: 1;
+            animation-timing-function: linear;
+            background: linear-gradient( to right,
+                rgba( white, 0 ),
+                rgba( white, 0.5 ) 10%,
+                rgba( white, 0.5 ) 90%,
+                rgba( white, 0 )
+            );
+        }
+
         &:intro, &:outro {
             opacity: 0;
             height: 0;
@@ -32,5 +51,26 @@ killmessages {
         &:intro {
             transform: scale( 0.0f );
         }
+    }
+}
+
+@keyframes Pulse {
+    0% {
+        transform: scale( 1.0f 1.0f );
+        opacity: 1;
+    }
+
+    5% {
+        transform: scale( 5.0f 1.0f );
+        opacity: 1;
+    }
+
+    20% {
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale( 5.0f 1.0f );
+        opacity: 0;
     }
 }

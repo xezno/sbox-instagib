@@ -9,7 +9,7 @@ partial class Player
 	private float ZoomSpeed => 25.0f;
 
 	// TODO: conditions for zooming
-	public bool IsZooming => Input.Down( InputButton.SecondaryAttack );
+	public bool IsZooming => Input.Down( InputButton.Zoom );
 
 	private void SimulateCamera()
 	{
